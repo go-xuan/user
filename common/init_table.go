@@ -1,13 +1,13 @@
 package common
 
 import (
-	"github.com/quanxiaoxuan/go-builder/database"
+	"github.com/quanxiaoxuan/go-builder/gormx"
 	"quan-admin/model/entity"
 )
 
 // 初始化数据库表结构
 func InitGormTable() {
-	PGDB := database.GormDB
+	PGDB := gormx.GormDB
 	// 用户表
 	if PGDB.Migrator().HasTable(&entity.SysUser{}) {
 		_ = PGDB.Migrator().AutoMigrate(&entity.SysUser{})

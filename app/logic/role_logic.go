@@ -1,11 +1,11 @@
 package logic
 
 import (
-	"github.com/quanxiaoxuan/go-builder/model/response"
+	"github.com/quanxiaoxuan/go-builder/paramx/response"
+	"github.com/quanxiaoxuan/go-builder/snowflakex"
 	log "github.com/sirupsen/logrus"
 
 	"quan-admin/app/mapper"
-	"quan-admin/conf"
 	"quan-admin/model/entity"
 	"quan-admin/model/params"
 	"quan-admin/model/results"
@@ -43,7 +43,7 @@ func RoleCodeExist(roleCode string) (exist bool, err error) {
 // 角色新增
 func RoleAdd(param params.RoleCreate) (int64, error) {
 	var err error
-	roleId := conf.NewSnow.NewId()
+	roleId := snowflakex.NewSnow.NewId()
 	var role = entity.SysRole{
 		RoleId:       roleId,
 		RoleCode:     param.RoleCode,

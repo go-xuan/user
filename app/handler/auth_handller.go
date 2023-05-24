@@ -2,8 +2,8 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/quanxiaoxuan/go-builder/auth"
-	"github.com/quanxiaoxuan/go-builder/model/response"
+	"github.com/quanxiaoxuan/go-builder/authx"
+	"github.com/quanxiaoxuan/go-builder/paramx/response"
 	log "github.com/sirupsen/logrus"
 
 	"quan-admin/app/logic"
@@ -36,7 +36,7 @@ func UserLogin(context *gin.Context) {
 // 验证token
 func TokenParse(context *gin.Context) {
 	var err error
-	var result *auth.Param
+	var result *authx.Param
 	token := context.Request.Header.Get("Authorization")
 	if result, err = logic.TokenParse(token); err != nil {
 		response.BuildErrorResponse(context, err.Error())

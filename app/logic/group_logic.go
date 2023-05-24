@@ -1,11 +1,11 @@
 package logic
 
 import (
-	"github.com/quanxiaoxuan/go-builder/model/response"
+	"github.com/quanxiaoxuan/go-builder/paramx/response"
+	"github.com/quanxiaoxuan/go-builder/snowflakex"
 	log "github.com/sirupsen/logrus"
 
 	"quan-admin/app/mapper"
-	"quan-admin/conf"
 	"quan-admin/model/entity"
 	"quan-admin/model/params"
 	"quan-admin/model/results"
@@ -38,7 +38,7 @@ func GroupCodeExist(groupCode string) (exist bool, err error) {
 // 群组新增
 func GroupAdd(param params.GroupCreate) (int64, error) {
 	var err error
-	groupId := conf.NewSnow.NewId()
+	groupId := snowflakex.NewSnow.NewId()
 	var group = entity.SysGroup{
 		GroupId:      groupId,
 		GroupCode:    param.GroupCode,

@@ -2,7 +2,7 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/quanxiaoxuan/go-builder/model/response"
+	"github.com/quanxiaoxuan/go-builder/paramx/response"
 	log "github.com/sirupsen/logrus"
 
 	"quan-admin/app/logic"

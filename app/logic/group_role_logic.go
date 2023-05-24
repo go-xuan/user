@@ -1,10 +1,10 @@
 package logic
 
 import (
+	"github.com/quanxiaoxuan/go-builder/snowflakex"
 	"github.com/quanxiaoxuan/go-utils/timex"
 
 	"quan-admin/app/mapper"
-	"quan-admin/conf"
 	"quan-admin/model/entity"
 	"quan-admin/model/params"
 )
@@ -25,7 +25,7 @@ func GroupRoleAdd(param params.GroupRoleAdd) error {
 	var groupRoleList entity.SysGroupRoleList
 	for _, item := range param.GroupRoleList {
 		var groupRole = entity.SysGroupRole{
-			Id:           conf.NewSnow.NewId(),
+			Id:           snowflakex.NewSnow.NewId(),
 			GroupId:      param.GroupId,
 			RoleId:       item.RoleId,
 			ValidStart:   timex.ToTime(item.ValidStart),

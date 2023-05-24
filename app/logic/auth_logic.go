@@ -5,13 +5,13 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/quanxiaoxuan/go-builder/auth"
-	"github.com/quanxiaoxuan/go-builder/redis"
+	"github.com/quanxiaoxuan/go-builder/authx"
+	"github.com/quanxiaoxuan/go-builder/redisx"
+	"github.com/quanxiaoxuan/go-builder/snowflakex"
 	"github.com/quanxiaoxuan/go-utils/stringx"
 	log "github.com/sirupsen/logrus"
 
 	"quan-admin/app/mapper"
-	"quan-admin/conf"
 	"quan-admin/model/entity"
 	"quan-admin/model/params"
 	"quan-admin/model/results"
@@ -42,7 +42,7 @@ func UserLogin(param params.UserLogin, loginIp string) (*results.LoginResult, er
 	if stringx.PasswordSalt(passWord, userAuth.Salt) == userAuth.Password {
 		sessionTime := userAuth.SessionTime
 		userIdStr := strconv.FormatInt(userInfo.UserId, 10)
-		var tokenParam = auth.Param{
+		var tokenParam = authx.Param{
 			UserId:     userIdStr,
 			UserName:   userInfo.UserName,
 			Phone:      userInfo.Phone,
@@ -50,15 +50,15 @@ func UserLogin(param params.UserLogin, loginIp string) (*results.LoginResult, er
 			ExpireTime: time.Now().Unix() + sessionTime,
 		}
 		var token string
-		token, err = auth.BuildAuthToken(&tokenParam)
+		token, err = authx.BuildAuthToken(&tokenParam)
 		if err != nil {
 			log.Error("生成token失败")
 			return nil, err
 		}
 		// token存入redis
-		redis.Console.Set("token_"+userIdStr, token, time.Duration(sessionTime*1e9))
+		redisx.RedisCTL.Set("token_"+userIdStr, token, time.Duration(sessionTime*1e9))
 		var sysLog = entity.SysLog{
-			Id:           conf.NewSnow.NewId(),
+			Id:           snowflakex.NewSnow.NewId(),
 			Module:       "auth",
 			Type:         "login",
 			Content:      userInfo.UserName + "【" + userInfo.Phone + "账号密码登录】",
@@ -80,11 +80,11 @@ func UserLogin(param params.UserLogin, loginIp string) (*results.LoginResult, er
 }
 
 // 验证token
-func TokenParse(token string) (*auth.Param, error) {
+func TokenParse(token string) (*authx.Param, error) {
 	if token == "" {
 		return nil, errors.New("未携带token")
 	}
-	tokenParam, err := auth.ParseAuthToken(token)
+	tokenParam, err := authx.ParseAuthToken(token)
 	if err != nil {
 		return nil, errors.New("token解析失败")
 	}
@@ -93,14 +93,14 @@ func TokenParse(token string) (*auth.Param, error) {
 
 // 用户登出
 func UserLogout(token, ip string) (userId int64, err error) {
-	var tokenParam *auth.Param
+	var tokenParam *authx.Param
 	tokenParam, err = TokenParse(token)
 	if err != nil {
 		return
 	}
 	userId, _ = strconv.ParseInt(tokenParam.UserId, 10, 64)
 	var sysLog = entity.SysLog{
-		Id:           conf.NewSnow.NewId(),
+		Id:           snowflakex.NewSnow.NewId(),
 		Module:       "auth",
 		Type:         "logout",
 		Content:      tokenParam.UserName + "【登出】",
@@ -112,6 +112,6 @@ func UserLogout(token, ip string) (userId int64, err error) {
 		log.Error("记录登录日志失败")
 	}
 	// 删除redis上用户token
-	redis.Console.Del("token_" + tokenParam.UserId)
+	redisx.RedisCTL.Del("token_" + tokenParam.UserId)
 	return
 }

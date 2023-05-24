@@ -3,7 +3,7 @@ package mapper
 import (
 	"strings"
 
-	"github.com/quanxiaoxuan/go-builder/database"
+	"github.com/quanxiaoxuan/go-builder/gormx"
 	"github.com/quanxiaoxuan/go-utils/randx"
 	"github.com/quanxiaoxuan/go-utils/stringx"
 	log "github.com/sirupsen/logrus"
@@ -44,7 +44,7 @@ func UserPage(param params.UserPage) (resultList results.UserInfoList, total int
 	if param.PageParam != nil || param.PageParam.PageSize > 0 {
 		selectSql.WriteString(param.PageParam.GetPgPageSql())
 	}
-	err = database.GormDB.Raw(selectSql.String()).Scan(&resultList).Error
+	err = gormx.GormDB.Raw(selectSql.String()).Scan(&resultList).Error
 	if err != nil {
 		log.Error("查询用户信信息失败 ： ", err)
 		return
@@ -54,7 +54,7 @@ func UserPage(param params.UserPage) (resultList results.UserInfoList, total int
 	countSql.WriteString(` ( `)
 	countSql.WriteString(sql.String())
 	countSql.WriteString(`) t `)
-	err = database.GormDB.Raw(countSql.String()).Scan(&total).Error
+	err = gormx.GormDB.Raw(countSql.String()).Scan(&total).Error
 	if err != nil {
 		log.Error("查询用户信信息失败 ： ", err)
 		return
@@ -67,32 +67,32 @@ func QueryUserInfo(userKey string) (result results.UserInfo, err error) {
 	sql := strings.Builder{}
 	sql.WriteString(UserBaseQuery)
 	sql.WriteString(` where u.phone = ?`)
-	err = database.GormDB.Raw(sql.String(), userKey).Scan(&result).Error
+	err = gormx.GormDB.Raw(sql.String(), userKey).Scan(&result).Error
 	return
 }
 
 // 查询用户基本信息
 func UserSelect(userId int64) (sysUser entity.SysUser, err error) {
 	sysUser.UserId = userId
-	err = database.GormDB.Find(&sysUser).Error
+	err = gormx.GormDB.Find(&sysUser).Error
 	return
 }
 
 // 用户列表查询
 func UserList() (resultList results.UserSimpleList, err error) {
-	err = database.GormDB.Model(&entity.SysUser{}).Select("user_id", "user_name", "phone", "email").Order("user_id").Scan(&resultList).Error
+	err = gormx.GormDB.Model(&entity.SysUser{}).Select("user_id", "user_name", "phone", "email").Order("user_id").Scan(&resultList).Error
 	return
 }
 
 // 查询群组编码是否存在
 func UserPhoneExist(phone string) (count int64, err error) {
-	err = database.GormDB.Model(&entity.SysUser{}).Where(`phone = ? `, phone).Count(&count).Error
+	err = gormx.GormDB.Model(&entity.SysUser{}).Where(`phone = ? `, phone).Count(&count).Error
 	return
 }
 
 // 用户新增
 func UserAdd(user entity.SysUser, userAuth entity.SysUserAuth) error {
-	tx := database.GormDB.Begin()
+	tx := gormx.GormDB.Begin()
 	err := tx.Create(&user).Error
 	if err != nil {
 		tx.Rollback()
@@ -111,7 +111,7 @@ func UserAdd(user entity.SysUser, userAuth entity.SysUserAuth) error {
 
 // 用户修改
 func UserUpdate(param params.UserUpdate) error {
-	tx := database.GormDB.Begin()
+	tx := gormx.GormDB.Begin()
 	// 更新用户表
 	userSql := strings.Builder{}
 	userSql.WriteString(`update sys_user set update_time = now(), update_user_id = ? `)
@@ -175,14 +175,14 @@ func UserUpdate(param params.UserUpdate) error {
 
 // 用户删除
 func UserDelete(userId int64) error {
-	tx := database.GormDB.Begin()
-	err := database.GormDB.Delete(&entity.SysUser{}, userId).Error
+	tx := gormx.GormDB.Begin()
+	err := gormx.GormDB.Delete(&entity.SysUser{}, userId).Error
 	if err != nil {
 		tx.Rollback()
 		log.Error("删除用户表失败 ： ", err)
 		return err
 	}
-	err = database.GormDB.Delete(&entity.SysUserAuth{}, userId).Error
+	err = gormx.GormDB.Delete(&entity.SysUserAuth{}, userId).Error
 	if err != nil {
 		tx.Rollback()
 		log.Error("删除用户鉴权表失败 ： ", err)

@@ -2,10 +2,10 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/quanxiaoxuan/go-builder/database"
-	"github.com/quanxiaoxuan/go-builder/logs"
-	"github.com/quanxiaoxuan/go-builder/nacos"
-	"github.com/quanxiaoxuan/go-builder/redis"
+	"github.com/quanxiaoxuan/go-builder/gormx"
+	"github.com/quanxiaoxuan/go-builder/logx"
+	"github.com/quanxiaoxuan/go-builder/nacosx"
+	"github.com/quanxiaoxuan/go-builder/redisx"
 	log "github.com/sirupsen/logrus"
 
 	"quan-admin/app/handler"
@@ -25,27 +25,27 @@ func main() {
 	conf.InitAppConfig()
 
 	// 初始化日志
-	logs.InitLogger(&conf.Config.Log, log.StandardLogger())
+	logx.InitLogger(&conf.Config.Log, log.StandardLogger())
 
 	// 初始化Nacos连接配置
-	nacos.InitNacosConn(&conf.Config.Nacos)
+	nacosx.InitNacosConn(&conf.Config.Nacos)
 	// 加载Nacos配置
-	if nacos.InitConfigClient() {
+	if nacosx.InitConfigClient() {
 		conf.LoadNacosConfig()
 	}
 	// 注册Nacos服务
-	if nacos.InitNamingClient() {
+	if nacosx.InitNamingClient() {
 		conf.InitNacosServerRegister()
 	}
 
 	// 连接数据库
-	database.InitGormDB(&conf.Config.Database)
+	gormx.InitGormDB(&conf.Config.Database)
 	// 初始化数据库表结构
 	if conf.Config.Database.InitTable {
 		common.InitGormTable()
 	}
 	// 连接redis
-	redis.InitRedisConsole(&conf.Config.Redis)
+	redisx.InitRedisCTL(&conf.Config.Redis)
 	// 初始化gin路由
 	InitGinRouter(&conf.Config.System)
 
@@ -58,7 +58,7 @@ func InitGinRouter(sys *conf.System) {
 		gin.SetMode(gin.ReleaseMode)
 	}
 	ginEngine := gin.New()
-	ginEngine.Use(logs.LoggerToFile(), gin.Recovery())
+	ginEngine.Use(logx.LoggerToFile(), gin.Recovery())
 	_ = ginEngine.SetTrustedProxies([]string{sys.Host})
 	// 注册路由
 	router := ginEngine.Group(sys.Prefix).Group(sys.Version)

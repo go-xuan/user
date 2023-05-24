@@ -2,8 +2,8 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/quanxiaoxuan/go-builder/auth"
-	"github.com/quanxiaoxuan/go-builder/model/response"
+	"github.com/quanxiaoxuan/go-builder/authx"
+	"github.com/quanxiaoxuan/go-builder/paramx/response"
 	log "github.com/sirupsen/logrus"
 
 	"quan-admin/app/logic"
@@ -58,7 +58,7 @@ func UserAdd(context *gin.Context) {
 		return
 	}
 	if param.CreateUserId == 0 {
-		param.CreateUserId = auth.GetUserId(context)
+		param.CreateUserId = authx.GetUserId(context)
 	}
 	var userId int64
 	if userId, err = logic.UserAdd(param); err != nil {
@@ -78,7 +78,7 @@ func UserUpdate(context *gin.Context) {
 		return
 	}
 	if param.UpdateUserId == 0 {
-		param.UpdateUserId = auth.GetUserId(context)
+		param.UpdateUserId = authx.GetUserId(context)
 	}
 	if err = logic.UserUpdate(param); err != nil {
 		response.BuildErrorResponse(context, err.Error())

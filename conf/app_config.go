@@ -2,27 +2,26 @@ package conf
 
 import (
 	"github.com/jinzhu/configor"
-	"github.com/quanxiaoxuan/go-builder/database"
-	"github.com/quanxiaoxuan/go-builder/logs"
-	"github.com/quanxiaoxuan/go-builder/nacos"
-	"github.com/quanxiaoxuan/go-builder/redis"
-	"github.com/quanxiaoxuan/go-builder/snow"
+	"github.com/quanxiaoxuan/go-builder/gormx"
+	"github.com/quanxiaoxuan/go-builder/logx"
+	"github.com/quanxiaoxuan/go-builder/nacosx"
+	"github.com/quanxiaoxuan/go-builder/redisx"
+	"github.com/quanxiaoxuan/go-builder/snowflakex"
 	"github.com/quanxiaoxuan/go-utils/ipx"
 
 	"strconv"
 )
 
 var Config AppConfig
-var NewSnow snow.Snow
 
 // 应用服务配置
 type AppConfig struct {
-	System   System               `json:"system" yaml:"system"`     // 应用配置
-	Log      logs.Config          `json:"log" yaml:"log"`           // 日志配置
-	Nacos    nacos.Config         `json:"nacos" yaml:"nacos"`       // nacos访问配置
-	Configs  nacos.ConfigItemList `json:"configs" yaml:"configs"`   // nacos配置清单
-	Database database.Config      `json:"database" yaml:"database"` // 数据库配置
-	Redis    redis.Config         `json:"redis" yaml:"redis"`       // redis配置
+	System   System                `json:"system" yaml:"system"`     // 应用配置
+	Log      logx.Config           `json:"log" yaml:"log"`           // 日志配置
+	Nacos    nacosx.Config         `json:"nacos" yaml:"nacos"`       // nacos访问配置
+	Configs  nacosx.ConfigItemList `json:"configs" yaml:"configs"`   // nacos配置清单
+	Database gormx.Config          `json:"database" yaml:"database"` // 数据库配置
+	Redis    redisx.Config         `json:"redis" yaml:"redis"`       // redis配置
 }
 
 // 系统基础配置
@@ -49,5 +48,5 @@ func InitAppConfig() {
 	Config.Log.LogName = Config.System.AppName
 	// 初始化雪花ID生成器
 	workerId, _ := strconv.ParseInt(Config.System.Host, 10, 64)
-	NewSnow = snow.Snow{WorkerId: workerId % 1023, TimeStamp: 0, Sequence: 0}
+	snowflakex.InitSnowFlake(workerId % 1023)
 }

@@ -3,14 +3,14 @@ package logic
 import (
 	"time"
 
-	"github.com/quanxiaoxuan/go-builder/model/response"
+	"github.com/quanxiaoxuan/go-builder/paramx/response"
+	"github.com/quanxiaoxuan/go-builder/snowflakex"
 	"github.com/quanxiaoxuan/go-utils/randx"
 	"github.com/quanxiaoxuan/go-utils/stringx"
 	"github.com/quanxiaoxuan/go-utils/timex"
 	log "github.com/sirupsen/logrus"
 
 	"quan-admin/app/mapper"
-	"quan-admin/conf"
 	"quan-admin/model/entity"
 	"quan-admin/model/params"
 	"quan-admin/model/results"
@@ -48,7 +48,7 @@ func UserPhoneExist(phone string) (exist bool, err error) {
 // 用户新增
 func UserAdd(param params.UserCreate) (int64, error) {
 	var err error
-	userId := conf.NewSnow.NewId()
+	userId := snowflakex.NewSnow.NewId()
 	var user = entity.SysUser{
 		UserId:       userId,
 		UserName:     param.UserName,

@@ -1,14 +1,15 @@
 package logic
 
 import (
+	"github.com/quanxiaoxuan/go-builder/snowflakex"
+
 	"quan-admin/app/mapper"
-	"quan-admin/conf"
 	"quan-admin/model/entity"
 )
 
 // 新增日志
 func LogAdd(sysLog entity.SysLog) error {
-	sysLog.Id = conf.NewSnow.NewId()
+	sysLog.Id = snowflakex.NewSnow.NewId()
 	return mapper.SysLogAdd(sysLog)
 }
 

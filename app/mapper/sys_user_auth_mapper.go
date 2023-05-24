@@ -3,7 +3,7 @@ package mapper
 import (
 	"strings"
 
-	"github.com/quanxiaoxuan/go-builder/database"
+	"github.com/quanxiaoxuan/go-builder/gormx"
 	"quan-admin/model/entity"
 	"quan-admin/model/params"
 )
@@ -11,7 +11,7 @@ import (
 // 查询用户身份信息
 func QueryUserAuth(userId int64) (userAuth entity.SysUserAuth, err error) {
 	userAuth.UserId = userId
-	err = database.GormDB.Find(&userAuth).Error
+	err = gormx.GormDB.Find(&userAuth).Error
 	return
 }
 
@@ -30,6 +30,6 @@ func UserAuthUpdate(update params.UserAuthUpdate) (err error) {
 		sql.WriteString(`, valid_end = '` + update.ValidEnd + `'`)
 	}
 	sql.WriteString(` where user_id = ?`)
-	err = database.GormDB.Exec(sql.String(), update.UpdateUserId, update.UserId).Error
+	err = gormx.GormDB.Exec(sql.String(), update.UpdateUserId, update.UserId).Error
 	return
 }

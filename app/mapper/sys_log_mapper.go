@@ -1,7 +1,7 @@
 package mapper
 
 import (
-	"github.com/quanxiaoxuan/go-builder/database"
+	"github.com/quanxiaoxuan/go-builder/gormx"
 	log "github.com/sirupsen/logrus"
 
 	"quan-admin/model/entity"
@@ -9,7 +9,7 @@ import (
 
 // 更新用户身份信息
 func SysLogAdd(syslog entity.SysLog) (err error) {
-	tx := database.GormDB.Begin()
+	tx := gormx.GormDB.Begin()
 	err = tx.Create(&syslog).Error
 	if err != nil {
 		tx.Rollback()
@@ -22,7 +22,7 @@ func SysLogAdd(syslog entity.SysLog) (err error) {
 
 // 更新用户身份信息
 func LogDelete(types []string) (err error) {
-	tx := database.GormDB.Begin()
+	tx := gormx.GormDB.Begin()
 	err = tx.Delete(&entity.SysLog{}, `type in ? and ip = ?`, types, "192.168.152.63").Error
 	if err != nil {
 		tx.Rollback()
