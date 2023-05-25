@@ -13,13 +13,13 @@ import (
 
 // 查询群组编码是否存在
 func RoleCodeExist(roleCode string) (count int64, err error) {
-	err = gormx.GormDB.Model(&entity.SysRole{}).Where(`role_code = ? `, roleCode).Count(&count).Error
+	err = gormx.Ctl.DB.Model(&entity.SysRole{}).Where(`role_code = ? `, roleCode).Count(&count).Error
 	return
 }
 
 // 角色新增
 func RoleAdd(role entity.SysRole) error {
-	err := gormx.GormDB.Create(&role).Error
+	err := gormx.Ctl.DB.Create(&role).Error
 	if err != nil {
 		log.Error("角色新增失败 ： ", err)
 		return err
@@ -29,7 +29,7 @@ func RoleAdd(role entity.SysRole) error {
 
 // 角色删除
 func RoleDelete(roleId int64) error {
-	err := gormx.GormDB.Delete(&entity.SysRole{}, roleId).Error
+	err := gormx.Ctl.DB.Delete(&entity.SysRole{}, roleId).Error
 	if err != nil {
 		log.Error("角色删除失败 ： ", err)
 		return err
@@ -39,7 +39,7 @@ func RoleDelete(roleId int64) error {
 
 // 角色修改
 func RoleUpdate(param params.RoleUpdate) error {
-	tx := gormx.GormDB.Begin()
+	tx := gormx.Ctl.DB.Begin()
 	sql := strings.Builder{}
 	sql.WriteString(`update sys_role set update_time = now(), update_user_id = ? `)
 	if param.RoleName != "" {
@@ -75,7 +75,7 @@ func RolePage(param params.RolePage) (resultList results.RoleInfoList, total int
 	if param.PageParam != nil || param.PageParam.PageSize > 0 {
 		selectSql.WriteString(param.PageParam.GetPgPageSql())
 	}
-	err = gormx.GormDB.Raw(selectSql.String()).Scan(&resultList).Error
+	err = gormx.Ctl.DB.Raw(selectSql.String()).Scan(&resultList).Error
 	if err != nil {
 		log.Error("角色分页查询失败 ： ", err)
 		return
@@ -85,7 +85,7 @@ func RolePage(param params.RolePage) (resultList results.RoleInfoList, total int
 	countSql.WriteString(` ( `)
 	countSql.WriteString(sql.String())
 	countSql.WriteString(`) t`)
-	err = gormx.GormDB.Raw(countSql.String()).Scan(&total).Error
+	err = gormx.Ctl.DB.Raw(countSql.String()).Scan(&total).Error
 	if err != nil {
 		log.Error("角色分页查询失败 ： ", err)
 		return
@@ -95,12 +95,12 @@ func RolePage(param params.RolePage) (resultList results.RoleInfoList, total int
 
 // 角色信息查询
 func RoleInfo(roleId int64) (result results.RoleInfo, err error) {
-	err = gormx.GormDB.Model(&entity.SysRole{}).Where(`role_id = ?`, roleId).Scan(&result).Error
+	err = gormx.Ctl.DB.Model(&entity.SysRole{}).Where(`role_id = ?`, roleId).Scan(&result).Error
 	return
 }
 
 // 用户角色
 func RoleList() (resultList results.RoleSimpleList, err error) {
-	err = gormx.GormDB.Model(&entity.SysRole{}).Select([]string{"role_id", "role_code", "role_name"}).Order("role_id").Scan(&resultList).Error
+	err = gormx.Ctl.DB.Model(&entity.SysRole{}).Select([]string{"role_id", "role_code", "role_name"}).Order("role_id").Scan(&resultList).Error
 	return
 }

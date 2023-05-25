@@ -56,7 +56,7 @@ func UserLogin(param params.UserLogin, loginIp string) (*results.LoginResult, er
 			return nil, err
 		}
 		// token存入redis
-		redisx.RedisCTL.Set("token_"+userIdStr, token, time.Duration(sessionTime*1e9))
+		redisx.Ctl.Set("token_"+userIdStr, token, time.Duration(sessionTime*1e9))
 		var sysLog = entity.SysLog{
 			Id:           snowflakex.NewSnow.NewId(),
 			Module:       "auth",
@@ -112,6 +112,6 @@ func UserLogout(token, ip string) (userId int64, err error) {
 		log.Error("记录登录日志失败")
 	}
 	// 删除redis上用户token
-	redisx.RedisCTL.Del("token_" + tokenParam.UserId)
+	redisx.Ctl.Del("token_" + tokenParam.UserId)
 	return
 }

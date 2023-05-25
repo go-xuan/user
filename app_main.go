@@ -38,13 +38,13 @@ func main() {
 		conf.InitNacosServerRegister()
 	}
 
-	// 连接数据库
-	gormx.InitGormDB(&conf.Config.Database)
+	// 初始化Gorm
+	gormx.InitGormCTL(&conf.Config.Database)
 	// 初始化数据库表结构
 	if conf.Config.Database.InitTable {
 		common.InitGormTable()
 	}
-	// 连接redis
+	// 初始化redis
 	redisx.InitRedisCTL(&conf.Config.Redis)
 	// 初始化gin路由
 	InitGinRouter(&conf.Config.System)

@@ -7,7 +7,7 @@ import (
 
 // 初始化数据库表结构
 func InitGormTable() {
-	PGDB := gormx.GormDB
+	PGDB := gormx.Ctl.DB
 	// 用户表
 	if PGDB.Migrator().HasTable(&entity.SysUser{}) {
 		_ = PGDB.Migrator().AutoMigrate(&entity.SysUser{})
