@@ -18,11 +18,11 @@ nacos:
 # nacos配置清单
 configs:
   - name: quan-admin
-    group: server
+    group: service
     dataId: quan.admin.yml
   - name: database
     group: common
-    dataId: database.properties
+    dataId: mysql.database.properties
   - name: redis
     group: common
     dataId: redis.properties
