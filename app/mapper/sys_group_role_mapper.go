@@ -10,13 +10,13 @@ import (
 
 // 群组角色校验
 func GroupRoleCount(groupId int64, roleIds []int64) (count int64, err error) {
-	err = gormx.Ctl.DB.Model(&entity.SysGroupRole{}).Where(`group_id = ? and role_id in ?`, groupId, roleIds).Count(&count).Error
+	err = gormx.CTL.DB.Model(&entity.SysGroupRole{}).Where(`group_id = ? and role_id in ?`, groupId, roleIds).Count(&count).Error
 	return
 }
 
 // 群组角色批量新增
 func GroupRoleAddBatch(memberList entity.SysGroupRoleList) error {
-	err := gormx.Ctl.DB.Create(&memberList).Error
+	err := gormx.CTL.DB.Create(&memberList).Error
 	if err != nil {
 		log.Error("群组角色批量新增失败 ： ", err)
 		return err
@@ -26,7 +26,7 @@ func GroupRoleAddBatch(memberList entity.SysGroupRoleList) error {
 
 // 查询群组角色列表
 func GroupRoleList(groupId int64) (resultList results.GroupRoleList, err error) {
-	err = gormx.Ctl.DB.Raw(`
+	err = gormx.CTL.DB.Raw(`
 select t1.role_id,
        t2.role_code,
        t2.role_name,

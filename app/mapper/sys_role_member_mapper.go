@@ -9,13 +9,13 @@ import (
 )
 
 func RoleMemberCount(roleId int64, userIds []int64) (count int64, err error) {
-	err = gormx.Ctl.DB.Model(&entity.SysRoleMember{}).Where(`role_id = ? and member_id in ?`, roleId, userIds).Count(&count).Error
+	err = gormx.CTL.DB.Model(&entity.SysRoleMember{}).Where(`role_id = ? and member_id in ?`, roleId, userIds).Count(&count).Error
 	return
 }
 
 // 角色用户批量新增
 func RoleMemberAddBatch(memberList entity.SysRoleMemberList) error {
-	err := gormx.Ctl.DB.Create(&memberList).Error
+	err := gormx.CTL.DB.Create(&memberList).Error
 	if err != nil {
 		log.Error("角色用户批量新增失败 ： ", err)
 		return err
@@ -25,7 +25,7 @@ func RoleMemberAddBatch(memberList entity.SysRoleMemberList) error {
 
 // 角色成员列表
 func RoleMemberList(roleId int64) (resultList results.RoleMemberList, err error) {
-	err = gormx.Ctl.DB.Raw(`
+	err = gormx.CTL.DB.Raw(`
 select t2.user_id,
        t2.user_name,
        t1.valid_start,

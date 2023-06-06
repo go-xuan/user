@@ -11,6 +11,7 @@ nacos:
   contextPath: /nacos
   username: nacos
   password: nacos
+  mode: 0
   nameSpace: localhost
   logDir: .nacos/log
   cacheDir: .nacos/cache

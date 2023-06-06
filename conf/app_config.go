@@ -8,6 +8,7 @@ import (
 	"github.com/quanxiaoxuan/go-builder/redisx"
 	"github.com/quanxiaoxuan/go-builder/snowflakex"
 	"github.com/quanxiaoxuan/go-utils/ipx"
+	log "github.com/sirupsen/logrus"
 
 	"strconv"
 )
@@ -46,7 +47,36 @@ func InitAppConfig() {
 		Config.System.Host = ipx.GetWLANIP()
 	}
 	Config.Log.LogName = Config.System.AppName
+	logx.CONFIG = &Config.Log
+	nacosx.CONFIG = &Config.Nacos
+
 	// 初始化雪花ID生成器
 	workerId, _ := strconv.ParseInt(Config.System.Host, 10, 64)
 	snowflakex.InitSnowFlake(workerId % 1023)
+}
+
+// 加载Nacos配置
+func LoadNacosConfig() {
+	if nacosx.CTL.ConfigClient == nil {
+		log.Error("未初始化nacos配置中心客户端!")
+	}
+	// 加载nacos配置
+	nacosx.LoadNacosConfig(Config.Configs, Config.System.AppName, &Config)
+
+	// 中间件配置同步
+	gormx.CONFIG = &Config.Database
+	redisx.CONFIG = &Config.Redis
+}
+
+// 注册Nacos服务
+func RegisterNacosServer() {
+	if nacosx.CTL.NamingClient == nil {
+		log.Error("未初始化nacos服务发现客户端!")
+	}
+	nacosx.RegisterInstance(nacosx.ServerConfig{
+		Group: Config.System.Env,
+		Name:  Config.System.AppName,
+		Ip:    Config.System.Host,
+		Port:  Config.System.Port,
+	})
 }

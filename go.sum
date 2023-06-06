@@ -944,8 +944,8 @@ github.com/prometheus/procfs v0.2.0/go.mod h1:lV6e/gmhEcM9IjHGsFOCxxuZ+z1YqCvr4O
 github.com/prometheus/procfs v0.6.0/go.mod h1:cz+aTbrPOrUb4q7XlbU9ygM+/jj0fzG6c1xBZuNvfVA=
 github.com/prometheus/procfs v0.7.3/go.mod h1:cz+aTbrPOrUb4q7XlbU9ygM+/jj0fzG6c1xBZuNvfVA=
 github.com/prometheus/tsdb v0.7.1/go.mod h1:qhTCs0VvXwvX/y3TZrWD7rabWM+ijKTux40TwIPHuXU=
-github.com/quanxiaoxuan/go-builder v1.2.3 h1:XavmlXLpqHvIArzI3wtQ+5+OIiO7e/vbt+QkQHbdWMA=
-github.com/quanxiaoxuan/go-builder v1.2.3/go.mod h1:8qDdwD9YzQg6HbyzyIhI8dcBtv9KX2ct6N/J3AKASBE=
+github.com/quanxiaoxuan/go-builder v1.2.4 h1:RaU/GvuWR/u0bzE5CuDbd0JU7As6IKovDiRja+IL83U=
+github.com/quanxiaoxuan/go-builder v1.2.4/go.mod h1:8qDdwD9YzQg6HbyzyIhI8dcBtv9KX2ct6N/J3AKASBE=
 github.com/quanxiaoxuan/go-utils v1.1.5 h1:zws2qo5jXny3wzuioQnER251hgh1jU64yT/6cuNug6Y=
 github.com/quanxiaoxuan/go-utils v1.1.5/go.mod h1:60bmzdnZ9lfO28uD7no9DEg3OQgBaMG/bmtCaezOkaw=
 github.com/redis/go-redis/v9 v9.0.3 h1:+7mmR26M0IvyLxGZUHxu4GiBkJkVDid0Un+j4ScYu4k=

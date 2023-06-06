@@ -11,7 +11,7 @@ import (
 // 查询用户身份信息
 func QueryUserAuth(userId int64) (userAuth entity.SysUserAuth, err error) {
 	userAuth.UserId = userId
-	err = gormx.Ctl.DB.Find(&userAuth).Error
+	err = gormx.CTL.DB.Find(&userAuth).Error
 	return
 }
 
@@ -30,6 +30,6 @@ func UserAuthUpdate(update params.UserAuthUpdate) (err error) {
 		sql.WriteString(`, valid_end = '` + update.ValidEnd + `'`)
 	}
 	sql.WriteString(` where user_id = ?`)
-	err = gormx.Ctl.DB.Exec(sql.String(), update.UpdateUserId, update.UserId).Error
+	err = gormx.CTL.DB.Exec(sql.String(), update.UpdateUserId, update.UserId).Error
 	return
 }

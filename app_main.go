@@ -25,27 +25,23 @@ func main() {
 	conf.InitAppConfig()
 
 	// 初始化日志
-	logx.InitLogger(&conf.Config.Log)
+	logx.InitLogger()
 
-	// 初始化Nacos连接配置
-	nacosx.InitNacosConn(&conf.Config.Nacos)
+	// 初始化Nacos
+	nacosx.InitNacosCTL()
 	// 加载Nacos配置
-	if nacosx.InitConfigClient() {
-		conf.LoadNacosConfig()
-	}
+	conf.LoadNacosConfig()
 	// 注册Nacos服务
-	if nacosx.InitNamingClient() {
-		conf.InitNacosServerRegister()
-	}
+	conf.RegisterNacosServer()
 
 	// 初始化Gorm
-	gormx.InitGormCTL(&conf.Config.Database)
+	gormx.InitGormCTL()
 	// 初始化数据库表结构
 	if conf.Config.Database.InitTable {
 		common.InitGormTable()
 	}
 	// 初始化redis
-	redisx.InitRedisCTL(&conf.Config.Redis)
+	redisx.InitRedisCTL()
 	// 初始化gin路由
 	InitGinRouter(&conf.Config.System)
 
