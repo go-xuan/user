@@ -25,7 +25,7 @@ func main() {
 	conf.InitAppConfig()
 
 	// 初始化日志
-	logx.InitLogger(&conf.Config.Log, log.StandardLogger())
+	logx.InitLogger(&conf.Config.Log)
 
 	// 初始化Nacos连接配置
 	nacosx.InitNacosConn(&conf.Config.Nacos)

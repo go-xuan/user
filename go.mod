@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/gin-gonic/gin v1.9.0
 	github.com/jinzhu/configor v1.2.1
-	github.com/quanxiaoxuan/go-builder v1.2.1
+	github.com/quanxiaoxuan/go-builder v1.2.3
 	github.com/quanxiaoxuan/go-utils v1.1.5
 	github.com/sirupsen/logrus v1.9.0
 )

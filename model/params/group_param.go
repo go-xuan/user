@@ -1,13 +1,13 @@
 package params
 
 import (
-	"github.com/quanxiaoxuan/go-builder/paramx/request"
+	"github.com/quanxiaoxuan/go-builder/paramx"
 )
 
 // 群组分页查询参数
 type GroupPage struct {
-	SearchKey string        `json:"searchKey" comment:"关键字"`
-	PageParam *request.Page `json:"pageParam" comment:"分页参数"`
+	SearchKey string       `json:"searchKey" comment:"关键字"`
+	PageParam *paramx.Page `json:"pageParam" comment:"分页参数"`
 }
 
 // 群组信息新增

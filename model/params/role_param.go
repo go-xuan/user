@@ -1,13 +1,13 @@
 package params
 
 import (
-	"github.com/quanxiaoxuan/go-builder/paramx/request"
+	"github.com/quanxiaoxuan/go-builder/paramx"
 )
 
 // 角色分页参数
 type RolePage struct {
-	SearchKey string        `json:"searchKey" comment:"关键字"`
-	PageParam *request.Page `json:"pageParam" comment:"分页参数"`
+	SearchKey string       `json:"searchKey" comment:"关键字"`
+	PageParam *paramx.Page `json:"pageParam" comment:"分页参数"`
 }
 
 // 角色新增
