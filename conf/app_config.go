@@ -40,7 +40,7 @@ func InitAppConfig() {
 	if err := configor.New(&configor.Config{
 		Debug:       true,
 		Environment: configor.ENV(),
-	}).Load(&Config, "config.yml"); err != nil {
+	}).Load(&Config, "config.yaml"); err != nil {
 		panic(err)
 	}
 	if ipx.GetWLANIP() != "" {
