@@ -2,13 +2,14 @@ package logic
 
 import (
 	"errors"
+	"github.com/quanxiaoxuan/quanx/common/snowflakex"
+	"github.com/quanxiaoxuan/quanx/middleware/redisx"
+	"github.com/quanxiaoxuan/quanx/utils/stringx"
+	"quan-admin/common"
 	"strconv"
 	"time"
 
-	"github.com/quanxiaoxuan/go-builder/authx"
-	"github.com/quanxiaoxuan/go-builder/redisx"
-	"github.com/quanxiaoxuan/go-builder/snowflakex"
-	"github.com/quanxiaoxuan/go-utils/stringx"
+	"github.com/quanxiaoxuan/quanx/common/authx"
 	log "github.com/sirupsen/logrus"
 
 	"quan-admin/app/mapper"
@@ -50,7 +51,7 @@ func UserLogin(param params.UserLogin, loginIp string) (*results.LoginResult, er
 			ExpireTime: time.Now().Unix() + sessionTime,
 		}
 		var token string
-		token, err = authx.BuildAuthToken(&tokenParam)
+		token, err = authx.BuildAuthToken(&tokenParam, common.SecretKey)
 		if err != nil {
 			log.Error("生成token失败")
 			return nil, err
@@ -58,7 +59,7 @@ func UserLogin(param params.UserLogin, loginIp string) (*results.LoginResult, er
 		// token存入redis
 		redisx.CTL.Set("token_"+userIdStr, token, time.Duration(sessionTime*1e9))
 		var sysLog = entity.SysLog{
-			Id:           snowflakex.NewSnow.NewId(),
+			Id:           snowflakex.Generator.NewId(),
 			Module:       "auth",
 			Type:         "login",
 			Content:      userInfo.UserName + "【" + userInfo.Phone + "账号密码登录】",
@@ -84,7 +85,7 @@ func TokenParse(token string) (*authx.Param, error) {
 	if token == "" {
 		return nil, errors.New("未携带token")
 	}
-	tokenParam, err := authx.ParseAuthToken(token)
+	tokenParam, err := authx.ParseAuthToken(token, common.SecretKey)
 	if err != nil {
 		return nil, errors.New("token解析失败")
 	}
@@ -100,7 +101,7 @@ func UserLogout(token, ip string) (userId int64, err error) {
 	}
 	userId, _ = strconv.ParseInt(tokenParam.UserId, 10, 64)
 	var sysLog = entity.SysLog{
-		Id:           snowflakex.NewSnow.NewId(),
+		Id:           snowflakex.Generator.NewId(),
 		Module:       "auth",
 		Type:         "logout",
 		Content:      tokenParam.UserName + "【登出】",

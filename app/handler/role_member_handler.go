@@ -2,9 +2,10 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/quanxiaoxuan/go-builder/authx"
-	"github.com/quanxiaoxuan/go-builder/paramx/response"
+	"github.com/quanxiaoxuan/quanx/common/authx"
+	"github.com/quanxiaoxuan/quanx/common/respx"
 	log "github.com/sirupsen/logrus"
+	"quan-admin/common"
 
 	"quan-admin/app/logic"
 	"quan-admin/model/params"
@@ -16,7 +17,7 @@ func RoleMemberAdd(context *gin.Context) {
 	var param params.RoleMemberAdd
 	if err = context.BindJSON(&param); err != nil {
 		log.Error("参数错误：", err)
-		response.BuildExceptionResponse(context, response.ParamErr, err)
+		respx.BuildExceptionResponse(context, respx.ParamErr, err)
 		return
 	}
 	var userIds []int64
@@ -25,19 +26,19 @@ func RoleMemberAdd(context *gin.Context) {
 	}
 	var exist bool
 	if exist, err = logic.RoleMemberExist(param.RoleId, userIds); err != nil {
-		response.BuildExceptionResponse(context, response.DuplicateErr, err)
+		respx.BuildExceptionResponse(context, respx.UniqueErr, err)
 		return
 	}
 	if exist {
-		response.BuildErrorResponse(context, "新增角色成员已存在")
+		respx.BuildErrorResponse(context, "新增角色成员已存在")
 		return
 	}
 	if param.CreateUserId == 0 {
-		param.CreateUserId = authx.GetUserId(context)
+		param.CreateUserId = authx.GetUserId(context, common.SecretKey)
 	}
 	if err = logic.RoleMemberAdd(param); err != nil {
-		response.BuildErrorResponse(context, err.Error())
+		respx.BuildErrorResponse(context, err.Error())
 	} else {
-		response.BuildSuccessResponse(context, nil)
+		respx.BuildSuccessResponse(context, nil)
 	}
 }

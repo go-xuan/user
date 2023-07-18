@@ -1,0 +1,3 @@
+package common
+
+const SecretKey = "1bM1qeHqi33rdiXr9SbrCCmkOeUXTw6vJpzzjhzKmG5g5bhILjOy48pWCpZMCMHU76qZ203KW2tEFNIxTLPxD16AEqEdKWcRznl6"

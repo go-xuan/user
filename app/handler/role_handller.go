@@ -2,9 +2,10 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/quanxiaoxuan/go-builder/authx"
-	"github.com/quanxiaoxuan/go-builder/paramx/response"
+	"github.com/quanxiaoxuan/quanx/common/authx"
+	"github.com/quanxiaoxuan/quanx/common/respx"
 	log "github.com/sirupsen/logrus"
+	"quan-admin/common"
 
 	"quan-admin/app/logic"
 	"quan-admin/model/params"
@@ -17,14 +18,14 @@ func RolePage(context *gin.Context) {
 	var param params.RolePage
 	if err = context.BindJSON(&param); err != nil {
 		log.Error("参数错误：", err)
-		response.BuildExceptionResponse(context, response.ParamErr, err)
+		respx.BuildExceptionResponse(context, respx.ParamErr, err)
 		return
 	}
-	var result *response.PageResponse
+	var result *respx.PageResponse
 	if result, err = logic.RolePage(param); err != nil {
-		response.BuildErrorResponse(context, err.Error())
+		respx.BuildErrorResponse(context, err.Error())
 	} else {
-		response.BuildSuccessResponse(context, result)
+		respx.BuildSuccessResponse(context, result)
 	}
 }
 
@@ -33,9 +34,9 @@ func RoleList(context *gin.Context) {
 	var err error
 	var result results.RoleSimpleList
 	if result, err = logic.RoleList(); err != nil {
-		response.BuildErrorResponse(context, err.Error())
+		respx.BuildErrorResponse(context, err.Error())
 	} else {
-		response.BuildSuccessResponse(context, result)
+		respx.BuildSuccessResponse(context, result)
 	}
 }
 
@@ -45,26 +46,26 @@ func RoleAdd(context *gin.Context) {
 	var param params.RoleCreate
 	if err = context.BindJSON(&param); err != nil {
 		log.Error("参数错误：", err)
-		response.BuildExceptionResponse(context, response.ParamErr, err)
+		respx.BuildExceptionResponse(context, respx.ParamErr, err)
 		return
 	}
 	var exist bool
 	if exist, err = logic.RoleCodeExist(param.RoleCode); err != nil {
-		response.BuildExceptionResponse(context, response.DuplicateErr, err)
+		respx.BuildExceptionResponse(context, respx.UniqueErr, err)
 		return
 	}
 	if exist {
-		response.BuildErrorResponse(context, "此角色编码已存在")
+		respx.BuildErrorResponse(context, "此角色编码已存在")
 		return
 	}
 	if param.CreateUserId == 0 {
-		param.CreateUserId = authx.GetUserId(context)
+		param.CreateUserId = authx.GetUserId(context, common.SecretKey)
 	}
 	var roleId int64
 	if roleId, err = logic.RoleAdd(param); err != nil {
-		response.BuildErrorResponse(context, err.Error())
+		respx.BuildErrorResponse(context, err.Error())
 	} else {
-		response.BuildSuccessResponse(context, roleId)
+		respx.BuildSuccessResponse(context, roleId)
 	}
 }
 
@@ -74,16 +75,16 @@ func RoleUpdate(context *gin.Context) {
 	var param params.RoleUpdate
 	if err = context.BindJSON(&param); err != nil {
 		log.Error("参数错误：", err)
-		response.BuildExceptionResponse(context, response.ParamErr, err)
+		respx.BuildExceptionResponse(context, respx.ParamErr, err)
 		return
 	}
 	if param.UpdateUserId == 0 {
-		param.UpdateUserId = authx.GetUserId(context)
+		param.UpdateUserId = authx.GetUserId(context, common.SecretKey)
 	}
 	if err = logic.RoleUpdate(param); err != nil {
-		response.BuildErrorResponse(context, err.Error())
+		respx.BuildErrorResponse(context, err.Error())
 	} else {
-		response.BuildSuccessResponse(context, nil)
+		respx.BuildSuccessResponse(context, nil)
 	}
 }
 
@@ -95,13 +96,13 @@ func RoleDelete(context *gin.Context) {
 	}
 	if err = context.ShouldBindQuery(&form); err != nil {
 		log.Error("参数错误：", err)
-		response.BuildExceptionResponse(context, response.ParamErr, err)
+		respx.BuildExceptionResponse(context, respx.ParamErr, err)
 		return
 	}
 	if err = logic.RoleDelete(form.RoleId); err != nil {
-		response.BuildErrorResponse(context, err.Error())
+		respx.BuildErrorResponse(context, err.Error())
 	} else {
-		response.BuildSuccessResponse(context, form.RoleId)
+		respx.BuildSuccessResponse(context, form.RoleId)
 	}
 }
 
@@ -113,13 +114,13 @@ func RoleDetail(context *gin.Context) {
 	}
 	if err = context.ShouldBindQuery(&form); err != nil {
 		log.Error("参数错误：", err)
-		response.BuildExceptionResponse(context, response.ParamErr, err)
+		respx.BuildExceptionResponse(context, respx.ParamErr, err)
 		return
 	}
 	var result results.RoleDetail
 	if result, err = logic.RoleDetail(form.RoleId); err != nil {
-		response.BuildErrorResponse(context, err.Error())
+		respx.BuildErrorResponse(context, err.Error())
 	} else {
-		response.BuildSuccessResponse(context, result)
+		respx.BuildSuccessResponse(context, result)
 	}
 }

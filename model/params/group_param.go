@@ -1,7 +1,7 @@
 package params
 
 import (
-	"github.com/quanxiaoxuan/go-builder/paramx"
+	"github.com/quanxiaoxuan/quanx/common/paramx"
 )
 
 // 群组分页查询参数

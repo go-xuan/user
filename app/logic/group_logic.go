@@ -1,8 +1,8 @@
 package logic
 
 import (
-	"github.com/quanxiaoxuan/go-builder/paramx/response"
-	"github.com/quanxiaoxuan/go-builder/snowflakex"
+	"github.com/quanxiaoxuan/quanx/common/respx"
+	"github.com/quanxiaoxuan/quanx/common/snowflakex"
 	log "github.com/sirupsen/logrus"
 
 	"quan-admin/app/mapper"
@@ -12,7 +12,7 @@ import (
 )
 
 // 群组分页
-func GroupPage(param params.GroupPage) (*response.PageResponse, error) {
+func GroupPage(param params.GroupPage) (*respx.PageResponse, error) {
 	var resultList results.GroupInfoList
 	var total int64
 	var err error
@@ -21,7 +21,7 @@ func GroupPage(param params.GroupPage) (*response.PageResponse, error) {
 		log.Error("用户分页查询失败")
 		return nil, err
 	}
-	return response.BuildPageData(param.PageParam, resultList, total), nil
+	return respx.BuildPageData(param.PageParam, resultList, total), nil
 }
 
 // 群组编码校验
@@ -38,7 +38,7 @@ func GroupCodeExist(groupCode string) (exist bool, err error) {
 // 群组新增
 func GroupAdd(param params.GroupCreate) (int64, error) {
 	var err error
-	groupId := snowflakex.NewSnow.NewId()
+	groupId := snowflakex.Generator.NewId()
 	var group = entity.SysGroup{
 		GroupId:      groupId,
 		GroupCode:    param.GroupCode,

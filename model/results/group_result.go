@@ -1,7 +1,7 @@
 package results
 
 import (
-	"github.com/quanxiaoxuan/go-utils/timex"
+	"github.com/quanxiaoxuan/quanx/utils/timex"
 )
 
 // 群组明细

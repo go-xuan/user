@@ -2,9 +2,9 @@ package logic
 
 import (
 	"errors"
-
-	"github.com/quanxiaoxuan/go-builder/snowflakex"
-	"github.com/quanxiaoxuan/go-utils/timex"
+	
+	"github.com/quanxiaoxuan/quanx/common/snowflakex"
+	"github.com/quanxiaoxuan/quanx/utils/timex"
 
 	"quan-admin/app/mapper"
 	"quan-admin/model/entity"
@@ -26,7 +26,7 @@ func RoleMemberAdd(param params.RoleMemberAdd) error {
 	var memberList entity.SysRoleMemberList
 	for _, item := range param.RoleMemberList {
 		var roleUser = entity.SysRoleMember{
-			Id:           snowflakex.NewSnow.NewId(),
+			Id:           snowflakex.Generator.NewId(),
 			RoleId:       param.RoleId,
 			MemberId:     item.UserId,
 			ValidStart:   timex.ToTime(item.ValidStart),

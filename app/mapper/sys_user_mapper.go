@@ -1,11 +1,11 @@
 package mapper
 
 import (
+	"github.com/quanxiaoxuan/quanx/utils/randx"
+	"github.com/quanxiaoxuan/quanx/utils/stringx"
 	"strings"
 
-	"github.com/quanxiaoxuan/go-builder/gormx"
-	"github.com/quanxiaoxuan/go-utils/randx"
-	"github.com/quanxiaoxuan/go-utils/stringx"
+	"github.com/quanxiaoxuan/quanx/middleware/gormx"
 	log "github.com/sirupsen/logrus"
 
 	"quan-admin/model/entity"

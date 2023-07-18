@@ -3,7 +3,8 @@ package mapper
 import (
 	"strings"
 
-	"github.com/quanxiaoxuan/go-builder/gormx"
+	"github.com/quanxiaoxuan/quanx/middleware/gormx"
+
 	"quan-admin/model/entity"
 	"quan-admin/model/params"
 )

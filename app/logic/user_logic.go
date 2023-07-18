@@ -3,11 +3,11 @@ package logic
 import (
 	"time"
 
-	"github.com/quanxiaoxuan/go-builder/paramx/response"
-	"github.com/quanxiaoxuan/go-builder/snowflakex"
-	"github.com/quanxiaoxuan/go-utils/randx"
-	"github.com/quanxiaoxuan/go-utils/stringx"
-	"github.com/quanxiaoxuan/go-utils/timex"
+	"github.com/quanxiaoxuan/quanx/common/respx"
+	"github.com/quanxiaoxuan/quanx/common/snowflakex"
+	"github.com/quanxiaoxuan/quanx/utils/randx"
+	"github.com/quanxiaoxuan/quanx/utils/stringx"
+	"github.com/quanxiaoxuan/quanx/utils/timex"
 	log "github.com/sirupsen/logrus"
 
 	"quan-admin/app/mapper"
@@ -17,7 +17,7 @@ import (
 )
 
 // 用户分页
-func UserPage(param params.UserPage) (*response.PageResponse, error) {
+func UserPage(param params.UserPage) (*respx.PageResponse, error) {
 	var resultList results.UserInfoList
 	var total int64
 	var err error
@@ -26,7 +26,7 @@ func UserPage(param params.UserPage) (*response.PageResponse, error) {
 		log.Error("用户分页查询失败")
 		return nil, err
 	}
-	return response.BuildPageData(param.PageParam, resultList, total), nil
+	return respx.BuildPageData(param.PageParam, resultList, total), nil
 }
 
 // 用户列表
@@ -48,7 +48,7 @@ func UserPhoneExist(phone string) (exist bool, err error) {
 // 用户新增
 func UserAdd(param params.UserCreate) (int64, error) {
 	var err error
-	userId := snowflakex.NewSnow.NewId()
+	userId := snowflakex.Generator.NewId()
 	var user = entity.SysUser{
 		UserId:       userId,
 		UserName:     param.UserName,

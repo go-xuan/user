@@ -5,7 +5,7 @@ import (
 )
 
 // 添加api接口函数路由
-func AddHandlerFunc(router *gin.RouterGroup) {
+func LoadApiRouter(router *gin.RouterGroup) {
 	// 用户登录
 	authRouter := router.Group("auth")
 	authRouter.POST("login", UserLogin)      // 用户登录

@@ -1,8 +1,8 @@
 package logic
 
 import (
-	"github.com/quanxiaoxuan/go-builder/snowflakex"
-	"github.com/quanxiaoxuan/go-utils/timex"
+	"github.com/quanxiaoxuan/quanx/common/snowflakex"
+	"github.com/quanxiaoxuan/quanx/utils/timex"
 
 	"quan-admin/app/mapper"
 	"quan-admin/model/entity"
@@ -14,7 +14,7 @@ func GroupMemberAdd(param params.GroupMemberAdd) error {
 	var memberList entity.SysGroupMemberList
 	for _, item := range param.GroupMemberList {
 		var member = entity.SysGroupMember{
-			Id:           snowflakex.NewSnow.NewId(),
+			Id:           snowflakex.Generator.NewId(),
 			GroupId:      param.GroupId,
 			MemberId:     item.UserId,
 			IsAdmin:      item.IsAdmin,

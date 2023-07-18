@@ -2,12 +2,11 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/quanxiaoxuan/go-builder/authx"
-	"github.com/quanxiaoxuan/go-builder/paramx/response"
+	"github.com/quanxiaoxuan/quanx/common/authx"
+	"github.com/quanxiaoxuan/quanx/common/respx"
+	"github.com/quanxiaoxuan/quanx/server"
 	log "github.com/sirupsen/logrus"
-
 	"quan-admin/app/logic"
-	"quan-admin/conf"
 	"quan-admin/model/params"
 	"quan-admin/model/results"
 )
@@ -18,18 +17,18 @@ func UserLogin(context *gin.Context) {
 	var param params.UserLogin
 	if err = context.BindJSON(&param); err != nil {
 		log.Error("参数错误：", err)
-		response.BuildExceptionResponse(context, response.ParamErr, err)
+		respx.BuildExceptionResponse(context, respx.ParamErr, err)
 		return
 	}
 	ip := context.ClientIP()
 	if ip == "::1" {
-		ip = conf.Config.System.Host
+		ip = server.GetConfig().Server.Host
 	}
 	var result *results.LoginResult
 	if result, err = logic.UserLogin(param, ip); err != nil {
-		response.BuildErrorResponse(context, err.Error())
+		respx.BuildErrorResponse(context, err.Error())
 	} else {
-		response.BuildSuccessResponse(context, result)
+		respx.BuildSuccessResponse(context, result)
 	}
 }
 
@@ -39,9 +38,9 @@ func TokenParse(context *gin.Context) {
 	var result *authx.Param
 	token := context.Request.Header.Get("Authorization")
 	if result, err = logic.TokenParse(token); err != nil {
-		response.BuildErrorResponse(context, err.Error())
+		respx.BuildErrorResponse(context, err.Error())
 	} else {
-		response.BuildSuccessResponse(context, result)
+		respx.BuildSuccessResponse(context, result)
 	}
 }
 
@@ -49,14 +48,14 @@ func TokenParse(context *gin.Context) {
 func UserLogout(context *gin.Context) {
 	ip := context.ClientIP()
 	if ip == "::1" {
-		ip = conf.Config.System.Host
+		ip = server.GetConfig().Server.Host
 	}
 	var err error
 	var userId int64
 	token := context.Request.Header.Get("Authorization")
 	if userId, err = logic.UserLogout(token, ip); err != nil {
-		response.BuildErrorResponse(context, err.Error())
+		respx.BuildErrorResponse(context, err.Error())
 	} else {
-		response.BuildSuccessResponse(context, userId)
+		respx.BuildSuccessResponse(context, userId)
 	}
 }

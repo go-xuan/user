@@ -1,8 +1,8 @@
 package logic
 
 import (
-	"github.com/quanxiaoxuan/go-builder/paramx/response"
-	"github.com/quanxiaoxuan/go-builder/snowflakex"
+	"github.com/quanxiaoxuan/quanx/common/respx"
+	"github.com/quanxiaoxuan/quanx/common/snowflakex"
 	log "github.com/sirupsen/logrus"
 
 	"quan-admin/app/mapper"
@@ -12,7 +12,7 @@ import (
 )
 
 // 用户分页查询
-func RolePage(param params.RolePage) (*response.PageResponse, error) {
+func RolePage(param params.RolePage) (*respx.PageResponse, error) {
 	var resultList results.RoleInfoList
 	var total int64
 	var err error
@@ -21,7 +21,7 @@ func RolePage(param params.RolePage) (*response.PageResponse, error) {
 		log.Error("用户分页查询失败")
 		return nil, err
 	}
-	return response.BuildPageData(param.PageParam, resultList, total), nil
+	return respx.BuildPageData(param.PageParam, resultList, total), nil
 }
 
 // 角色列表
@@ -43,7 +43,7 @@ func RoleCodeExist(roleCode string) (exist bool, err error) {
 // 角色新增
 func RoleAdd(param params.RoleCreate) (int64, error) {
 	var err error
-	roleId := snowflakex.NewSnow.NewId()
+	roleId := snowflakex.Generator.NewId()
 	var role = entity.SysRole{
 		RoleId:       roleId,
 		RoleCode:     param.RoleCode,
