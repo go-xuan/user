@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/gin-gonic/gin v1.9.1
-	github.com/quanxiaoxuan/quanx v1.0.2
+	github.com/quanxiaoxuan/quanx v1.0.3
 	github.com/sirupsen/logrus v1.9.0
 )
 

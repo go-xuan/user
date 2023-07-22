@@ -7,6 +7,10 @@ import (
 
 func main() {
 	var engine = server.NewEngine()
+	engine.AddMiddleware(
+		engine.InitLogger,
+		engine.InitNacos,
+		engine.InitGorm)
 	engine.AddRouterLoaders(handler.LoadApiRouter)
 	engine.Run()
 }
