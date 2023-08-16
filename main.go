@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/quanxiaoxuan/quanx/server"
 	"quan-admin/app/handler"
+	"quan-admin/common"
 )
 
 func main() {
@@ -10,7 +11,8 @@ func main() {
 	engine.AddMiddleware(
 		engine.InitLogger,
 		engine.InitNacos,
-		engine.InitGorm)
+		engine.InitGorm,
+		common.InitGormTable)
 	engine.AddRouterLoaders(handler.LoadApiRouter)
 	engine.Run()
 }
