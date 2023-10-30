@@ -1,0 +1,24 @@
+# 当前系统配置
+server:
+  name: quan-admin
+  port: 9001
+  env: localhost
+  prefix: admin
+
+# nacos访问配置
+nacos:
+  address: localhost:8848
+  path: /nacos
+  username: nacos
+  password: nacos
+  mode: 0
+  nameSpace: localhost
+  logDir: resource/.nacos/log
+  cacheDir: resource/.nacos/cache
+  options:
+    - group: quan_admin
+      dataId: server.yaml
+    - group: quan_admin
+      dataId: database.yaml
+    - group: quan_admin
+      dataId: redis.yaml

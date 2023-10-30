@@ -1,0 +1,33 @@
+# 当前系统配置
+server:
+  name: quan-admin
+  port: 9001
+  env: localhost
+  prefix: admin
+
+database:
+  - source: default
+    enable: true
+    type: postgres
+    host: localhost
+    port: 5432
+    userName: postgres
+    password: postgres
+    database: quan_admin
+    debug: true
+    init: true
+
+
+redis:
+  - source: default
+    mode: 0
+    host: localhost
+    port: 6379
+    password: Init@1234
+    database: 1
+  - source: user
+    mode: 0
+    host: localhost
+    port: 6379
+    password: Init@1234
+    database: 2
