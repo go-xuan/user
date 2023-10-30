@@ -1,9 +1,11 @@
 package model
 
 import (
-	"github.com/quanxiaoxuan/quanx/utils/timex"
-	"quan-admin/model/table"
 	"time"
+
+	"github.com/quanxiaoxuan/quanx/utils/timex"
+
+	"quan-user/model/table"
 )
 
 // 群组明细

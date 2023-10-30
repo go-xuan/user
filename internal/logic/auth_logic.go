@@ -3,7 +3,6 @@ package logic
 import (
 	"context"
 	"errors"
-	"quan-admin/model"
 	"strconv"
 	"time"
 
@@ -13,8 +12,9 @@ import (
 	"github.com/quanxiaoxuan/quanx/utils/idx"
 	log "github.com/sirupsen/logrus"
 
-	"quan-admin/internal/dao"
-	"quan-admin/model/table"
+	"quan-user/internal/dao"
+	"quan-user/model"
+	"quan-user/model/table"
 )
 
 // 用户登录

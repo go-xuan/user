@@ -7,8 +7,9 @@ import (
 	"github.com/quanxiaoxuan/quanx/public/authx"
 	"github.com/quanxiaoxuan/quanx/utils/encryptx"
 	log "github.com/sirupsen/logrus"
-	"quan-admin/internal/logic"
-	"quan-admin/model"
+
+	"quan-user/internal/logic"
+	"quan-user/model"
 )
 
 // 用户登录

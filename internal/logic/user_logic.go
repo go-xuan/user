@@ -2,18 +2,18 @@ package logic
 
 import (
 	"errors"
-	"github.com/quanxiaoxuan/quanx/utils/encryptx"
-	"github.com/quanxiaoxuan/quanx/utils/idx"
-	"quan-admin/model"
 	"time"
 
 	"github.com/quanxiaoxuan/quanx/common/respx"
+	"github.com/quanxiaoxuan/quanx/utils/encryptx"
+	"github.com/quanxiaoxuan/quanx/utils/idx"
 	"github.com/quanxiaoxuan/quanx/utils/randx"
 	"github.com/quanxiaoxuan/quanx/utils/timex"
 	log "github.com/sirupsen/logrus"
 
-	"quan-admin/internal/dao"
-	"quan-admin/model/table"
+	"quan-user/internal/dao"
+	"quan-user/model"
+	"quan-user/model/table"
 )
 
 // 用户分页

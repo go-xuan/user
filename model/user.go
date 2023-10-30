@@ -1,11 +1,13 @@
 package model
 
 import (
+	"time"
+
 	"github.com/quanxiaoxuan/quanx/utils/encryptx"
 	"github.com/quanxiaoxuan/quanx/utils/randx"
 	"github.com/quanxiaoxuan/quanx/utils/timex"
-	"quan-admin/model/table"
-	"time"
+
+	"quan-user/model/table"
 )
 
 // 用户信息

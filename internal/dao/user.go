@@ -6,8 +6,8 @@ import (
 
 	"github.com/quanxiaoxuan/quanx/public/gormx"
 
-	"quan-admin/model"
-	"quan-admin/model/table"
+	"quan-user/model"
+	"quan-user/model/table"
 )
 
 const SelectUser = `

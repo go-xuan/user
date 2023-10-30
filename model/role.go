@@ -2,7 +2,8 @@ package model
 
 import (
 	"github.com/quanxiaoxuan/quanx/utils/timex"
-	"quan-admin/model/table"
+
+	"quan-user/model/table"
 )
 
 // 角色信息

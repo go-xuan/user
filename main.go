@@ -3,14 +3,13 @@ package main
 import (
 	"github.com/quanxiaoxuan/quanx/engine"
 
-	"quan-admin/common"
-	"quan-admin/internal/router"
-	"quan-admin/model/table"
+	"quan-user/common"
+	"quan-user/internal/router"
+	"quan-user/model/table"
 )
 
 func main() {
 	var newEngine = engine.GetEngine()
-	//newEngine.SetConfigPath("config/config.yaml")
 	newEngine.SetConfigPath("config/config-localhost.yaml")
 	newEngine.AddGormModel("default",
 		&table.User{},

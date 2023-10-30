@@ -1,4 +1,4 @@
-module quan-admin
+module quan-user
 
 go 1.18
 

@@ -3,7 +3,8 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/quanxiaoxuan/quanx/public/middlewarex"
-	"quan-admin/internal/controller"
+
+	"quan-user/internal/controller"
 )
 
 // 添加api接口函数路由

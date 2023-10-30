@@ -6,9 +6,9 @@ import (
 	"github.com/quanxiaoxuan/quanx/common/respx"
 	"github.com/quanxiaoxuan/quanx/public/authx"
 	log "github.com/sirupsen/logrus"
-	"quan-admin/model"
 
-	"quan-admin/internal/logic"
+	"quan-user/internal/logic"
+	"quan-user/model"
 )
 
 // 用户分页查询
