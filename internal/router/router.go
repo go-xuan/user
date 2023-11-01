@@ -2,8 +2,7 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/quanxiaoxuan/quanx/public/middlewarex"
-
+	"github.com/quanxiaoxuan/quanx/public/authx"
 	"quan-user/internal/controller"
 )
 
@@ -11,9 +10,14 @@ import (
 func BindGinRouter(router *gin.RouterGroup) {
 	api := router.Group("api/v1")
 	api.Use(
-		middlewarex.WhiteList("/auth/login", "/user/save"), // 白名单
-		middlewarex.Cooke(), // cookie鉴权
-		//middlewarex.Auth(),  // auth鉴权
+		authx.WhiteList(
+			"/auth/login",
+			"/user/save",
+			"/auth/encrypt",
+			"/auth/decrypt",
+		), // 白名单
+		authx.CookeAuth(), // cookie鉴权
+		//authx.TokenAuth(), // auth鉴权
 	)
 	// 用户登录
 	auth := api.Group("auth")
@@ -21,6 +25,7 @@ func BindGinRouter(router *gin.RouterGroup) {
 	auth.GET("logout", controller.UserLogout)     // 用户登出
 	auth.GET("tokenParse", controller.TokenParse) // token解析
 	auth.GET("encrypt", controller.Encrypt)       // 密码加密
+	auth.GET("decrypt", controller.Decrypt)       // 密码解密
 	// 用户管理
 	user := api.Group("user")
 	user.POST("page", controller.UserPage)    // 用户分页

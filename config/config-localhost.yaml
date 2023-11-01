@@ -3,8 +3,9 @@ server:
   name: quan-admin
   port: 9001
   env: localhost
-  prefix: admin
+  prefix: user
 
+# 数据库配置
 database:
   - source: default
     enable: true
@@ -13,11 +14,11 @@ database:
     port: 5432
     username: postgres
     password: postgres
-    database: quan_admin
+    database: quan_user
     debug: true
     init: true
 
-
+# redis配置
 redis:
   - source: default
     mode: 0

@@ -29,12 +29,14 @@ func UserLogin(param model.Login, loginIp string) (result *model.LoginResult, er
 	if err != nil {
 		return
 	}
-	passWord := param.Password
-	if len(passWord) < 32 {
-		passWord = encryptx.MD5(passWord)
+	var password string
+	password, err = encryptx.RSA().Decrypt(param.Password)
+	if err != nil {
+		return
 	}
+	password = encryptx.MD5(password)
 	// 校验密码
-	if encryptx.PasswordSalt(passWord, userAuth.Salt) != userAuth.Password {
+	if encryptx.PasswordSalt(password, userAuth.Salt) != userAuth.Password {
 		err = errors.New("密码错误")
 		return
 	}
@@ -54,7 +56,7 @@ func UserLogin(param model.Login, loginIp string) (result *model.LoginResult, er
 		return
 	}
 	// token存入redis
-	redisx.GetCmd("user").Set(context.TODO(), "login:"+user.Account, token, time.Duration(sessionTime*1e9))
+	redisx.GetCmd("user").Set(context.TODO(), authx.RedisKeyPrefix+user.Account, token, time.Duration(sessionTime*1e9))
 	var sysLog = table.Log{
 		Id:           idx.SnowFlake().NewInt64(),
 		Module:       "auth",
@@ -87,6 +89,6 @@ func UserLogout(user *authx.User, ip string) (userId int64, err error) {
 		log.Error("记录日志失败")
 	}
 	// 删除redis上用户token
-	redisx.GetCmd("user").Del(context.TODO(), "login:"+user.Account)
+	redisx.GetCmd("user").Del(context.TODO(), user.RedisCacheKey())
 	return
 }

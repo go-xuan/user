@@ -3,7 +3,7 @@ server:
   name: quan-admin
   port: 9001
   env: localhost
-  prefix: admin
+  prefix: user
 
 # nacos访问配置
 nacos:
@@ -16,9 +16,9 @@ nacos:
   logDir: resource/.nacos/log
   cacheDir: resource/.nacos/cache
   options:
-    - group: quan_admin
+    - group: quan_user
       dataId: server.yaml
-    - group: quan_admin
+    - group: quan_user
       dataId: database.yaml
-    - group: quan_admin
+    - group: quan_user
       dataId: redis.yaml

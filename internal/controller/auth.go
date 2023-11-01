@@ -44,7 +44,7 @@ func UserLogout(ctx *gin.Context) {
 	if ip == "::1" {
 		ip = engine.GetEngine().Config.Server.Host
 	}
-	if value, ok := ctx.Get("token_user"); ok {
+	if value, ok := ctx.Get(authx.TokenUser); ok {
 		userId, err := logic.UserLogout(value.(*authx.User), ip)
 		if err != nil {
 			respx.BuildError(ctx, err)
@@ -60,16 +60,9 @@ func UserLogout(ctx *gin.Context) {
 
 // 验证token
 func TokenParse(ctx *gin.Context) {
-	if value, ok := ctx.Get("token_user"); ok {
+	if value, ok := ctx.Get(authx.TokenUser); ok {
 		respx.BuildResponse(ctx, value, nil)
 	}
-}
-
-// 加密
-func Encrypt(ctx *gin.Context) {
-	var password = ctx.Query("password")
-	ciphertext, err := encryptx.RSA().Encrypt([]byte(password))
-	respx.BuildResponse(ctx, ciphertext, err)
 }
 
 func SetCookie(ctx *gin.Context, value string) error {
@@ -77,12 +70,26 @@ func SetCookie(ctx *gin.Context, value string) error {
 	if value == "" {
 		maxAge = -1
 	} else {
-		bytes, err := encryptx.RSA().Encrypt([]byte(value))
+		bytes, err := encryptx.RSA().Encrypt(value)
 		if err != nil {
 			return err
 		}
-		value = string(bytes)
+		value = bytes
 	}
-	ctx.SetCookie("auth_cookie", value, maxAge, "", "", false, true)
+	ctx.SetCookie(authx.CookieKey, value, maxAge, "", "", false, true)
 	return nil
+}
+
+// 加密
+func Encrypt(ctx *gin.Context) {
+	var text = ctx.Query("text")
+	ciphertext, err := encryptx.RSA().Encrypt(text)
+	respx.BuildResponse(ctx, ciphertext, err)
+}
+
+// 加密
+func Decrypt(ctx *gin.Context) {
+	var text = ctx.Query("text")
+	plaintext, err := encryptx.RSA().Decrypt(text)
+	respx.BuildResponse(ctx, plaintext, err)
 }
