@@ -1,7 +1,7 @@
 package model
 
 import (
-	"github.com/quanxiaoxuan/quanx/utils/timex"
+	"github.com/go-xuan/quanx/utils/timex"
 
 	"quan-user/model/table"
 )

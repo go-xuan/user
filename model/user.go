@@ -3,9 +3,9 @@ package model
 import (
 	"time"
 
-	"github.com/quanxiaoxuan/quanx/utils/encryptx"
-	"github.com/quanxiaoxuan/quanx/utils/randx"
-	"github.com/quanxiaoxuan/quanx/utils/timex"
+	"github.com/go-xuan/quanx/utils/encryptx"
+	"github.com/go-xuan/quanx/utils/randx"
+	"github.com/go-xuan/quanx/utils/timex"
 
 	"quan-user/model/table"
 )

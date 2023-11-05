@@ -1,6 +1,6 @@
 # 当前系统配置
 server:
-  name: quan-admin
+  name: quan-user
   port: 9001
   env: localhost
   prefix: user

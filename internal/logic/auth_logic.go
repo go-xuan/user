@@ -6,10 +6,10 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/quanxiaoxuan/quanx/public/authx"
-	"github.com/quanxiaoxuan/quanx/public/redisx"
-	"github.com/quanxiaoxuan/quanx/utils/encryptx"
-	"github.com/quanxiaoxuan/quanx/utils/idx"
+	"github.com/go-xuan/quanx/public/authx"
+	"github.com/go-xuan/quanx/public/redisx"
+	"github.com/go-xuan/quanx/utils/encryptx"
+	"github.com/go-xuan/quanx/utils/idx"
 	log "github.com/sirupsen/logrus"
 
 	"quan-user/internal/dao"

@@ -2,9 +2,9 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/quanxiaoxuan/quanx/common/modelx"
-	"github.com/quanxiaoxuan/quanx/common/respx"
-	"github.com/quanxiaoxuan/quanx/public/authx"
+	"github.com/go-xuan/quanx/common/modelx"
+	"github.com/go-xuan/quanx/common/respx"
+	"github.com/go-xuan/quanx/public/authx"
 	log "github.com/sirupsen/logrus"
 
 	"quan-user/internal/logic"
@@ -28,7 +28,7 @@ func GroupPage(ctx *gin.Context) {
 // 群组明细
 func GroupDetail(ctx *gin.Context) {
 	var err error
-	var in modelx.PrimaryKey
+	var in modelx.IdInt64
 	if err = ctx.ShouldBindQuery(&in); err != nil {
 		log.Error("参数错误：", err)
 		respx.BuildException(ctx, respx.ParamErr, err)
@@ -42,7 +42,7 @@ func GroupDetail(ctx *gin.Context) {
 // 群组删除
 func GroupDelete(ctx *gin.Context) {
 	var err error
-	var in modelx.PrimaryKey
+	var in modelx.IdInt64
 	if err = ctx.ShouldBindQuery(&in); err != nil {
 		log.Error("参数错误：", err)
 		respx.BuildException(ctx, respx.ParamErr, err)

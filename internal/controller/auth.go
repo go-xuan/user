@@ -2,10 +2,10 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/quanxiaoxuan/quanx/common/respx"
-	"github.com/quanxiaoxuan/quanx/engine"
-	"github.com/quanxiaoxuan/quanx/public/authx"
-	"github.com/quanxiaoxuan/quanx/utils/encryptx"
+	"github.com/go-xuan/quanx/common/respx"
+	"github.com/go-xuan/quanx/engine"
+	"github.com/go-xuan/quanx/public/authx"
+	"github.com/go-xuan/quanx/utils/encryptx"
 	log "github.com/sirupsen/logrus"
 
 	"quan-user/internal/logic"

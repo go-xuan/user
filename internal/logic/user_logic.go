@@ -4,11 +4,11 @@ import (
 	"errors"
 	"time"
 
-	"github.com/quanxiaoxuan/quanx/common/respx"
-	"github.com/quanxiaoxuan/quanx/utils/encryptx"
-	"github.com/quanxiaoxuan/quanx/utils/idx"
-	"github.com/quanxiaoxuan/quanx/utils/randx"
-	"github.com/quanxiaoxuan/quanx/utils/timex"
+	"github.com/go-xuan/quanx/common/respx"
+	"github.com/go-xuan/quanx/utils/encryptx"
+	"github.com/go-xuan/quanx/utils/idx"
+	"github.com/go-xuan/quanx/utils/randx"
+	"github.com/go-xuan/quanx/utils/timex"
 	log "github.com/sirupsen/logrus"
 
 	"quan-user/internal/dao"
