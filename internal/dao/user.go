@@ -6,8 +6,8 @@ import (
 
 	"github.com/go-xuan/quanx/public/gormx"
 
-	"quan-user/model"
-	"quan-user/model/table"
+	"user/internal/model"
+	"user/internal/model/table"
 )
 
 const SelectUser = `
@@ -143,14 +143,14 @@ func UserExist(in *model.UserSave) (count int64, err error) {
 }
 
 // 用户新增
-func UserCreate(user table.User, userAuth table.UserAuth) error {
+func UserCreate(user *table.User, userAuth *table.UserAuth) error {
 	tx := gormx.CTL.DB.Begin()
-	err := tx.Create(&user).Error
+	err := tx.Create(user).Error
 	if err != nil {
 		tx.Rollback()
 		return err
 	}
-	err = tx.Create(&userAuth).Error
+	err = tx.Create(userAuth).Error
 	if err != nil {
 		tx.Rollback()
 		return err
@@ -196,13 +196,13 @@ func UserUpdate(in *model.UserSave) (err error) {
 		userAuthCols = append(userAuthCols, "valid_end")
 	}
 	// 更新用户表
-	err = tx.Model(&table.User{}).Select(userCols).Where("user_id = ? ", in.Id).Updates(in.User()).Error
+	err = tx.Model(&table.User{}).Select(userCols).Where("user_id = ? ", in.Id).Updates(in.UserUpdate()).Error
 	if err != nil {
 		tx.Rollback()
 		return
 	}
 	// 更新用户鉴权表
-	err = tx.Model(&table.UserAuth{}).Select(userAuthCols).Where("user_id = ? ", in.Id).Updates(in.UserAuth()).Error
+	err = tx.Model(&table.UserAuth{}).Select(userAuthCols).Where("user_id = ? ", in.Id).Updates(in.UserAuthUpdate()).Error
 	if err != nil {
 		tx.Rollback()
 		return

@@ -3,29 +3,21 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-xuan/quanx/public/authx"
-	"quan-user/internal/controller"
+
+	"user/internal/controller"
 )
 
 // 添加api接口函数路由
 func BindGinRouter(router *gin.RouterGroup) {
 	api := router.Group("api/v1")
 	api.Use(
-		authx.WhiteList(
-			"/auth/login",
-			"/user/save",
-			"/auth/encrypt",
-			"/auth/decrypt",
-		), // 白名单
-		authx.CookeAuth(), // cookie鉴权
-		//authx.TokenAuth(), // auth鉴权
+		// 白名单
+		authx.WhiteList("/auth/encrypt", "/auth/decrypt"),
+		// cookie鉴权
+		authx.CookeAuth(),
+		// auth鉴权
+		//authx.TokenAuth(),
 	)
-	// 用户登录
-	auth := api.Group("auth")
-	auth.POST("login", controller.UserLogin)      // 用户登录
-	auth.GET("logout", controller.UserLogout)     // 用户登出
-	auth.GET("tokenParse", controller.TokenParse) // token解析
-	auth.GET("encrypt", controller.Encrypt)       // 密码加密
-	auth.GET("decrypt", controller.Decrypt)       // 密码解密
 	// 用户管理
 	user := api.Group("user")
 	user.POST("page", controller.UserPage)    // 用户分页
@@ -33,6 +25,13 @@ func BindGinRouter(router *gin.RouterGroup) {
 	user.GET("delete", controller.UserDelete) // 用户删除
 	user.GET("detail", controller.UserDetail) // 用户明细
 	user.GET("list", controller.UserList)     // 用户列表
+	// 用户登录
+	auth := api.Group("auth")
+	auth.POST("login", controller.UserLogin)      // 用户登录
+	auth.GET("logout", controller.UserLogout)     // 用户登出
+	auth.GET("tokenParse", controller.TokenParse) // token解析
+	auth.GET("encrypt", controller.Encrypt)       // 密码加密
+	auth.GET("decrypt", controller.Decrypt)       // 密码解密
 	// 角色管理
 	role := api.Group("role")
 	role.POST("page", controller.RolePage)    // 角色分页

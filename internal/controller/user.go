@@ -2,13 +2,13 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/go-xuan/quanx/common/modelx"
-	"github.com/go-xuan/quanx/common/respx"
 	"github.com/go-xuan/quanx/public/authx"
+	"github.com/go-xuan/quanx/public/modelx"
+	"github.com/go-xuan/quanx/public/respx"
 	log "github.com/sirupsen/logrus"
 
-	"quan-user/internal/logic"
-	"quan-user/model"
+	"user/internal/logic"
+	"user/internal/model"
 )
 
 // 用户分页
@@ -22,7 +22,7 @@ func UserPage(ctx *gin.Context) {
 	}
 	var result *respx.PageResponse
 	result, err = logic.UserPage(in)
-	respx.BuildResponse(ctx, result, err)
+	respx.BuildNormal(ctx, result, err)
 }
 
 // 用户列表
@@ -30,7 +30,7 @@ func UserList(ctx *gin.Context) {
 	var err error
 	var result []*model.User
 	result, err = logic.UserList()
-	respx.BuildResponse(ctx, result, err)
+	respx.BuildNormal(ctx, result, err)
 }
 
 // 用户新增
@@ -47,11 +47,11 @@ func UserSave(ctx *gin.Context) {
 	}
 	if in.Id != 0 {
 		err = logic.UserUpdate(&in)
-		respx.BuildResponse(ctx, nil, err)
+		respx.BuildNormal(ctx, nil, err)
 	} else {
 		var result int64
 		result, err = logic.UserCreate(&in)
-		respx.BuildResponse(ctx, result, err)
+		respx.BuildNormal(ctx, result, err)
 	}
 }
 
@@ -65,7 +65,7 @@ func UserDelete(ctx *gin.Context) {
 		return
 	}
 	err = logic.UserDelete(in.Id)
-	respx.BuildResponse(ctx, nil, err)
+	respx.BuildNormal(ctx, nil, err)
 }
 
 // 用户明细
@@ -79,5 +79,5 @@ func UserDetail(ctx *gin.Context) {
 	}
 	var result *model.User
 	result, err = logic.UserDetail(in.Id)
-	respx.BuildResponse(ctx, result, err)
+	respx.BuildNormal(ctx, result, err)
 }

@@ -2,13 +2,13 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/go-xuan/quanx/common/modelx"
-	"github.com/go-xuan/quanx/common/respx"
 	"github.com/go-xuan/quanx/public/authx"
+	"github.com/go-xuan/quanx/public/modelx"
+	"github.com/go-xuan/quanx/public/respx"
 	log "github.com/sirupsen/logrus"
 
-	"quan-user/internal/logic"
-	"quan-user/model"
+	"user/internal/logic"
+	"user/internal/model"
 )
 
 // 群组分页
@@ -22,7 +22,7 @@ func GroupPage(ctx *gin.Context) {
 	}
 	var result *respx.PageResponse
 	result, err = logic.GroupPage(in)
-	respx.BuildResponse(ctx, result, err)
+	respx.BuildNormal(ctx, result, err)
 }
 
 // 群组明细
@@ -36,7 +36,7 @@ func GroupDetail(ctx *gin.Context) {
 	}
 	var result model.GroupDetail
 	result, err = logic.GroupDetail(in.Id)
-	respx.BuildResponse(ctx, result, err)
+	respx.BuildNormal(ctx, result, err)
 }
 
 // 群组删除
@@ -49,7 +49,7 @@ func GroupDelete(ctx *gin.Context) {
 		return
 	}
 	err = logic.GroupDelete(in.Id)
-	respx.BuildResponse(ctx, nil, err)
+	respx.BuildNormal(ctx, nil, err)
 }
 
 // 群组新增
@@ -67,9 +67,8 @@ func GroupSave(ctx *gin.Context) {
 	var result int64
 	if in.Id == 0 {
 		result, err = logic.GroupCreate(&in)
-		respx.BuildResponse(ctx, result, err)
 	} else {
-		err = logic.GroupUpdate(&in)
-		respx.BuildResponse(ctx, nil, err)
+		result, err = logic.GroupUpdate(&in)
 	}
+	respx.BuildNormal(ctx, result, err)
 }

@@ -2,18 +2,13 @@ package logic
 
 import (
 	"errors"
-	"time"
 
-	"github.com/go-xuan/quanx/common/respx"
-	"github.com/go-xuan/quanx/utils/encryptx"
+	"github.com/go-xuan/quanx/public/respx"
 	"github.com/go-xuan/quanx/utils/idx"
-	"github.com/go-xuan/quanx/utils/randx"
-	"github.com/go-xuan/quanx/utils/timex"
 	log "github.com/sirupsen/logrus"
 
-	"quan-user/internal/dao"
-	"quan-user/model"
-	"quan-user/model/table"
+	"user/internal/dao"
+	"user/internal/model"
 )
 
 // 用户分页
@@ -52,48 +47,13 @@ func UserCreate(in *model.UserSave) (userId int64, err error) {
 	if err = UserExist(in); err != nil {
 		return
 	}
-	userId = idx.SnowFlake().NewInt64()
-	var user = table.User{
-		Id:           userId,
-		Account:      in.Account,
-		Name:         in.Name,
-		Phone:        in.Phone,
-		Gender:       in.Gender,
-		Birthday:     in.Birthday,
-		Email:        in.Email,
-		Address:      in.Address,
-		Remark:       in.Remark,
-		CreateUserId: in.CurrUserId,
-		UpdateUserId: in.CurrUserId,
-	}
-	passWord := in.Password
-	if len(passWord) < 32 {
-		passWord = encryptx.MD5(passWord)
-	}
-	salt := randx.UUID()
-	validStart := time.Now()
-	if in.ValidStart != "" {
-		validStart = timex.ToTime(in.ValidStart)
-	}
-	validEnd := validStart.AddDate(1, 0, 0)
-	if in.ValidEnd != "" {
-		validEnd = timex.ToTime(in.ValidEnd)
-	}
-	var userAuth = table.UserAuth{
-		UserId:       userId,
-		Salt:         salt,
-		Password:     encryptx.PasswordSalt(passWord, salt),
-		SessionTime:  3600,
-		ValidStart:   validStart,
-		ValidEnd:     validEnd,
-		CreateUserId: in.CurrUserId,
-		UpdateUserId: in.CurrUserId,
-	}
-	err = dao.UserCreate(user, userAuth)
+	in.Id = idx.SnowFlake().NewInt64()
+	err = dao.UserCreate(in.UserCreate(), in.UserAuthCreate())
 	if err != nil {
 		log.Error("用户新增失败")
 		return
 	}
+	userId = in.Id
 	return
 }
 

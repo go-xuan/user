@@ -2,10 +2,9 @@ package model
 
 import (
 	"time"
+	"user/internal/model/table"
 
 	"github.com/go-xuan/quanx/utils/timex"
-
-	"quan-user/model/table"
 )
 
 // 群组明细

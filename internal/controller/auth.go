@@ -2,14 +2,14 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/go-xuan/quanx/common/respx"
-	"github.com/go-xuan/quanx/engine"
+	"github.com/go-xuan/quanx"
 	"github.com/go-xuan/quanx/public/authx"
+	"github.com/go-xuan/quanx/public/respx"
 	"github.com/go-xuan/quanx/utils/encryptx"
 	log "github.com/sirupsen/logrus"
 
-	"quan-user/internal/logic"
-	"quan-user/model"
+	"user/internal/logic"
+	"user/internal/model"
 )
 
 // 用户登录
@@ -23,7 +23,7 @@ func UserLogin(ctx *gin.Context) {
 	}
 	ip := ctx.ClientIP()
 	if ip == "::1" {
-		ip = engine.GetEngine().Config.Server.Host
+		ip = quanx.GetEngine().Config.Server.Host
 	}
 	var result *model.LoginResult
 	result, err = logic.UserLogin(param, ip)
@@ -42,7 +42,7 @@ func UserLogin(ctx *gin.Context) {
 func UserLogout(ctx *gin.Context) {
 	ip := ctx.ClientIP()
 	if ip == "::1" {
-		ip = engine.GetEngine().Config.Server.Host
+		ip = quanx.GetEngine().Config.Server.Host
 	}
 	if value, ok := ctx.Get(authx.TokenUser); ok {
 		userId, err := logic.UserLogout(value.(*authx.User), ip)
@@ -61,7 +61,7 @@ func UserLogout(ctx *gin.Context) {
 // 验证token
 func TokenParse(ctx *gin.Context) {
 	if value, ok := ctx.Get(authx.TokenUser); ok {
-		respx.BuildResponse(ctx, value, nil)
+		respx.BuildNormal(ctx, value, nil)
 	}
 }
 
@@ -76,7 +76,7 @@ func SetCookie(ctx *gin.Context, value string) error {
 		}
 		value = bytes
 	}
-	ctx.SetCookie(authx.CookieKey, value, maxAge, "", "", false, true)
+	ctx.SetCookie(authx.CookieAuth, value, maxAge, "", "", false, true)
 	return nil
 }
 
@@ -84,12 +84,12 @@ func SetCookie(ctx *gin.Context, value string) error {
 func Encrypt(ctx *gin.Context) {
 	var text = ctx.Query("text")
 	ciphertext, err := encryptx.RSA().Encrypt(text)
-	respx.BuildResponse(ctx, ciphertext, err)
+	respx.BuildNormal(ctx, ciphertext, err)
 }
 
 // 加密
 func Decrypt(ctx *gin.Context) {
 	var text = ctx.Query("text")
 	plaintext, err := encryptx.RSA().Decrypt(text)
-	respx.BuildResponse(ctx, plaintext, err)
+	respx.BuildNormal(ctx, plaintext, err)
 }

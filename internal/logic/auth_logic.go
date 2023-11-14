@@ -12,9 +12,9 @@ import (
 	"github.com/go-xuan/quanx/utils/idx"
 	log "github.com/sirupsen/logrus"
 
-	"quan-user/internal/dao"
-	"quan-user/model"
-	"quan-user/model/table"
+	"user/internal/dao"
+	"user/internal/model"
+	"user/internal/model/table"
 )
 
 // 用户登录

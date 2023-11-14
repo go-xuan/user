@@ -3,27 +3,27 @@ package logic
 import (
 	"errors"
 
-	"github.com/go-xuan/quanx/common/respx"
+	"github.com/go-xuan/quanx/public/respx"
 	"github.com/go-xuan/quanx/utils/idx"
 	"github.com/go-xuan/quanx/utils/timex"
 	log "github.com/sirupsen/logrus"
 
-	"quan-user/internal/dao"
-	"quan-user/model"
-	"quan-user/model/table"
+	"user/internal/dao"
+	"user/internal/model"
+	"user/internal/model/table"
 )
 
 // 群组分页
-func GroupPage(in model.GroupPage) (*respx.PageResponse, error) {
-	var resultList []*model.Group
+func GroupPage(in model.GroupPage) (resp *respx.PageResponse, err error) {
+	var rows []*model.Group
 	var total int64
-	var err error
-	resultList, total, err = dao.GroupPage(in)
+	rows, total, err = dao.GroupPage(in)
 	if err != nil {
-		log.Error("用户分页查询失败")
-		return nil, err
+		log.Error("群组分页查询失败")
+		return
 	}
-	return respx.BuildPageResp(in.Page.Page, resultList, total), nil
+	resp = respx.BuildPageResp(in.Page.Page, rows, total)
+	return
 }
 
 // 群组编码校验
@@ -40,12 +40,12 @@ func GroupExist(in *model.GroupSave) (err error) {
 }
 
 // 群组新增
-func GroupCreate(in *model.GroupSave) (groupId int64, err error) {
+func GroupCreate(in *model.GroupSave) (id int64, err error) {
 	if err = GroupExist(in); err != nil {
 		return
 	}
-	groupId = idx.SnowFlake().NewInt64()
-	in.Id = groupId
+	id = idx.SnowFlake().NewInt64()
+	in.Id = id
 	err = dao.GroupCreate(in.Group())
 	if err != nil {
 		log.Error("群组新增失败")
@@ -69,13 +69,14 @@ func GroupCreate(in *model.GroupSave) (groupId int64, err error) {
 }
 
 // 群组修改
-func GroupUpdate(in *model.GroupSave) error {
-	err := dao.GroupUpdate(in)
+func GroupUpdate(in *model.GroupSave) (id int64, err error) {
+	err = dao.GroupUpdate(in)
 	if err != nil {
 		log.Error("群组修改失败")
-		return err
+		return
 	}
-	return nil
+	id = in.Id
+	return
 }
 
 // 群组删除

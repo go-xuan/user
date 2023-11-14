@@ -3,7 +3,7 @@ package dao
 import (
 	"github.com/go-xuan/quanx/public/gormx"
 
-	"quan-user/model/table"
+	"user/internal/model/table"
 )
 
 // 更新用户身份信息

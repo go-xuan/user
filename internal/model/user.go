@@ -1,13 +1,13 @@
 package model
 
 import (
+	"github.com/go-xuan/quanx/utils/defaultx"
 	"time"
+	"user/internal/model/table"
 
 	"github.com/go-xuan/quanx/utils/encryptx"
 	"github.com/go-xuan/quanx/utils/randx"
 	"github.com/go-xuan/quanx/utils/timex"
-
-	"quan-user/model/table"
 )
 
 // 用户信息
@@ -66,9 +66,27 @@ type UserSave struct {
 	CurrUserId int64  `json:"currUserId" comment:"当前用户ID"`
 }
 
-func (u *UserSave) User() *table.User {
+func (u *UserSave) UserCreate() *table.User {
 	return &table.User{
 		Id:           u.Id,
+		Account:      u.Account,
+		Name:         u.Name,
+		Phone:        u.Phone,
+		Gender:       u.Gender,
+		Birthday:     u.Birthday,
+		Email:        u.Email,
+		Address:      u.Address,
+		Remark:       u.Remark,
+		CreateUserId: u.CurrUserId,
+		UpdateUserId: u.CurrUserId,
+		UpdateTime:   time.Now(),
+	}
+}
+
+func (u *UserSave) UserUpdate() *table.User {
+	return &table.User{
+		Id:           u.Id,
+		Account:      u.Account,
 		Name:         u.Name,
 		Phone:        u.Phone,
 		Gender:       u.Gender,
@@ -81,26 +99,36 @@ func (u *UserSave) User() *table.User {
 	}
 }
 
-func (u *UserSave) UserAuth() *table.UserAuth {
-	var auth = &table.UserAuth{
+func (u *UserSave) UserAuthCreate() (auth *table.UserAuth) {
+	auth = &table.UserAuth{
+		UserId:       u.Id,
+		SessionTime:  3600,
+		CreateUserId: u.CurrUserId,
+		UpdateUserId: u.CurrUserId,
+		UpdateTime:   time.Now(),
+	}
+	var salt = randx.UUID()
+	auth.Salt = salt
+	auth.Password = encryptx.PasswordSalt(encryptx.MD5(u.Password), salt)
+	var validStart = defaultx.Time(u.ValidStart, time.Now())
+	auth.ValidStart = validStart
+	auth.ValidEnd = defaultx.Time(u.ValidEnd, validStart.AddDate(1, 0, 0))
+	return
+}
+
+func (u *UserSave) UserAuthUpdate() (auth *table.UserAuth) {
+	auth = &table.UserAuth{
 		UserId:       u.Id,
 		UpdateUserId: u.CurrUserId,
 		UpdateTime:   time.Now(),
 	}
 	if u.Password != "" {
-		passWord, salt := u.Password, randx.UUID()
-		if len(passWord) < 32 {
-			passWord = encryptx.MD5(passWord)
-		}
-		passWord = encryptx.PasswordSalt(passWord, salt)
-		auth.Password = passWord
+		var salt = randx.UUID()
+		var password = encryptx.PasswordSalt(encryptx.MD5(u.Password), salt)
+		auth.Password = password
 		auth.Salt = salt
 	}
-	if u.ValidStart != "" {
-		auth.ValidStart = timex.ToTime(u.ValidStart)
-	}
-	if u.ValidEnd != "" {
-		auth.ValidEnd = timex.ToTime(u.ValidEnd)
-	}
-	return auth
+	auth.ValidStart = defaultx.Time(u.ValidStart, time.Time{})
+	auth.ValidEnd = defaultx.Time(u.ValidEnd, time.Time{})
+	return
 }

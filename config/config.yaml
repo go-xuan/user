@@ -1,4 +1,4 @@
-# 当前系统配置
+# 当前应用配置
 server:
   name: quan-user
   port: 9001
@@ -16,9 +16,9 @@ nacos:
   logDir: resource/.nacos/log
   cacheDir: resource/.nacos/cache
   options:
-    - group: quan_user
+    - group: user
       dataId: server.yaml
-    - group: quan_user
+    - group: user
       dataId: database.yaml
-    - group: quan_user
+    - group: user
       dataId: redis.yaml

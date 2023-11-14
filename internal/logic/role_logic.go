@@ -3,14 +3,14 @@ package logic
 import (
 	"errors"
 
-	"github.com/go-xuan/quanx/common/respx"
+	"github.com/go-xuan/quanx/public/respx"
 	"github.com/go-xuan/quanx/utils/idx"
 	"github.com/go-xuan/quanx/utils/timex"
 	log "github.com/sirupsen/logrus"
 
-	"quan-user/internal/dao"
-	"quan-user/model"
-	"quan-user/model/table"
+	"user/internal/dao"
+	"user/internal/model"
+	"user/internal/model/table"
 )
 
 // 用户分页查询

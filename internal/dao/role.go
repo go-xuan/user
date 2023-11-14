@@ -5,8 +5,8 @@ import (
 
 	"github.com/go-xuan/quanx/public/gormx"
 
-	"quan-user/model"
-	"quan-user/model/table"
+	"user/internal/model"
+	"user/internal/model/table"
 )
 
 // 查询群组编码是否存在
