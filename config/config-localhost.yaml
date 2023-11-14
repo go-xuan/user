@@ -2,11 +2,12 @@
 server:
   name: quan-user
   port: 9001
+  prefix: /user/api/v1
   env: localhost
-  prefix: user
 
 # 数据库配置
 database:
+  # 默认PG库
   - source: default
     enable: true
     type: postgres
@@ -17,15 +18,27 @@ database:
     database: quan_user
     debug: true
     init: true
+  - source: mysql
+    enable: true
+    type: mysql
+    host: localhost
+    port: 3306
+    username: root
+    password: root
+    database: quan_user
+    debug: true
+    init: true
 
 # redis配置
 redis:
+  # 默认redis库
   - source: default
     mode: 0
     host: localhost
     port: 6379
     password: Init@123
     database: 1
+  # 用户缓存库
   - source: user
     mode: 0
     host: localhost
