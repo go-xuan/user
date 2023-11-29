@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/go-xuan/quanx/public/authx"
-	"github.com/go-xuan/quanx/public/redisx"
+	"github.com/go-xuan/quanx/common/authx"
+	"github.com/go-xuan/quanx/console/redisx"
 	"github.com/go-xuan/quanx/utils/encryptx"
 	"github.com/go-xuan/quanx/utils/idx"
 	log "github.com/sirupsen/logrus"
@@ -40,23 +40,23 @@ func UserLogin(param model.Login, loginIp string) (result *model.LoginResult, er
 		err = errors.New("密码错误")
 		return
 	}
-	sessionTime := userAuth.SessionTime
-	userId := strconv.FormatInt(user.Id, 10)
-	var token string
-	token, err = authx.BuildAuthToken(&authx.User{
-		Id:         userId,
+	var authUser = &authx.User{
+		Id:         strconv.FormatInt(user.Id, 10),
 		Account:    user.Account,
 		Name:       user.Name,
 		Phone:      user.Phone,
 		LoginIp:    loginIp,
-		ExpireTime: time.Now().Unix() + sessionTime,
-	})
+		ExpireTime: time.Now().Unix() + userAuth.SessionTime,
+	}
+	var token string
+	token, err = authx.GetTokenByUser(authUser)
 	if err != nil {
 		log.Error("生成token失败")
 		return
 	}
 	// token存入redis
-	redisx.GetCmd("user").Set(context.TODO(), authx.RedisKeyPrefix+user.Account, token, time.Duration(sessionTime*1e9))
+	authUser.SetTokenCache(token, time.Duration(userAuth.SessionTime*1e9))
+	// 记录日志
 	var sysLog = table.Log{
 		Id:           idx.SnowFlake().NewInt64(),
 		Module:       "auth",

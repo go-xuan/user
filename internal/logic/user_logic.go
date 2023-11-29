@@ -3,7 +3,7 @@ package logic
 import (
 	"errors"
 
-	"github.com/go-xuan/quanx/public/respx"
+	"github.com/go-xuan/quanx/common/respx"
 	"github.com/go-xuan/quanx/utils/idx"
 	log "github.com/sirupsen/logrus"
 

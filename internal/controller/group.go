@@ -2,9 +2,9 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/go-xuan/quanx/public/authx"
-	"github.com/go-xuan/quanx/public/modelx"
-	"github.com/go-xuan/quanx/public/respx"
+	"github.com/go-xuan/quanx/common/authx"
+	"github.com/go-xuan/quanx/common/modelx"
+	"github.com/go-xuan/quanx/common/respx"
 	log "github.com/sirupsen/logrus"
 
 	"user/internal/logic"
@@ -22,7 +22,7 @@ func GroupPage(ctx *gin.Context) {
 	}
 	var result *respx.PageResponse
 	result, err = logic.GroupPage(in)
-	respx.BuildNormal(ctx, result, err)
+	respx.BuildResponse(ctx, result, err)
 }
 
 // 群组明细
@@ -36,7 +36,7 @@ func GroupDetail(ctx *gin.Context) {
 	}
 	var result model.GroupDetail
 	result, err = logic.GroupDetail(in.Id)
-	respx.BuildNormal(ctx, result, err)
+	respx.BuildResponse(ctx, result, err)
 }
 
 // 群组删除
@@ -49,7 +49,7 @@ func GroupDelete(ctx *gin.Context) {
 		return
 	}
 	err = logic.GroupDelete(in.Id)
-	respx.BuildNormal(ctx, nil, err)
+	respx.BuildResponse(ctx, nil, err)
 }
 
 // 群组新增
@@ -70,5 +70,5 @@ func GroupSave(ctx *gin.Context) {
 	} else {
 		result, err = logic.GroupUpdate(&in)
 	}
-	respx.BuildNormal(ctx, result, err)
+	respx.BuildResponse(ctx, result, err)
 }

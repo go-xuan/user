@@ -3,7 +3,7 @@ package dao
 import (
 	"strings"
 
-	"github.com/go-xuan/quanx/public/gormx"
+	"github.com/go-xuan/quanx/console/gormx"
 
 	"user/internal/model"
 	"user/internal/model/table"

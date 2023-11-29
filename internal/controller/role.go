@@ -2,9 +2,9 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/go-xuan/quanx/public/authx"
-	"github.com/go-xuan/quanx/public/modelx"
-	"github.com/go-xuan/quanx/public/respx"
+	"github.com/go-xuan/quanx/common/authx"
+	"github.com/go-xuan/quanx/common/modelx"
+	"github.com/go-xuan/quanx/common/respx"
 	log "github.com/sirupsen/logrus"
 
 	"user/internal/logic"
@@ -22,14 +22,14 @@ func RolePage(ctx *gin.Context) {
 	}
 	var result *respx.PageResponse
 	result, err = logic.RolePage(in)
-	respx.BuildNormal(ctx, result, err)
+	respx.BuildResponse(ctx, result, err)
 
 }
 
 // 角色列表
 func RoleList(ctx *gin.Context) {
 	result, err := logic.RoleList()
-	respx.BuildNormal(ctx, result, err)
+	respx.BuildResponse(ctx, result, err)
 }
 
 // 角色新增
@@ -47,10 +47,10 @@ func RoleSave(ctx *gin.Context) {
 	var result int64
 	if in.Id == 0 {
 		result, err = logic.RoleCreate(&in)
-		respx.BuildNormal(ctx, result, err)
+		respx.BuildResponse(ctx, result, err)
 	} else {
 		err = logic.RoleUpdate(&in)
-		respx.BuildNormal(ctx, nil, err)
+		respx.BuildResponse(ctx, nil, err)
 	}
 }
 
@@ -64,7 +64,7 @@ func RoleDelete(ctx *gin.Context) {
 		return
 	}
 	err = logic.RoleDelete(in.Id)
-	respx.BuildNormal(ctx, nil, err)
+	respx.BuildResponse(ctx, nil, err)
 }
 
 // 角色详情
@@ -78,5 +78,5 @@ func RoleDetail(ctx *gin.Context) {
 	}
 	var result model.RoleDetail
 	result, err = logic.RoleDetail(in.Id)
-	respx.BuildNormal(ctx, result, err)
+	respx.BuildResponse(ctx, result, err)
 }
