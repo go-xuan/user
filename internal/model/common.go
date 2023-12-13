@@ -1,6 +1,6 @@
 package model
 
-import "github.com/go-xuan/quanx/common/modelx"
+import "github.com/go-xuan/quanx/modelx"
 
 type Page struct {
 	Keyword string       `json:"keyword" comment:"关键字"`

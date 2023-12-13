@@ -3,10 +3,9 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-xuan/quanx"
-	"github.com/go-xuan/quanx/common/authx"
-	"github.com/go-xuan/quanx/common/respx"
-	"github.com/go-xuan/quanx/utils/encryptx"
-	log "github.com/sirupsen/logrus"
+	"github.com/go-xuan/quanx/authx"
+	"github.com/go-xuan/quanx/encryptx"
+	"github.com/go-xuan/quanx/respx"
 
 	"user/internal/logic"
 	"user/internal/model"
@@ -17,7 +16,6 @@ func UserLogin(ctx *gin.Context) {
 	var err error
 	var param model.Login
 	if err = ctx.BindJSON(&param); err != nil {
-		log.Error("参数错误：", err)
 		respx.BuildException(ctx, respx.ParamErr, err)
 		return
 	}
@@ -31,10 +29,7 @@ func UserLogin(ctx *gin.Context) {
 		respx.BuildError(ctx, err)
 		return
 	}
-	if err = SetCookie(ctx, result.User.Account); err != nil {
-		respx.BuildError(ctx, err)
-		return
-	}
+	authx.SetCookie(ctx, result.User.Account)
 	respx.BuildSuccess(ctx, result)
 }
 
@@ -50,10 +45,7 @@ func UserLogout(ctx *gin.Context) {
 			respx.BuildError(ctx, err)
 			return
 		}
-		if err = SetCookie(ctx, ""); err != nil {
-			respx.BuildError(ctx, err)
-			return
-		}
+		authx.SetCookie(ctx, "")
 		respx.BuildSuccess(ctx, userId)
 	}
 }
@@ -65,31 +57,14 @@ func TokenParse(ctx *gin.Context) {
 	}
 }
 
-func SetCookie(ctx *gin.Context, value string) error {
-	var maxAge = 3600
-	if value == "" {
-		maxAge = -1
-	} else {
-		bytes, err := encryptx.RSA().Encrypt(value)
-		if err != nil {
-			return err
-		}
-		value = bytes
-	}
-	ctx.SetCookie(authx.CookieKey, value, maxAge, "", "", false, true)
-	return nil
-}
-
 // 加密
 func Encrypt(ctx *gin.Context) {
-	var text = ctx.Query("text")
-	ciphertext, err := encryptx.RSA().Encrypt(text)
+	ciphertext, err := encryptx.RSA().Encrypt(ctx.Query("text"))
 	respx.BuildResponse(ctx, ciphertext, err)
 }
 
 // 加密
 func Decrypt(ctx *gin.Context) {
-	var text = ctx.Query("text")
-	plaintext, err := encryptx.RSA().Decrypt(text)
+	plaintext, err := encryptx.RSA().Decrypt(ctx.Query("text"))
 	respx.BuildResponse(ctx, plaintext, err)
 }

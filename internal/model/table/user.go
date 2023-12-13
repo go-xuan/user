@@ -2,6 +2,7 @@ package table
 
 import "time"
 
+// 用户表
 type User struct {
 	Id           int64     `json:"id" gorm:"type:bigint; not null; primary_key; comment:用户ID;"`
 	Name         string    `json:"name" gorm:"type:varchar(100); not null; comment:姓名;"`
@@ -22,6 +23,14 @@ func (User) TableName() string {
 	return "t_sys_user"
 }
 
+func (u User) Comment() string {
+	return "用户信息表"
+}
+
+func (u User) InitData() interface{} {
+	return nil
+}
+
 // 用户鉴权表
 type UserAuth struct {
 	UserId       int64     `json:"userId" gorm:"type:bigint; not null; primary_key; comment:用户ID;"`
@@ -38,4 +47,12 @@ type UserAuth struct {
 
 func (UserAuth) TableName() string {
 	return "t_sys_user_auth"
+}
+
+func (a UserAuth) Comment() string {
+	return "用户鉴权表"
+}
+
+func (a UserAuth) InitData() interface{} {
+	return nil
 }

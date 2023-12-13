@@ -17,6 +17,14 @@ func (Group) TableName() string {
 	return "t_sys_group"
 }
 
+func (g Group) Comment() string {
+	return "群组表"
+}
+
+func (g Group) InitData() interface{} {
+	return nil
+}
+
 type GroupUser struct {
 	Id           int64     `json:"id" gorm:"type:bigint; not null; primary_key; comment:主键ID;"`
 	GroupId      int64     `json:"groupId" gorm:"type:bigint; not null; comment:群组ID;"`
@@ -32,7 +40,15 @@ type GroupUser struct {
 }
 
 func (GroupUser) TableName() string {
-	return "t_sys_group__user_"
+	return "t_sys_group_user"
+}
+
+func (u GroupUser) Comment() string {
+	return "群组成员表"
+}
+
+func (u GroupUser) InitData() interface{} {
+	return nil
 }
 
 type GroupRole struct {
@@ -50,4 +66,12 @@ type GroupRole struct {
 
 func (GroupRole) TableName() string {
 	return "t_sys_group_role"
+}
+
+func (r GroupRole) Comment() string {
+	return "群组角色表"
+}
+
+func (r GroupRole) InitData() interface{} {
+	return nil
 }

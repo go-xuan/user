@@ -4,7 +4,7 @@ import (
 	"time"
 	"user/internal/model/table"
 
-	"github.com/go-xuan/quanx/utils/timex"
+	"github.com/go-xuan/quanx/utilx/timex"
 )
 
 // 群组明细

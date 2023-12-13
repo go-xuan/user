@@ -6,10 +6,10 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/go-xuan/quanx/common/authx"
-	"github.com/go-xuan/quanx/console/redisx"
-	"github.com/go-xuan/quanx/utils/encryptx"
-	"github.com/go-xuan/quanx/utils/idx"
+	"github.com/go-xuan/quanx/authx"
+	"github.com/go-xuan/quanx/encryptx"
+	"github.com/go-xuan/quanx/redisx"
+	"github.com/go-xuan/quanx/snowflakex"
 	log "github.com/sirupsen/logrus"
 
 	"user/internal/dao"
@@ -55,10 +55,10 @@ func UserLogin(param model.Login, loginIp string) (result *model.LoginResult, er
 		return
 	}
 	// token存入redis
-	authUser.SetTokenCache(token, time.Duration(userAuth.SessionTime*1e9))
+	authUser.SetTokenCache(token, time.Duration(userAuth.SessionTime)*time.Second)
 	// 记录日志
 	var sysLog = table.Log{
-		Id:           idx.SnowFlake().NewInt64(),
+		Id:           snowflakex.New().Int64(),
 		Module:       "auth",
 		Type:         "login",
 		Content:      user.Name + "【" + user.Phone + "账号密码登录】",
@@ -77,7 +77,7 @@ func UserLogin(param model.Login, loginIp string) (result *model.LoginResult, er
 func UserLogout(user *authx.User, ip string) (userId int64, err error) {
 	userId, _ = strconv.ParseInt(user.Id, 10, 64)
 	var sysLog = table.Log{
-		Id:           idx.SnowFlake().NewInt64(),
+		Id:           snowflakex.New().Int64(),
 		Module:       "auth",
 		Type:         "logout",
 		Content:      user.Name + "【登出】",
@@ -89,6 +89,6 @@ func UserLogout(user *authx.User, ip string) (userId int64, err error) {
 		log.Error("记录日志失败")
 	}
 	// 删除redis上用户token
-	redisx.GetCmd("user").Del(context.TODO(), user.RedisCacheKey())
+	redisx.GetCmd("user").Del(context.TODO(), user.RedisKey())
 	return
 }

@@ -15,7 +15,7 @@ database:
     port: 5432
     username: postgres
     password: postgres
-    database: quan_user
+    database: quan_demo
     debug: true
     init: true
   - source: mysql

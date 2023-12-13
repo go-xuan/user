@@ -3,7 +3,7 @@ package dao
 import (
 	"strings"
 
-	"github.com/go-xuan/quanx/console/gormx"
+	"github.com/go-xuan/quanx/gormx"
 
 	"user/internal/model"
 	"user/internal/model/table"
@@ -28,7 +28,7 @@ func GroupPage(in model.GroupPage) (result []*model.Group, total int64, err erro
 	if in.Page.Page != nil && in.Page.Page.PageSize > 0 {
 		selectSql.WriteString(in.Page.Page.PgPageSql())
 	}
-	err = gormx.CTL.DB.Raw(selectSql.String()).Scan(&result).Error
+	err = gormx.This().DB.Raw(selectSql.String()).Scan(&result).Error
 	if err != nil {
 		return
 	}
@@ -37,7 +37,7 @@ func GroupPage(in model.GroupPage) (result []*model.Group, total int64, err erro
 	countSql.WriteString(` ( `)
 	countSql.WriteString(sql.String())
 	countSql.WriteString(` ) t`)
-	err = gormx.CTL.DB.Raw(countSql.String()).Scan(&total).Error
+	err = gormx.This().DB.Raw(countSql.String()).Scan(&total).Error
 	if err != nil {
 		return
 	}
@@ -46,7 +46,7 @@ func GroupPage(in model.GroupPage) (result []*model.Group, total int64, err erro
 
 // 查询群组编码是否存在
 func GroupExist(in *model.GroupSave) (count int64, err error) {
-	err = gormx.CTL.DB.Model(&table.Group{}).Where(`code = ? `, in.Code).Count(&count).Error
+	err = gormx.This().DB.Model(&table.Group{}).Where(`code = ? `, in.Code).Count(&count).Error
 	if err != nil {
 		return
 	}
@@ -55,7 +55,7 @@ func GroupExist(in *model.GroupSave) (count int64, err error) {
 
 // 群组新增
 func GroupCreate(group *table.Group) (err error) {
-	err = gormx.CTL.DB.Create(group).Error
+	err = gormx.This().DB.Create(group).Error
 	if err != nil {
 		return
 	}
@@ -71,7 +71,7 @@ func GroupUpdate(in *model.GroupSave) (err error) {
 	if in.Remark != "" {
 		cols = append(cols, "remark")
 	}
-	err = gormx.CTL.DB.Model(&table.Group{}).Select(cols).Where("id = ? ", in.Id).Updates(in.Group()).Error
+	err = gormx.This().DB.Model(&table.Group{}).Select(cols).Where("id = ? ", in.Id).Updates(in.Group()).Error
 	if err != nil {
 		return
 	}
@@ -80,7 +80,7 @@ func GroupUpdate(in *model.GroupSave) (err error) {
 
 // 群组删除
 func GroupDelete(id int64) (err error) {
-	err = gormx.CTL.DB.Delete(&table.Group{}, id).Error
+	err = gormx.This().DB.Delete(&table.Group{}, id).Error
 	if err != nil {
 		return
 	}
@@ -89,7 +89,7 @@ func GroupDelete(id int64) (err error) {
 
 // 查询群组信息
 func GetGroup(id int64) (result model.Group, err error) {
-	err = gormx.CTL.DB.Model(&table.Group{}).Where(`id = ?`, id).Scan(&result).Error
+	err = gormx.This().DB.Model(&table.Group{}).Where(`id = ?`, id).Scan(&result).Error
 	if err != nil {
 		return
 	}
@@ -98,7 +98,7 @@ func GetGroup(id int64) (result model.Group, err error) {
 
 // 群组成员校验
 func GroupUserCount(id int64, userIds []int64) (count int64, err error) {
-	err = gormx.CTL.DB.Model(&table.GroupUser{}).Where(`id = ? and user_id in ?`, id, userIds).Count(&count).Error
+	err = gormx.This().DB.Model(&table.GroupUser{}).Where(`id = ? and user_id in ?`, id, userIds).Count(&count).Error
 	if err != nil {
 		return
 	}
@@ -107,7 +107,7 @@ func GroupUserCount(id int64, userIds []int64) (count int64, err error) {
 
 // 群组成员批量新增
 func GroupUserCreateBatch(list []*table.GroupUser) error {
-	err := gormx.CTL.DB.Create(&list).Error
+	err := gormx.This().DB.Create(&list).Error
 	if err != nil {
 		return err
 	}
@@ -116,7 +116,7 @@ func GroupUserCreateBatch(list []*table.GroupUser) error {
 
 // 查询群组成员列表
 func GroupUserList(id int64) (resultList []*model.GroupUser, err error) {
-	err = gormx.CTL.DB.Raw(`
+	err = gormx.This().DB.Raw(`
 select t2.id,
        t2.name,
        t1.is_admin,
@@ -136,7 +136,7 @@ select t2.id,
 
 // 群组角色校验
 func GroupRoleCount(id int64, roleIds []int64) (count int64, err error) {
-	err = gormx.CTL.DB.Model(&table.GroupRole{}).Where(`id = ? and role_id in ?`, id, roleIds).Count(&count).Error
+	err = gormx.This().DB.Model(&table.GroupRole{}).Where(`id = ? and role_id in ?`, id, roleIds).Count(&count).Error
 	if err != nil {
 		return
 	}
@@ -145,7 +145,7 @@ func GroupRoleCount(id int64, roleIds []int64) (count int64, err error) {
 
 // 群组角色批量新增
 func GroupRoleCreateBatch(list []*table.GroupRole) error {
-	err := gormx.CTL.DB.Create(&list).Error
+	err := gormx.This().DB.Create(&list).Error
 	if err != nil {
 		return err
 	}
@@ -154,7 +154,7 @@ func GroupRoleCreateBatch(list []*table.GroupRole) error {
 
 // 查询群组角色列表
 func GroupRoleList(id int64) (resultList []*model.GroupRole, err error) {
-	err = gormx.CTL.DB.Raw(`
+	err = gormx.This().DB.Raw(`
 select t2.id,
        t2.code,
        t2.name,

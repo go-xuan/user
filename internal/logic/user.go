@@ -3,8 +3,8 @@ package logic
 import (
 	"errors"
 
-	"github.com/go-xuan/quanx/common/respx"
-	"github.com/go-xuan/quanx/utils/idx"
+	"github.com/go-xuan/quanx/respx"
+	"github.com/go-xuan/quanx/snowflakex"
 	log "github.com/sirupsen/logrus"
 
 	"user/internal/dao"
@@ -47,7 +47,7 @@ func UserCreate(in *model.UserSave) (userId int64, err error) {
 	if err = UserExist(in); err != nil {
 		return
 	}
-	in.Id = idx.SnowFlake().NewInt64()
+	in.Id = snowflakex.New().Int64()
 	err = dao.UserCreate(in.UserCreate(), in.UserAuthCreate())
 	if err != nil {
 		log.Error("用户新增失败")

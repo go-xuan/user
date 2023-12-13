@@ -1,13 +1,14 @@
 package model
 
 import (
-	"github.com/go-xuan/quanx/utils/defaultx"
+	"github.com/go-xuan/quanx/utilx/anyx"
 	"time"
-	"user/internal/model/table"
 
-	"github.com/go-xuan/quanx/utils/encryptx"
-	"github.com/go-xuan/quanx/utils/randx"
-	"github.com/go-xuan/quanx/utils/timex"
+	"github.com/go-xuan/quanx/encryptx"
+	"github.com/go-xuan/quanx/utilx/randx"
+	"github.com/go-xuan/quanx/utilx/timex"
+
+	"user/internal/model/table"
 )
 
 // 用户信息
@@ -110,9 +111,10 @@ func (u *UserSave) UserAuthCreate() (auth *table.UserAuth) {
 	var salt = randx.UUID()
 	auth.Salt = salt
 	auth.Password = encryptx.PasswordSalt(encryptx.MD5(u.Password), salt)
-	var validStart = defaultx.Time(u.ValidStart, time.Now())
+	var validStart = anyx.IfValue(u.ValidStart != "", timex.ToTime(u.ValidStart), time.Now())
+	var validEnd = anyx.IfValue(u.ValidEnd != "", timex.ToTime(u.ValidEnd), validStart.AddDate(1, 0, 0))
 	auth.ValidStart = validStart
-	auth.ValidEnd = defaultx.Time(u.ValidEnd, validStart.AddDate(1, 0, 0))
+	auth.ValidEnd = validEnd
 	return
 }
 
@@ -128,7 +130,7 @@ func (u *UserSave) UserAuthUpdate() (auth *table.UserAuth) {
 		auth.Password = password
 		auth.Salt = salt
 	}
-	auth.ValidStart = defaultx.Time(u.ValidStart, time.Time{})
-	auth.ValidEnd = defaultx.Time(u.ValidEnd, time.Time{})
+	auth.ValidStart = anyx.IfValue(u.ValidStart != "", timex.ToTime(u.ValidStart), time.Time{})
+	auth.ValidEnd = anyx.IfValue(u.ValidEnd != "", timex.ToTime(u.ValidEnd), time.Time{})
 	return
 }

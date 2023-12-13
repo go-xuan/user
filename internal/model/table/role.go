@@ -17,6 +17,14 @@ func (Role) TableName() string {
 	return "t_sys_role"
 }
 
+func (r Role) Comment() string {
+	return "角色表"
+}
+
+func (r Role) InitData() interface{} {
+	return nil
+}
+
 // 角色所属用户
 type RoleUser struct {
 	Id           int64     `json:"id" gorm:"type:bigint; not null; primary_key; comment:主键ID;"`
@@ -33,4 +41,12 @@ type RoleUser struct {
 
 func (RoleUser) TableName() string {
 	return "t_sys_role_user"
+}
+
+func (u RoleUser) Comment() string {
+	return "角色成员表"
+}
+
+func (u RoleUser) InitData() interface{} {
+	return nil
 }

@@ -4,7 +4,7 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/go-xuan/quanx/console/gormx"
+	"github.com/go-xuan/quanx/gormx"
 
 	"user/internal/model"
 	"user/internal/model/table"
@@ -47,7 +47,7 @@ func UserPage(in model.UserPage) (result []*model.User, total int64, err error) 
 	if in.Page.Page != nil && in.Page.Page.PageSize > 0 {
 		selectSql.WriteString(in.Page.Page.PgPageSql())
 	}
-	err = gormx.CTL.DB.Raw(selectSql.String()).Scan(&result).Error
+	err = gormx.This().DB.Raw(selectSql.String()).Scan(&result).Error
 	if err != nil {
 		return
 	}
@@ -56,7 +56,7 @@ func UserPage(in model.UserPage) (result []*model.User, total int64, err error) 
 	countSql.WriteString(` ( `)
 	countSql.WriteString(sql.String())
 	countSql.WriteString(` ) t `)
-	err = gormx.CTL.DB.Raw(countSql.String()).Scan(&total).Error
+	err = gormx.This().DB.Raw(countSql.String()).Scan(&total).Error
 	if err != nil {
 		return
 	}
@@ -69,7 +69,7 @@ func GetUserById(id int64) (user *model.User, err error) {
 	sql := strings.Builder{}
 	sql.WriteString(SelectUser)
 	sql.WriteString(` where u.id = ?`)
-	err = gormx.CTL.DB.Raw(sql.String(), id).Scan(user).Error
+	err = gormx.This().DB.Raw(sql.String(), id).Scan(user).Error
 	if err != nil {
 		return
 	}
@@ -86,7 +86,7 @@ func GetUserByName(username string) (user *model.User, err error) {
 	sql := strings.Builder{}
 	sql.WriteString(SelectUser)
 	sql.WriteString(` where u.phone = ? or u.account = ? `)
-	err = gormx.CTL.DB.Raw(sql.String(), username, username).Scan(user).Error
+	err = gormx.This().DB.Raw(sql.String(), username, username).Scan(user).Error
 	if err != nil {
 		return
 	}
@@ -100,7 +100,7 @@ func GetUserByName(username string) (user *model.User, err error) {
 // 查询用户基本信息
 func QueryUser(id int64) (user *table.User, err error) {
 	user.Id = id
-	err = gormx.CTL.DB.Find(user).Error
+	err = gormx.This().DB.Find(user).Error
 	if err != nil {
 		return
 	}
@@ -114,7 +114,7 @@ func QueryUser(id int64) (user *table.User, err error) {
 func QueryUserAuth(userId int64) (auth *table.UserAuth, err error) {
 	auth = &table.UserAuth{}
 	auth.UserId = userId
-	err = gormx.CTL.DB.Find(auth).Error
+	err = gormx.This().DB.Find(auth).Error
 	if err != nil {
 		return
 	}
@@ -126,7 +126,7 @@ func QueryUserAuth(userId int64) (auth *table.UserAuth, err error) {
 
 // 用户列表查询
 func UserList() (result []*model.User, err error) {
-	err = gormx.CTL.DB.Model(&table.User{}).Select([]string{"id", "account", "name", "phone", "email"}).Order("id desc").Scan(&result).Error
+	err = gormx.This().DB.Model(&table.User{}).Select([]string{"id", "account", "name", "phone", "email"}).Order("id desc").Scan(&result).Error
 	if err != nil {
 		return
 	}
@@ -135,7 +135,7 @@ func UserList() (result []*model.User, err error) {
 
 // 查询手机是否存在
 func UserExist(in *model.UserSave) (count int64, err error) {
-	err = gormx.CTL.DB.Model(&table.User{}).Where(`account = ? or phone = ?`, in.Account, in.Phone).Count(&count).Error
+	err = gormx.This().DB.Model(&table.User{}).Where(`account = ? or phone = ?`, in.Account, in.Phone).Count(&count).Error
 	if err != nil {
 		return
 	}
@@ -144,7 +144,7 @@ func UserExist(in *model.UserSave) (count int64, err error) {
 
 // 用户新增
 func UserCreate(user *table.User, userAuth *table.UserAuth) error {
-	tx := gormx.CTL.DB.Begin()
+	tx := gormx.This().DB.Begin()
 	err := tx.Create(user).Error
 	if err != nil {
 		tx.Rollback()
@@ -161,7 +161,7 @@ func UserCreate(user *table.User, userAuth *table.UserAuth) error {
 
 // 用户修改
 func UserUpdate(in *model.UserSave) (err error) {
-	tx := gormx.CTL.DB.Begin()
+	tx := gormx.This().DB.Begin()
 	// 更新用户表
 	var userCols = []string{"update_user_id", "update_time"}
 	var userAuthCols = []string{"update_user_id", "update_time"}
@@ -213,7 +213,7 @@ func UserUpdate(in *model.UserSave) (err error) {
 
 // 用户删除
 func UserDelete(userId int64) error {
-	tx := gormx.CTL.DB.Begin()
+	tx := gormx.This().DB.Begin()
 	err := tx.Delete(&table.User{}, userId).Error
 	if err != nil {
 		tx.Rollback()

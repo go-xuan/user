@@ -3,7 +3,7 @@ package dao
 import (
 	"strings"
 
-	"github.com/go-xuan/quanx/console/gormx"
+	"github.com/go-xuan/quanx/gormx"
 
 	"user/internal/model"
 	"user/internal/model/table"
@@ -11,7 +11,7 @@ import (
 
 // 查询群组编码是否存在
 func RoleExist(in *model.RoleSave) (count int64, err error) {
-	err = gormx.CTL.DB.Model(&table.Role{}).Where(`code = ? `, in.Code).Count(&count).Error
+	err = gormx.This().DB.Model(&table.Role{}).Where(`code = ? `, in.Code).Count(&count).Error
 	if err != nil {
 		return
 	}
@@ -20,7 +20,7 @@ func RoleExist(in *model.RoleSave) (count int64, err error) {
 
 // 角色新增
 func RoleCreate(role *table.Role) (err error) {
-	err = gormx.CTL.DB.Create(role).Error
+	err = gormx.This().DB.Create(role).Error
 	if err != nil {
 		return
 	}
@@ -29,7 +29,7 @@ func RoleCreate(role *table.Role) (err error) {
 
 // 角色删除
 func RoleDelete(id int64) (err error) {
-	err = gormx.CTL.DB.Delete(&table.Role{}, id).Error
+	err = gormx.This().DB.Delete(&table.Role{}, id).Error
 	if err != nil {
 		return
 	}
@@ -38,7 +38,7 @@ func RoleDelete(id int64) (err error) {
 
 // 角色修改
 func RoleUpdate(in *model.RoleSave) (err error) {
-	var tx = gormx.CTL.DB.Begin()
+	var tx = gormx.This().DB.Begin()
 	var cols = []string{"update_user_id", "update_time"}
 	if in.Name != "" {
 		cols = append(cols, "name")
@@ -77,7 +77,7 @@ func RolePage(in model.RolePage) (result []*model.Role, total int64, err error) 
 	if in.Page.Page != nil && in.Page.Page.PageSize > 0 {
 		selectSql.WriteString(in.Page.Page.PgPageSql())
 	}
-	err = gormx.CTL.DB.Raw(selectSql.String()).Scan(&result).Error
+	err = gormx.This().DB.Raw(selectSql.String()).Scan(&result).Error
 	if err != nil {
 		return
 	}
@@ -86,7 +86,7 @@ func RolePage(in model.RolePage) (result []*model.Role, total int64, err error) 
 	countSql.WriteString(` ( `)
 	countSql.WriteString(sql.String())
 	countSql.WriteString(` ) t`)
-	err = gormx.CTL.DB.Raw(countSql.String()).Count(&total).Error
+	err = gormx.This().DB.Raw(countSql.String()).Count(&total).Error
 	if err != nil {
 		return
 	}
@@ -95,7 +95,7 @@ func RolePage(in model.RolePage) (result []*model.Role, total int64, err error) 
 
 // 角色信息查询
 func RoleInfo(id int64) (result model.Role, err error) {
-	err = gormx.CTL.DB.Model(&table.Role{}).Where(`id = ?`, id).Scan(&result).Error
+	err = gormx.This().DB.Model(&table.Role{}).Where(`id = ?`, id).Scan(&result).Error
 	if err != nil {
 		return
 	}
@@ -104,7 +104,7 @@ func RoleInfo(id int64) (result model.Role, err error) {
 
 // 用户角色
 func RoleList() (resultList []*model.Role, err error) {
-	err = gormx.CTL.DB.Model(&table.Role{}).Select([]string{"id", "code", "name"}).Order("id").Scan(&resultList).Error
+	err = gormx.This().DB.Model(&table.Role{}).Select([]string{"id", "code", "name"}).Order("id").Scan(&resultList).Error
 	if err != nil {
 		return
 	}
@@ -112,7 +112,7 @@ func RoleList() (resultList []*model.Role, err error) {
 }
 
 func RoleUserCount(roleId int64, userIds []int64) (count int64, err error) {
-	err = gormx.CTL.DB.Model(&table.RoleUser{}).Where(`id = ? and user_id in ?`, roleId, userIds).Count(&count).Error
+	err = gormx.This().DB.Model(&table.RoleUser{}).Where(`id = ? and user_id in ?`, roleId, userIds).Count(&count).Error
 	if err != nil {
 		return
 	}
@@ -121,7 +121,7 @@ func RoleUserCount(roleId int64, userIds []int64) (count int64, err error) {
 
 // 角色用户批量新增
 func RoleUserCreateBatch(list []*table.RoleUser) (err error) {
-	err = gormx.CTL.DB.Create(&list).Error
+	err = gormx.This().DB.Create(&list).Error
 	if err != nil {
 		return
 	}
@@ -130,7 +130,7 @@ func RoleUserCreateBatch(list []*table.RoleUser) (err error) {
 
 // 角色成员列表
 func RoleUserList(roleId int64) (resultList []*model.RoleUser, err error) {
-	err = gormx.CTL.DB.Raw(`
+	err = gormx.This().DB.Raw(`
 select t2.id,
        t2.name,
        t2.account,

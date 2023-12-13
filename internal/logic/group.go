@@ -3,9 +3,9 @@ package logic
 import (
 	"errors"
 
-	"github.com/go-xuan/quanx/common/respx"
-	"github.com/go-xuan/quanx/utils/idx"
-	"github.com/go-xuan/quanx/utils/timex"
+	"github.com/go-xuan/quanx/respx"
+	"github.com/go-xuan/quanx/snowflakex"
+	"github.com/go-xuan/quanx/utilx/timex"
 	log "github.com/sirupsen/logrus"
 
 	"user/internal/dao"
@@ -44,7 +44,7 @@ func GroupCreate(in *model.GroupSave) (id int64, err error) {
 	if err = GroupExist(in); err != nil {
 		return
 	}
-	id = idx.SnowFlake().NewInt64()
+	id = snowflakex.New().Int64()
 	in.Id = id
 	err = dao.GroupCreate(in.Group())
 	if err != nil {
@@ -145,7 +145,7 @@ func GroupUserAdd(in *model.GroupSave) (err error) {
 	var createList []*table.GroupUser
 	for _, item := range in.UserList {
 		var create = table.GroupUser{
-			Id:           idx.SnowFlake().NewInt64(),
+			Id:           snowflakex.New().Int64(),
 			GroupId:      in.Id,
 			UserId:       item.Id,
 			IsAdmin:      item.IsAdmin,
@@ -182,7 +182,7 @@ func GroupRoleAdd(in *model.GroupSave) (err error) {
 	var createList []*table.GroupRole
 	for _, item := range in.RoleList {
 		var create = table.GroupRole{
-			Id:           idx.SnowFlake().NewInt64(),
+			Id:           snowflakex.New().Int64(),
 			GroupId:      in.Id,
 			RoleId:       item.Id,
 			ValidStart:   timex.ToTime(item.ValidStart),

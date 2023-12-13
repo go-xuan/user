@@ -2,9 +2,9 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/go-xuan/quanx/common/authx"
-	"github.com/go-xuan/quanx/common/modelx"
-	"github.com/go-xuan/quanx/common/respx"
+	"github.com/go-xuan/quanx/authx"
+	"github.com/go-xuan/quanx/modelx"
+	"github.com/go-xuan/quanx/respx"
 	log "github.com/sirupsen/logrus"
 
 	"user/internal/logic"

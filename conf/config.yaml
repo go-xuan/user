@@ -4,6 +4,7 @@ server:
   port: 9001
 #  env: localhost
   prefix: /user/api/v1
+  debug: true
 
 # nacos访问配置
 nacos:
@@ -15,5 +16,5 @@ nacos:
   nameSpace: localhost
   logDir: resource/.nacos/log
   cacheDir: resource/.nacos/cache
-  loadConfig:
-    init: server.yaml,database.yaml,redis.yaml
+  config:
+    basic: server.yaml,database.yaml,redis.yaml
