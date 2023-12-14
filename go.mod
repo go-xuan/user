@@ -12,7 +12,7 @@ require (
 
 require (
 	github.com/BurntSushi/toml v1.3.2 // indirect
-	github.com/aliyun/alibaba-cloud-sdk-go v1.62.631 // indirect
+	github.com/aliyun/alibaba-cloud-sdk-go v1.62.634 // indirect
 	github.com/buger/jsonparser v1.1.1 // indirect
 	github.com/bytedance/sonic v1.10.2 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
