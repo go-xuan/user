@@ -4,7 +4,7 @@ import (
 	"github.com/go-xuan/quanx/utilx/anyx"
 	"time"
 
-	"github.com/go-xuan/quanx/encryptx"
+	"github.com/go-xuan/quanx/utilx/encryptx"
 	"github.com/go-xuan/quanx/utilx/randx"
 	"github.com/go-xuan/quanx/utilx/timex"
 

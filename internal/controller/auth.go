@@ -4,8 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-xuan/quanx"
 	"github.com/go-xuan/quanx/authx"
-	"github.com/go-xuan/quanx/encryptx"
-	"github.com/go-xuan/quanx/respx"
+	"github.com/go-xuan/quanx/common/respx"
+	"github.com/go-xuan/quanx/utilx/encryptx"
 
 	"user/internal/logic"
 	"user/internal/model"
