@@ -7,7 +7,8 @@ import (
 )
 
 func main() {
-	var engine = quanx.GetEngine(router.BindGinRouter)
+	var engine = quanx.GetEngine(quanx.UseNacos)
+	engine.AddGinRouter(router.BindGinRouter)
 	//engine.SetConfig("conf/config-localhost.yaml")
 	engine.AddTable(
 		&table.User{},
