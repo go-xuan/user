@@ -16,5 +16,3 @@ nacos:
   nameSpace: localhost
   logDir: resource/.nacos/log
   cacheDir: resource/.nacos/cache
-  config:
-    basic: server.yaml,database.yaml,redis.yaml
