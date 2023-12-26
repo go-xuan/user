@@ -8,7 +8,7 @@ import (
 func main() {
 	var engine = quanx.GetEngine(quanx.EnableNacos)
 	engine.AddGinRouter(router.BindGinRouter)
-	//engine.SetConfig("conf/config-localhost.yaml")
+	//engine.SetConfigDir("conf")
 	//engine.AddTable(
 	//	&table.User{},
 	//	&table.UserAuth{},
