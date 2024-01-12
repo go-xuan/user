@@ -2,7 +2,7 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/go-xuan/quanx/authx"
+	"github.com/go-xuan/quanx/importx/ginx"
 
 	"user/internal/controller"
 )
@@ -10,13 +10,10 @@ import (
 // 添加api接口函数路由
 func BindGinRouter(router *gin.RouterGroup) {
 	router.Use(
-		authx.Open(),
 		// 白名单
-		authx.WhiteList("/auth/encrypt", "/auth/decrypt"),
-		// cookie鉴权
-		authx.CookeAuth(),
+		ginx.WhiteList("/auth/encrypt", "/auth/decrypt"),
 		// auth鉴权
-		//authx.TokenAuth(),
+		ginx.Auth(),
 	)
 	// 用户管理
 	user := router.Group("user")

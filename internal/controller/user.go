@@ -2,9 +2,9 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/go-xuan/quanx/authx"
 	"github.com/go-xuan/quanx/commonx/modelx"
 	"github.com/go-xuan/quanx/commonx/respx"
+	"github.com/go-xuan/quanx/importx/ginx"
 	log "github.com/sirupsen/logrus"
 
 	"user/internal/logic"
@@ -43,7 +43,7 @@ func UserSave(ctx *gin.Context) {
 		return
 	}
 	if in.CurrUserId == 0 {
-		in.CurrUserId = authx.GetUserId(ctx)
+		in.CurrUserId = ginx.GetUserId(ctx)
 	}
 	if in.Id != 0 {
 		err = logic.UserUpdate(&in)
@@ -58,7 +58,7 @@ func UserSave(ctx *gin.Context) {
 // 用户删除
 func UserDelete(ctx *gin.Context) {
 	var err error
-	var in modelx.IdInt64
+	var in modelx.Id[int64]
 	if err = ctx.ShouldBindQuery(&in); err != nil {
 		log.Error("参数错误：", err)
 		respx.Exception(ctx, respx.ParamErr, err)
@@ -71,7 +71,7 @@ func UserDelete(ctx *gin.Context) {
 // 用户明细
 func UserDetail(ctx *gin.Context) {
 	var err error
-	var in modelx.IdInt64
+	var in modelx.Id[int64]
 	if err = ctx.ShouldBindQuery(&in); err != nil {
 		log.Error("参数错误：", err)
 		respx.Exception(ctx, respx.ParamErr, err)

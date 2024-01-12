@@ -3,8 +3,8 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-xuan/quanx"
-	"github.com/go-xuan/quanx/authx"
 	"github.com/go-xuan/quanx/commonx/respx"
+	"github.com/go-xuan/quanx/importx/ginx"
 	"github.com/go-xuan/quanx/utilx/encryptx"
 
 	"user/internal/logic"
@@ -29,7 +29,7 @@ func UserLogin(ctx *gin.Context) {
 		respx.BuildError(ctx, err)
 		return
 	}
-	authx.SetCookie(ctx, result.User.Account)
+	ginx.SetCookie(ctx, result.User.Account)
 	respx.BuildSuccess(ctx, result)
 }
 
@@ -40,12 +40,12 @@ func UserLogout(ctx *gin.Context) {
 		ip = quanx.GetServer().Host
 	}
 	if value, ok := ctx.Get("user"); ok {
-		userId, err := logic.UserLogout(value.(*authx.User), ip)
+		userId, err := logic.UserLogout(value.(*ginx.User), ip)
 		if err != nil {
 			respx.BuildError(ctx, err)
 			return
 		}
-		authx.SetCookie(ctx, "")
+		ginx.RemoveCookie(ctx)
 		respx.BuildSuccess(ctx, userId)
 	}
 }

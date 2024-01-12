@@ -3,10 +3,10 @@ package logic
 import (
 	"context"
 	"errors"
+	"github.com/go-xuan/quanx/importx/ginx"
 	"strconv"
 	"time"
 
-	"github.com/go-xuan/quanx/authx"
 	"github.com/go-xuan/quanx/importx/redisx"
 	"github.com/go-xuan/quanx/utilx/encryptx"
 	"github.com/go-xuan/quanx/utilx/snowflakex"
@@ -40,16 +40,16 @@ func UserLogin(param model.Login, loginIp string) (result *model.LoginResult, er
 		err = errors.New("密码错误")
 		return
 	}
-	var authUser = &authx.User{
+	var authUser = &ginx.User{
 		Id:         strconv.FormatInt(user.Id, 10),
-		Account:    user.Account,
+		Username:   user.Account,
 		Name:       user.Name,
 		Phone:      user.Phone,
 		LoginIp:    loginIp,
 		ExpireTime: time.Now().Unix() + userAuth.SessionTime,
 	}
 	var token string
-	token, err = authx.GetTokenByUser(authUser)
+	token, err = ginx.GetTokenByUser(authUser)
 	if err != nil {
 		log.Error("生成token失败")
 		return
@@ -74,7 +74,7 @@ func UserLogin(param model.Login, loginIp string) (result *model.LoginResult, er
 }
 
 // 用户登出
-func UserLogout(user *authx.User, ip string) (userId int64, err error) {
+func UserLogout(user *ginx.User, ip string) (userId int64, err error) {
 	userId, _ = strconv.ParseInt(user.Id, 10, 64)
 	var sysLog = table.Log{
 		Id:           snowflakex.New().Int64(),
