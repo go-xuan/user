@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/go-xuan/quanx/authx"
-	"github.com/go-xuan/quanx/runner/redisx"
+	"github.com/go-xuan/quanx/importx/redisx"
 	"github.com/go-xuan/quanx/utilx/encryptx"
 	"github.com/go-xuan/quanx/utilx/snowflakex"
 	log "github.com/sirupsen/logrus"

@@ -4,7 +4,7 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/go-xuan/quanx/runner/gormx"
+	"github.com/go-xuan/quanx/importx/gormx"
 
 	"user/internal/model"
 	"user/internal/model/table"

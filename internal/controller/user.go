@@ -3,8 +3,8 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-xuan/quanx/authx"
-	"github.com/go-xuan/quanx/common/modelx"
-	"github.com/go-xuan/quanx/common/respx"
+	"github.com/go-xuan/quanx/commonx/modelx"
+	"github.com/go-xuan/quanx/commonx/respx"
 	log "github.com/sirupsen/logrus"
 
 	"user/internal/logic"
@@ -17,7 +17,7 @@ func UserPage(ctx *gin.Context) {
 	var in model.UserPage
 	if err = ctx.BindJSON(&in); err != nil {
 		log.Error("参数错误：", err)
-		respx.BuildException(ctx, respx.ParamErr, err)
+		respx.Exception(ctx, respx.ParamErr, err)
 		return
 	}
 	var result *respx.PageResponse
@@ -39,7 +39,7 @@ func UserSave(ctx *gin.Context) {
 	var in model.UserSave
 	if err = ctx.BindJSON(&in); err != nil {
 		log.Error("参数错误：", err)
-		respx.BuildException(ctx, respx.ParamErr, err)
+		respx.Exception(ctx, respx.ParamErr, err)
 		return
 	}
 	if in.CurrUserId == 0 {
@@ -61,7 +61,7 @@ func UserDelete(ctx *gin.Context) {
 	var in modelx.IdInt64
 	if err = ctx.ShouldBindQuery(&in); err != nil {
 		log.Error("参数错误：", err)
-		respx.BuildException(ctx, respx.ParamErr, err)
+		respx.Exception(ctx, respx.ParamErr, err)
 		return
 	}
 	err = logic.UserDelete(in.Id)
@@ -74,7 +74,7 @@ func UserDetail(ctx *gin.Context) {
 	var in modelx.IdInt64
 	if err = ctx.ShouldBindQuery(&in); err != nil {
 		log.Error("参数错误：", err)
-		respx.BuildException(ctx, respx.ParamErr, err)
+		respx.Exception(ctx, respx.ParamErr, err)
 		return
 	}
 	var result *model.User

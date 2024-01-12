@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-xuan/quanx"
 	"github.com/go-xuan/quanx/authx"
-	"github.com/go-xuan/quanx/common/respx"
+	"github.com/go-xuan/quanx/commonx/respx"
 	"github.com/go-xuan/quanx/utilx/encryptx"
 
 	"user/internal/logic"
@@ -16,12 +16,12 @@ func UserLogin(ctx *gin.Context) {
 	var err error
 	var param model.Login
 	if err = ctx.BindJSON(&param); err != nil {
-		respx.BuildException(ctx, respx.ParamErr, err)
+		respx.Exception(ctx, respx.ParamErr, err)
 		return
 	}
 	ip := ctx.ClientIP()
 	if ip == "::1" {
-		ip = quanx.GetServerConfig().Host
+		ip = quanx.GetServer().Host
 	}
 	var result *model.LoginResult
 	result, err = logic.UserLogin(param, ip)
@@ -37,7 +37,7 @@ func UserLogin(ctx *gin.Context) {
 func UserLogout(ctx *gin.Context) {
 	ip := ctx.ClientIP()
 	if ip == "::1" {
-		ip = quanx.GetServerConfig().Host
+		ip = quanx.GetServer().Host
 	}
 	if value, ok := ctx.Get("user"); ok {
 		userId, err := logic.UserLogout(value.(*authx.User), ip)

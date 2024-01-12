@@ -111,8 +111,8 @@ func (u *UserSave) UserAuthCreate() (auth *table.UserAuth) {
 	var salt = randx.UUID()
 	auth.Salt = salt
 	auth.Password = encryptx.PasswordSalt(encryptx.MD5(u.Password), salt)
-	var validStart = anyx.IfValue(u.ValidStart != "", timex.ToTime(u.ValidStart), time.Now())
-	var validEnd = anyx.IfValue(u.ValidEnd != "", timex.ToTime(u.ValidEnd), validStart.AddDate(1, 0, 0))
+	var validStart = anyx.IfElse(u.ValidStart != "", timex.ToTime(u.ValidStart), time.Now())
+	var validEnd = anyx.IfElse(u.ValidEnd != "", timex.ToTime(u.ValidEnd), validStart.AddDate(1, 0, 0))
 	auth.ValidStart = validStart
 	auth.ValidEnd = validEnd
 	return
@@ -130,7 +130,7 @@ func (u *UserSave) UserAuthUpdate() (auth *table.UserAuth) {
 		auth.Password = password
 		auth.Salt = salt
 	}
-	auth.ValidStart = anyx.IfValue(u.ValidStart != "", timex.ToTime(u.ValidStart), time.Time{})
-	auth.ValidEnd = anyx.IfValue(u.ValidEnd != "", timex.ToTime(u.ValidEnd), time.Time{})
+	auth.ValidStart = anyx.IfElse(u.ValidStart != "", timex.ToTime(u.ValidStart), time.Time{})
+	auth.ValidEnd = anyx.IfElse(u.ValidEnd != "", timex.ToTime(u.ValidEnd), time.Time{})
 	return
 }
