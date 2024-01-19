@@ -9,12 +9,12 @@ import (
 
 // 添加api接口函数路由
 func BindGinRouter(router *gin.RouterGroup) {
-	router.Use(
-		// 白名单
-		ginx.WhiteList("/auth/encrypt", "/auth/decrypt"),
-		// auth鉴权
-		ginx.Auth(),
-	)
+	BindNotAuthRouter(router)
+	BindAuthRouter(router)
+}
+
+func BindAuthRouter(router *gin.RouterGroup) {
+	router.Use(ginx.Auth)
 	// 用户管理
 	user := router.Group("user")
 	user.POST("page", controller.UserPage)    // 用户分页
@@ -22,13 +22,7 @@ func BindGinRouter(router *gin.RouterGroup) {
 	user.GET("delete", controller.UserDelete) // 用户删除
 	user.GET("detail", controller.UserDetail) // 用户明细
 	user.GET("list", controller.UserList)     // 用户列表
-	// 用户登录
-	auth := router.Group("auth")
-	auth.POST("login", controller.UserLogin)      // 用户登录
-	auth.GET("logout", controller.UserLogout)     // 用户登出
-	auth.GET("tokenParse", controller.TokenParse) // token解析
-	auth.GET("encrypt", controller.Encrypt)       // 密码加密
-	auth.GET("decrypt", controller.Decrypt)       // 密码解密
+
 	// 角色管理
 	role := router.Group("role")
 	role.POST("page", controller.RolePage)    // 角色分页
@@ -42,4 +36,13 @@ func BindGinRouter(router *gin.RouterGroup) {
 	group.POST("save", controller.GroupSave)    // 群组保存
 	group.GET("delete", controller.GroupDelete) // 群组删除
 	group.GET("detail", controller.GroupDetail) // 群组明细
+}
+func BindNotAuthRouter(router *gin.RouterGroup) {
+	router.Use(ginx.NotAuth)
+	auth := router.Group("auth")
+	auth.POST("login", controller.UserLogin)      // 用户登录
+	auth.GET("logout", controller.UserLogout)     // 用户登出
+	auth.GET("tokenParse", controller.TokenParse) // token解析
+	auth.GET("encrypt", controller.Encrypt)       // 密码加密
+	auth.GET("decrypt", controller.Decrypt)       // 密码解密
 }

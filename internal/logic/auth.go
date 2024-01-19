@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/go-xuan/quanx/importx/encryptx"
 	"github.com/go-xuan/quanx/importx/redisx"
-	"github.com/go-xuan/quanx/utilx/encryptx"
 	"github.com/go-xuan/quanx/utilx/snowflakex"
 	log "github.com/sirupsen/logrus"
 
