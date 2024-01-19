@@ -2,7 +2,7 @@ package model
 
 import (
 	"github.com/go-xuan/quanx/utilx/timex"
-	"user/internal/model/table"
+	"user/internal/model/entity"
 )
 
 // 角色信息
@@ -32,8 +32,8 @@ type RoleSave struct {
 	CurrUserId int64       `json:"currUserId" comment:"当前用户ID"`
 }
 
-func (r *RoleSave) Role() *table.Role {
-	return &table.Role{
+func (r *RoleSave) Role() *entity.Role {
+	return &entity.Role{
 		Id:           r.Id,
 		Code:         r.Code,
 		Name:         r.Name,

@@ -2,7 +2,7 @@ package model
 
 import (
 	"time"
-	"user/internal/model/table"
+	"user/internal/model/entity"
 
 	"github.com/go-xuan/quanx/utilx/timex"
 )
@@ -35,8 +35,8 @@ type GroupSave struct {
 	CurrUserId int64        `json:"currUserId" comment:"当前用户"`
 }
 
-func (g *GroupSave) Group() *table.Group {
-	return &table.Group{
+func (g *GroupSave) Group() *entity.Group {
+	return &entity.Group{
 		Id:           g.Id,
 		Code:         g.Code,
 		Name:         g.Name,

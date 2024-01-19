@@ -10,7 +10,7 @@ import (
 
 	"user/internal/dao"
 	"user/internal/model"
-	"user/internal/model/table"
+	"user/internal/model/entity"
 )
 
 // 群组分页
@@ -142,9 +142,9 @@ func GroupUserExist(id int64, userIds []int64) (err error) {
 
 // 群组成员新增
 func GroupUserAdd(in *model.GroupSave) (err error) {
-	var createList []*table.GroupUser
+	var createList []*entity.GroupUser
 	for _, item := range in.UserList {
-		var create = table.GroupUser{
+		var create = entity.GroupUser{
 			Id:           snowflakex.New().Int64(),
 			GroupId:      in.Id,
 			UserId:       item.Id,
@@ -179,9 +179,9 @@ func GroupRoleExist(groupId int64, roleIds []int64) (err error) {
 
 // 群组角色新增
 func GroupRoleAdd(in *model.GroupSave) (err error) {
-	var createList []*table.GroupRole
+	var createList []*entity.GroupRole
 	for _, item := range in.RoleList {
-		var create = table.GroupRole{
+		var create = entity.GroupRole{
 			Id:           snowflakex.New().Int64(),
 			GroupId:      in.Id,
 			RoleId:       item.Id,

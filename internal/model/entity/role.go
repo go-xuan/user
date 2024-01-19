@@ -1,4 +1,4 @@
-package table
+package entity
 
 import "time"
 

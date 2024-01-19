@@ -7,7 +7,7 @@ import (
 	"github.com/go-xuan/quanx/importx/gormx"
 
 	"user/internal/model"
-	"user/internal/model/table"
+	"user/internal/model/entity"
 )
 
 const SelectUser = `
@@ -98,7 +98,7 @@ func GetUserByName(username string) (user *model.User, err error) {
 }
 
 // 查询用户基本信息
-func QueryUser(id int64) (user *table.User, err error) {
+func QueryUser(id int64) (user *entity.User, err error) {
 	user.Id = id
 	err = gormx.This().DB.Find(user).Error
 	if err != nil {
@@ -111,8 +111,8 @@ func QueryUser(id int64) (user *table.User, err error) {
 }
 
 // 查询用户身份信息
-func QueryUserAuth(userId int64) (auth *table.UserAuth, err error) {
-	auth = &table.UserAuth{}
+func QueryUserAuth(userId int64) (auth *entity.UserAuth, err error) {
+	auth = &entity.UserAuth{}
 	auth.UserId = userId
 	err = gormx.This().DB.Find(auth).Error
 	if err != nil {
@@ -126,7 +126,7 @@ func QueryUserAuth(userId int64) (auth *table.UserAuth, err error) {
 
 // 用户列表查询
 func UserList() (result []*model.User, err error) {
-	err = gormx.This().DB.Model(&table.User{}).Select([]string{"id", "account", "name", "phone", "email"}).Order("id desc").Scan(&result).Error
+	err = gormx.This().DB.Model(&entity.User{}).Select([]string{"id", "account", "name", "phone", "email"}).Order("id desc").Scan(&result).Error
 	if err != nil {
 		return
 	}
@@ -135,7 +135,7 @@ func UserList() (result []*model.User, err error) {
 
 // 查询手机是否存在
 func UserExist(in *model.UserSave) (count int64, err error) {
-	err = gormx.This().DB.Model(&table.User{}).Where(`account = ? or phone = ?`, in.Account, in.Phone).Count(&count).Error
+	err = gormx.This().DB.Model(&entity.User{}).Where(`account = ? or phone = ?`, in.Account, in.Phone).Count(&count).Error
 	if err != nil {
 		return
 	}
@@ -143,7 +143,7 @@ func UserExist(in *model.UserSave) (count int64, err error) {
 }
 
 // 用户新增
-func UserCreate(user *table.User, userAuth *table.UserAuth) error {
+func UserCreate(user *entity.User, userAuth *entity.UserAuth) error {
 	tx := gormx.This().DB.Begin()
 	err := tx.Create(user).Error
 	if err != nil {
@@ -196,13 +196,13 @@ func UserUpdate(in *model.UserSave) (err error) {
 		userAuthCols = append(userAuthCols, "valid_end")
 	}
 	// 更新用户表
-	err = tx.Model(&table.User{}).Select(userCols).Where("user_id = ? ", in.Id).Updates(in.UserUpdate()).Error
+	err = tx.Model(&entity.User{}).Select(userCols).Where("user_id = ? ", in.Id).Updates(in.UserUpdate()).Error
 	if err != nil {
 		tx.Rollback()
 		return
 	}
 	// 更新用户鉴权表
-	err = tx.Model(&table.UserAuth{}).Select(userAuthCols).Where("user_id = ? ", in.Id).Updates(in.UserAuthUpdate()).Error
+	err = tx.Model(&entity.UserAuth{}).Select(userAuthCols).Where("user_id = ? ", in.Id).Updates(in.UserAuthUpdate()).Error
 	if err != nil {
 		tx.Rollback()
 		return
@@ -214,12 +214,12 @@ func UserUpdate(in *model.UserSave) (err error) {
 // 用户删除
 func UserDelete(userId int64) error {
 	tx := gormx.This().DB.Begin()
-	err := tx.Delete(&table.User{}, userId).Error
+	err := tx.Delete(&entity.User{}, userId).Error
 	if err != nil {
 		tx.Rollback()
 		return err
 	}
-	err = tx.Delete(&table.UserAuth{}, userId).Error
+	err = tx.Delete(&entity.UserAuth{}, userId).Error
 	if err != nil {
 		tx.Rollback()
 		return err

@@ -14,7 +14,7 @@ import (
 
 	"user/internal/dao"
 	"user/internal/model"
-	"user/internal/model/table"
+	"user/internal/model/entity"
 )
 
 // 用户登录
@@ -24,7 +24,7 @@ func UserLogin(param model.Login, loginIp string) (result *model.LoginResult, er
 	if err != nil {
 		return
 	}
-	var userAuth *table.UserAuth
+	var userAuth *entity.UserAuth
 	userAuth, err = dao.QueryUserAuth(user.Id)
 	if err != nil {
 		return
@@ -57,7 +57,7 @@ func UserLogin(param model.Login, loginIp string) (result *model.LoginResult, er
 	// token存入redis
 	authUser.SetTokenCache(token, time.Duration(userAuth.SessionTime)*time.Second)
 	// 记录日志
-	var sysLog = table.Log{
+	var sysLog = entity.Log{
 		Id:           snowflakex.New().Int64(),
 		Module:       "auth",
 		Type:         "login",
@@ -76,7 +76,7 @@ func UserLogin(param model.Login, loginIp string) (result *model.LoginResult, er
 // 用户登出
 func UserLogout(user *ginx.User, ip string) (userId int64, err error) {
 	userId, _ = strconv.ParseInt(user.Id, 10, 64)
-	var sysLog = table.Log{
+	var sysLog = entity.Log{
 		Id:           snowflakex.New().Int64(),
 		Module:       "auth",
 		Type:         "logout",

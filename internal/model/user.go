@@ -8,7 +8,7 @@ import (
 	"github.com/go-xuan/quanx/utilx/randx"
 	"github.com/go-xuan/quanx/utilx/timex"
 
-	"user/internal/model/table"
+	"user/internal/model/entity"
 )
 
 // 用户信息
@@ -29,8 +29,8 @@ type User struct {
 
 // 用户明细
 type UserDetail struct {
-	*table.User     // 用户基本信息
-	*table.UserAuth // 用户鉴权信息
+	*entity.User     // 用户基本信息
+	*entity.UserAuth // 用户鉴权信息
 }
 
 // 用户分页参数
@@ -67,8 +67,8 @@ type UserSave struct {
 	CurrUserId int64  `json:"currUserId" comment:"当前用户ID"`
 }
 
-func (u *UserSave) UserCreate() *table.User {
-	return &table.User{
+func (u *UserSave) UserCreate() *entity.User {
+	return &entity.User{
 		Id:           u.Id,
 		Account:      u.Account,
 		Name:         u.Name,
@@ -84,8 +84,8 @@ func (u *UserSave) UserCreate() *table.User {
 	}
 }
 
-func (u *UserSave) UserUpdate() *table.User {
-	return &table.User{
+func (u *UserSave) UserUpdate() *entity.User {
+	return &entity.User{
 		Id:           u.Id,
 		Account:      u.Account,
 		Name:         u.Name,
@@ -100,8 +100,8 @@ func (u *UserSave) UserUpdate() *table.User {
 	}
 }
 
-func (u *UserSave) UserAuthCreate() (auth *table.UserAuth) {
-	auth = &table.UserAuth{
+func (u *UserSave) UserAuthCreate() (auth *entity.UserAuth) {
+	auth = &entity.UserAuth{
 		UserId:       u.Id,
 		SessionTime:  3600,
 		CreateUserId: u.CurrUserId,
@@ -118,8 +118,8 @@ func (u *UserSave) UserAuthCreate() (auth *table.UserAuth) {
 	return
 }
 
-func (u *UserSave) UserAuthUpdate() (auth *table.UserAuth) {
-	auth = &table.UserAuth{
+func (u *UserSave) UserAuthUpdate() (auth *entity.UserAuth) {
+	auth = &entity.UserAuth{
 		UserId:       u.Id,
 		UpdateUserId: u.CurrUserId,
 		UpdateTime:   time.Now(),

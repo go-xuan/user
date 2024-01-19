@@ -10,7 +10,7 @@ import (
 
 	"user/internal/dao"
 	"user/internal/model"
-	"user/internal/model/table"
+	"user/internal/model/entity"
 )
 
 // 用户分页查询
@@ -125,9 +125,9 @@ func RoleUserExist(roleId int64, userIds []int64) (err error) {
 }
 
 func RoleUserAdd(in *model.RoleSave) (err error) {
-	var createList []*table.RoleUser
+	var createList []*entity.RoleUser
 	for _, item := range in.UserList {
-		var create = table.RoleUser{
+		var create = entity.RoleUser{
 			Id:           snowflakex.New().Int64(),
 			RoleId:       in.Id,
 			UserId:       item.Id,
