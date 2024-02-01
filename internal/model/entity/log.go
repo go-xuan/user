@@ -16,7 +16,7 @@ func (Log) TableName() string {
 	return "t_sys_log"
 }
 
-func (l Log) Comment() string {
+func (l Log) TableComment() string {
 	return "日志表"
 }
 

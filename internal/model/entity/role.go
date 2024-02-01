@@ -17,7 +17,7 @@ func (Role) TableName() string {
 	return "t_sys_role"
 }
 
-func (r Role) Comment() string {
+func (r Role) TableComment() string {
 	return "角色表"
 }
 
@@ -43,7 +43,7 @@ func (RoleUser) TableName() string {
 	return "t_sys_role_user"
 }
 
-func (u RoleUser) Comment() string {
+func (u RoleUser) TableComment() string {
 	return "角色成员表"
 }
 

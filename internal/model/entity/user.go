@@ -23,7 +23,7 @@ func (User) TableName() string {
 	return "t_sys_user"
 }
 
-func (u User) Comment() string {
+func (u User) TableComment() string {
 	return "用户信息表"
 }
 
@@ -49,7 +49,7 @@ func (UserAuth) TableName() string {
 	return "t_sys_user_auth"
 }
 
-func (a UserAuth) Comment() string {
+func (a UserAuth) TableComment() string {
 	return "用户鉴权表"
 }
 

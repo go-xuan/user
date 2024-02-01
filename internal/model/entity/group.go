@@ -17,7 +17,7 @@ func (Group) TableName() string {
 	return "t_sys_group"
 }
 
-func (g Group) Comment() string {
+func (g Group) TableComment() string {
 	return "群组表"
 }
 
@@ -43,7 +43,7 @@ func (GroupUser) TableName() string {
 	return "t_sys_group_user"
 }
 
-func (u GroupUser) Comment() string {
+func (u GroupUser) TableComment() string {
 	return "群组成员表"
 }
 
@@ -68,7 +68,7 @@ func (GroupRole) TableName() string {
 	return "t_sys_group_role"
 }
 
-func (r GroupRole) Comment() string {
+func (r GroupRole) TableComment() string {
 	return "群组角色表"
 }
 
