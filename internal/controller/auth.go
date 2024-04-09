@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/go-xuan/quanx"
 	"github.com/go-xuan/quanx/commonx/respx"
@@ -39,8 +40,8 @@ func UserLogout(ctx *gin.Context) {
 	if ip == "::1" {
 		ip = quanx.GetServer().Host
 	}
-	if value, ok := ctx.Get("user"); ok {
-		userId, err := logic.UserLogout(value.(*ginx.User), ip)
+	if user := ginx.GetUser(ctx); user != nil {
+		userId, err := logic.UserLogout(user, ip)
 		if err != nil {
 			respx.BuildError(ctx, err)
 			return
@@ -52,8 +53,10 @@ func UserLogout(ctx *gin.Context) {
 
 // 验证token
 func TokenParse(ctx *gin.Context) {
-	if value, ok := ctx.Get("user"); ok {
-		respx.BuildResponse(ctx, value, nil)
+	if user := ginx.GetUser(ctx); user != nil {
+		respx.BuildSuccess(ctx, user)
+	} else {
+		respx.BuildError(ctx, errors.New(""))
 	}
 }
 

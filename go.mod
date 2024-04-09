@@ -6,7 +6,7 @@ toolchain go1.22.0
 
 require (
 	github.com/gin-gonic/gin v1.9.1
-	github.com/go-xuan/quanx v1.24.409
+	github.com/go-xuan/quanx v1.24.410
 	github.com/sirupsen/logrus v1.9.3
 )
 
