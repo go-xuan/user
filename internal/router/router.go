@@ -13,8 +13,10 @@ func BindGinRouter(router *gin.RouterGroup) {
 	BindAuthRouter(router)
 }
 
+// 鉴权路由
 func BindAuthRouter(router *gin.RouterGroup) {
 	router.Use(ginx.Auth)
+
 	// 用户管理
 	user := router.Group("user")
 	user.POST("page", controller.UserPage)    // 用户分页
@@ -30,6 +32,7 @@ func BindAuthRouter(router *gin.RouterGroup) {
 	role.POST("save", controller.RoleSave)    // 角色保存
 	role.GET("delete", controller.RoleDelete) // 角色删除
 	role.GET("detail", controller.RoleDetail) // 角色明细
+
 	// 群组管理
 	group := router.Group("group")
 	group.POST("page", controller.GroupPage)    // 群组分页
@@ -37,6 +40,8 @@ func BindAuthRouter(router *gin.RouterGroup) {
 	group.GET("delete", controller.GroupDelete) // 群组删除
 	group.GET("detail", controller.GroupDetail) // 群组明细
 }
+
+// 免鉴权路由
 func BindNotAuthRouter(router *gin.RouterGroup) {
 	router.Use(ginx.NotAuth)
 	auth := router.Group("auth")
