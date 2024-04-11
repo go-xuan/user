@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/go-xuan/quanx"
+
 	"user/internal/model/entity"
 	"user/internal/router"
 )
@@ -9,7 +10,6 @@ import (
 func main() {
 	var engine = quanx.GetEngine(quanx.EnableNacos)
 	engine.AddGinRouter(router.BindGinRouter)
-	engine.SetConfigDir("conf")
 	engine.AddTable(
 		&entity.User{},
 		&entity.UserAuth{},
