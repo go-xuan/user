@@ -3,9 +3,9 @@ package logic
 import (
 	"errors"
 
-	"github.com/go-xuan/quanx/commonx/respx"
-	"github.com/go-xuan/quanx/utilx/snowflakex"
-	"github.com/go-xuan/quanx/utilx/timex"
+	"github.com/go-xuan/quanx/frame/snowflakex"
+	"github.com/go-xuan/quanx/net/respx"
+	"github.com/go-xuan/quanx/utils/timex"
 	log "github.com/sirupsen/logrus"
 
 	"user/internal/dao"
@@ -22,7 +22,7 @@ func GroupPage(in model.GroupPage) (resp *respx.PageResponse, err error) {
 		log.Error("群组分页查询失败")
 		return
 	}
-	resp = respx.BuildPageResp(in.Page.Page, rows, total)
+	resp = respx.BuildPageResp(in.Page, rows, total)
 	return
 }
 

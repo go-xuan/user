@@ -2,9 +2,11 @@ package model
 
 import (
 	"time"
-	"user/internal/model/entity"
 
-	"github.com/go-xuan/quanx/utilx/timex"
+	"github.com/go-xuan/quanx/common/modelx"
+	"github.com/go-xuan/quanx/utils/timex"
+
+	"user/internal/model/entity"
 )
 
 // 群组明细
@@ -21,7 +23,8 @@ type Group struct {
 
 // 群组分页查询参数
 type GroupPage struct {
-	Page
+	Keyword string `json:"keyword" comment:"关键字"`
+	*modelx.Page
 }
 
 // 群组信息新增

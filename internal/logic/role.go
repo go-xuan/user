@@ -3,9 +3,9 @@ package logic
 import (
 	"errors"
 
-	"github.com/go-xuan/quanx/commonx/respx"
-	"github.com/go-xuan/quanx/utilx/snowflakex"
-	"github.com/go-xuan/quanx/utilx/timex"
+	"github.com/go-xuan/quanx/frame/snowflakex"
+	"github.com/go-xuan/quanx/net/respx"
+	"github.com/go-xuan/quanx/utils/timex"
 	log "github.com/sirupsen/logrus"
 
 	"user/internal/dao"
@@ -23,7 +23,7 @@ func RolePage(in model.RolePage) (*respx.PageResponse, error) {
 		log.Error("用户分页查询失败")
 		return nil, err
 	}
-	return respx.BuildPageResp(in.Page.Page, list, total), nil
+	return respx.BuildPageResp(in.Page, list, total), nil
 }
 
 // 角色列表

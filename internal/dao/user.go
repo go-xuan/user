@@ -4,7 +4,7 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/go-xuan/quanx/importx/gormx"
+	"github.com/go-xuan/quanx/db/gormx"
 
 	"user/internal/model"
 	"user/internal/model/entity"
@@ -44,8 +44,8 @@ func UserPage(in model.UserPage) (result []*model.User, total int64, err error) 
 	selectSql.WriteString(` ( `)
 	selectSql.WriteString(sql.String())
 	selectSql.WriteString(` ) t order by update_time desc`)
-	if in.Page.Page != nil && in.Page.Page.PageSize > 0 {
-		selectSql.WriteString(in.Page.Page.PgPageSql())
+	if in.Page != nil && in.Page.PageSize > 0 {
+		selectSql.WriteString(in.Page.PgPageSql())
 	}
 	err = gormx.This().DB.Raw(selectSql.String()).Scan(&result).Error
 	if err != nil {

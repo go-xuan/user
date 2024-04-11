@@ -3,13 +3,12 @@ package logic
 import (
 	"context"
 	"errors"
-	"github.com/go-xuan/quanx/importx/ginx"
-	"strconv"
 	"time"
 
-	"github.com/go-xuan/quanx/importx/encryptx"
-	"github.com/go-xuan/quanx/importx/redisx"
-	"github.com/go-xuan/quanx/utilx/snowflakex"
+	"github.com/go-xuan/quanx/db/redisx"
+	"github.com/go-xuan/quanx/frame/ginx"
+	"github.com/go-xuan/quanx/frame/snowflakex"
+	"github.com/go-xuan/quanx/os/encryptx"
 	log "github.com/sirupsen/logrus"
 
 	"user/internal/dao"
@@ -41,11 +40,11 @@ func UserLogin(param model.Login, loginIp string) (result *model.LoginResult, er
 		return
 	}
 	var authUser = &ginx.User{
-		Id:         strconv.FormatInt(user.Id, 10),
-		Username:   user.Account,
+		Id:         user.Id,
+		Account:    user.Account,
 		Name:       user.Name,
 		Phone:      user.Phone,
-		LoginIp:    loginIp,
+		Ip:         loginIp,
 		ExpireTime: time.Now().Unix() + userAuth.SessionTime,
 	}
 	var token string
@@ -65,9 +64,9 @@ func UserLogin(param model.Login, loginIp string) (result *model.LoginResult, er
 		Ip:           loginIp,
 		CreateUserId: userAuth.UserId,
 	}
-	err = dao.SysLogCreate(sysLog)
-	if err != nil {
+	if err = dao.SysLogCreate(sysLog); err != nil {
 		log.Error("记录登录日志失败")
+		return
 	}
 	result = &model.LoginResult{User: user, Token: token}
 	return
@@ -75,20 +74,19 @@ func UserLogin(param model.Login, loginIp string) (result *model.LoginResult, er
 
 // 用户登出
 func UserLogout(user *ginx.User, ip string) (userId int64, err error) {
-	userId, _ = strconv.ParseInt(user.Id, 10, 64)
 	var sysLog = entity.Log{
 		Id:           snowflakex.New().Int64(),
 		Module:       "auth",
 		Type:         "logout",
 		Content:      user.Name + "【登出】",
 		Ip:           ip,
-		CreateUserId: userId,
+		CreateUserId: user.Id,
 	}
-	err = dao.SysLogCreate(sysLog)
-	if err != nil {
+	if err = dao.SysLogCreate(sysLog); err != nil {
 		log.Error("记录日志失败")
+		return
 	}
 	// 删除redis上用户token
-	redisx.GetCmd("user").Del(context.TODO(), user.RedisKey())
+	redisx.DB("user").Del(context.TODO(), user.RedisKey())
 	return
 }

@@ -1,7 +1,9 @@
 package model
 
 import (
-	"github.com/go-xuan/quanx/utilx/timex"
+	"github.com/go-xuan/quanx/common/modelx"
+	"github.com/go-xuan/quanx/utils/timex"
+
 	"user/internal/model/entity"
 )
 
@@ -19,7 +21,8 @@ type Role struct {
 
 // 角色分页参数
 type RolePage struct {
-	Page
+	Keyword string `json:"keyword" comment:"关键字"`
+	*modelx.Page
 }
 
 // 角色保存

@@ -2,11 +2,12 @@ package controller
 
 import (
 	"errors"
+
 	"github.com/gin-gonic/gin"
 	"github.com/go-xuan/quanx"
-	"github.com/go-xuan/quanx/commonx/respx"
-	"github.com/go-xuan/quanx/importx/encryptx"
-	"github.com/go-xuan/quanx/importx/ginx"
+	"github.com/go-xuan/quanx/frame/ginx"
+	"github.com/go-xuan/quanx/net/respx"
+	"github.com/go-xuan/quanx/os/encryptx"
 
 	"user/internal/logic"
 	"user/internal/model"

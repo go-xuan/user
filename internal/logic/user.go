@@ -3,8 +3,8 @@ package logic
 import (
 	"errors"
 
-	"github.com/go-xuan/quanx/commonx/respx"
-	"github.com/go-xuan/quanx/utilx/snowflakex"
+	"github.com/go-xuan/quanx/frame/snowflakex"
+	"github.com/go-xuan/quanx/net/respx"
 	log "github.com/sirupsen/logrus"
 
 	"user/internal/dao"
@@ -20,7 +20,7 @@ func UserPage(in model.UserPage) (resp *respx.PageResponse, err error) {
 		log.Error("用户分页查询失败")
 		return
 	}
-	resp = respx.BuildPageResp(in.Page.Page, resultList, total)
+	resp = respx.BuildPageResp(in.Page, resultList, total)
 	return
 }
 

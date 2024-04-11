@@ -1,12 +1,13 @@
 package model
 
 import (
-	"github.com/go-xuan/quanx/utilx/anyx"
 	"time"
 
-	"github.com/go-xuan/quanx/importx/encryptx"
-	"github.com/go-xuan/quanx/utilx/randx"
-	"github.com/go-xuan/quanx/utilx/timex"
+	"github.com/go-xuan/quanx/common/modelx"
+	"github.com/go-xuan/quanx/os/encryptx"
+	"github.com/go-xuan/quanx/utils/anyx"
+	"github.com/go-xuan/quanx/utils/randx"
+	"github.com/go-xuan/quanx/utils/timex"
 
 	"user/internal/model/entity"
 )
@@ -35,7 +36,8 @@ type UserDetail struct {
 
 // 用户分页参数
 type UserPage struct {
-	Page
+	Keyword string `json:"keyword" comment:"关键字"`
+	*modelx.Page
 }
 
 // 用户登录参数
@@ -111,8 +113,8 @@ func (u *UserSave) UserAuthCreate() (auth *entity.UserAuth) {
 	var salt = randx.UUID()
 	auth.Salt = salt
 	auth.Password = encryptx.PasswordSalt(encryptx.MD5(u.Password), salt)
-	var validStart = anyx.IfElseValue(u.ValidStart != "", timex.ToTime(u.ValidStart), time.Now())
-	var validEnd = anyx.IfElseValue(u.ValidEnd != "", timex.ToTime(u.ValidEnd), validStart.AddDate(1, 0, 0))
+	var validStart = anyx.If(u.ValidStart != "", timex.ToTime(u.ValidStart), time.Now())
+	var validEnd = anyx.If(u.ValidEnd != "", timex.ToTime(u.ValidEnd), validStart.AddDate(1, 0, 0))
 	auth.ValidStart = validStart
 	auth.ValidEnd = validEnd
 	return
@@ -130,7 +132,7 @@ func (u *UserSave) UserAuthUpdate() (auth *entity.UserAuth) {
 		auth.Password = password
 		auth.Salt = salt
 	}
-	auth.ValidStart = anyx.IfElseValue(u.ValidStart != "", timex.ToTime(u.ValidStart), time.Time{})
-	auth.ValidEnd = anyx.IfElseValue(u.ValidEnd != "", timex.ToTime(u.ValidEnd), time.Time{})
+	auth.ValidStart = anyx.If(u.ValidStart != "", timex.ToTime(u.ValidStart), time.Time{})
+	auth.ValidEnd = anyx.If(u.ValidEnd != "", timex.ToTime(u.ValidEnd), time.Time{})
 	return
 }
