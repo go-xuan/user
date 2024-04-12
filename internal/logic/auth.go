@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"context"
 	"errors"
 	"time"
 
@@ -15,7 +16,7 @@ import (
 )
 
 // 用户登录
-func UserLogin(param model.Login, loginIp string) (result *model.LoginResult, err error) {
+func UserLogin(ctx context.Context, param model.Login, loginIp string) (result *model.LoginResult, err error) {
 	var user *model.User
 	if user, err = dao.GetUserByName(param.Username); err != nil {
 		return
@@ -48,7 +49,7 @@ func UserLogin(param model.Login, loginIp string) (result *model.LoginResult, er
 		return
 	}
 	// token存入redis
-	ginx.AuthCache.Set(user.Account, token, time.Duration(userAuth.SessionTime)*time.Second)
+	ginx.AuthCache.Set(ctx, user.Account, token, time.Duration(userAuth.SessionTime)*time.Second)
 	// 记录日志
 	var sysLog = entity.Log{
 		Id:           snowflakex.New().Int64(),
@@ -67,7 +68,7 @@ func UserLogin(param model.Login, loginIp string) (result *model.LoginResult, er
 }
 
 // 用户登出
-func UserLogout(user *ginx.User, ip string) (userId int64, err error) {
+func UserLogout(ctx context.Context, user *ginx.User, ip string) (userId int64, err error) {
 	var sysLog = entity.Log{
 		Id:           snowflakex.New().Int64(),
 		Module:       "auth",
@@ -81,6 +82,6 @@ func UserLogout(user *ginx.User, ip string) (userId int64, err error) {
 		return
 	}
 	// 删除redis上用户token
-	ginx.AuthCache.Del(user.Account)
+	ginx.AuthCache.Del(ctx, user.Account)
 	return
 }

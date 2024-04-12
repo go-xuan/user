@@ -4,7 +4,6 @@ import (
 	"errors"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-xuan/quanx"
 	"github.com/go-xuan/quanx/frame/ginx"
 	"github.com/go-xuan/quanx/net/respx"
 	"github.com/go-xuan/quanx/os/encryptx"
@@ -21,12 +20,9 @@ func UserLogin(ctx *gin.Context) {
 		respx.Exception(ctx, respx.ParamErr, err)
 		return
 	}
-	ip := ctx.ClientIP()
-	if ip == "::1" {
-		ip = quanx.GetServer().Host
-	}
+	ip := ginx.GetCorrectIP(ctx)
 	var result *model.LoginResult
-	result, err = logic.UserLogin(param, ip)
+	result, err = logic.UserLogin(ctx.Request.Context(), param, ip)
 	if err != nil {
 		respx.BuildError(ctx, err)
 		return
@@ -37,12 +33,9 @@ func UserLogin(ctx *gin.Context) {
 
 // 用户登出
 func UserLogout(ctx *gin.Context) {
-	ip := ctx.ClientIP()
-	if ip == "::1" {
-		ip = quanx.GetServer().Host
-	}
 	if user := ginx.GetUser(ctx); user != nil {
-		userId, err := logic.UserLogout(user, ip)
+		ip := ginx.GetCorrectIP(ctx)
+		userId, err := logic.UserLogout(ctx.Request.Context(), user, ip)
 		if err != nil {
 			respx.BuildError(ctx, err)
 			return
