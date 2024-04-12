@@ -6,7 +6,7 @@ replace github.com/go-xuan/quanx v1.0.0 => ../quanx
 
 require (
 	github.com/gin-gonic/gin v1.9.1
-	github.com/go-xuan/quanx v1.24.411
+	github.com/go-xuan/quanx v1.0.0
 	github.com/sirupsen/logrus v1.9.3
 )
 

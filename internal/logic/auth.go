@@ -1,11 +1,9 @@
 package logic
 
 import (
-	"context"
 	"errors"
 	"time"
 
-	"github.com/go-xuan/quanx/db/redisx"
 	"github.com/go-xuan/quanx/frame/ginx"
 	"github.com/go-xuan/quanx/frame/snowflakex"
 	"github.com/go-xuan/quanx/os/encryptx"
@@ -19,18 +17,15 @@ import (
 // 用户登录
 func UserLogin(param model.Login, loginIp string) (result *model.LoginResult, err error) {
 	var user *model.User
-	user, err = dao.GetUserByName(param.Username)
-	if err != nil {
+	if user, err = dao.GetUserByName(param.Username); err != nil {
 		return
 	}
 	var userAuth *entity.UserAuth
-	userAuth, err = dao.QueryUserAuth(user.Id)
-	if err != nil {
+	if userAuth, err = dao.QueryUserAuth(user.Id); err != nil {
 		return
 	}
 	var password string
-	password, err = encryptx.RSA().Decrypt(param.Password)
-	if err != nil {
+	if password, err = encryptx.RSA().Decrypt(param.Password); err != nil {
 		return
 	}
 	password = encryptx.MD5(password)
@@ -48,13 +43,12 @@ func UserLogin(param model.Login, loginIp string) (result *model.LoginResult, er
 		ExpireTime: time.Now().Unix() + userAuth.SessionTime,
 	}
 	var token string
-	token, err = ginx.GetTokenByUser(authUser)
-	if err != nil {
+	if token, err = ginx.NewToken(authUser); err != nil {
 		log.Error("生成token失败")
 		return
 	}
 	// token存入redis
-	authUser.SetTokenCache(token, time.Duration(userAuth.SessionTime)*time.Second)
+	ginx.AuthCache.Set(user.Account, token, time.Duration(userAuth.SessionTime)*time.Second)
 	// 记录日志
 	var sysLog = entity.Log{
 		Id:           snowflakex.New().Int64(),
@@ -87,6 +81,6 @@ func UserLogout(user *ginx.User, ip string) (userId int64, err error) {
 		return
 	}
 	// 删除redis上用户token
-	redisx.DB("user").Del(context.TODO(), user.RedisKey())
+	ginx.AuthCache.Del(user.Account)
 	return
 }
