@@ -2,7 +2,6 @@
 server:
   name: user
   port: 9001
-#  env: localhost
   prefix: /user/api/v1
   debug: true
 
@@ -14,5 +13,3 @@ nacos:
   password: nacos
   mode: 0
   nameSpace: localhost
-  logDir: resource/.nacos/log
-  cacheDir: resource/.nacos/cache

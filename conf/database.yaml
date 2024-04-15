@@ -1,0 +1,21 @@
+source: default
+enable: true
+type: postgres
+host: localhost
+port: 5432
+username: postgres
+password: postgres
+database: quan_demo
+debug: true
+init: true
+
+#- source: default
+#  enable: true
+#  type: postgres
+#  host: localhost
+#  port: 5432
+#  username: postgres
+#  password: postgres
+#  database: quan_demo
+#  debug: true
+#  init: true
