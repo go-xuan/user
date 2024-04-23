@@ -4,7 +4,7 @@ import "time"
 
 // 用户表
 type User struct {
-	Id           int64     `json:"id" gorm:"type:bigint; not null; primary_key; comment:用户ID;"`
+	Id           int64     `json:"id" gorm:"type:bigint; primary_key; comment:用户ID;"`
 	Name         string    `json:"name" gorm:"type:varchar(100); not null; comment:姓名;"`
 	Account      string    `json:"account" gorm:"type:varchar(20); not null; comment:用户账号;"`
 	Phone        string    `json:"phone" gorm:"type:varchar(100); not null; comment:手机;"`
@@ -33,7 +33,7 @@ func (u User) InitData() interface{} {
 
 // 用户鉴权表
 type UserAuth struct {
-	UserId       int64     `json:"userId" gorm:"type:bigint; not null; primary_key; comment:用户ID;"`
+	UserId       int64     `json:"userId" gorm:"type:bigint; primary_key; comment:用户ID;"`
 	Password     string    `json:"password" gorm:"type:varchar(100); not null; comment:密码;"`
 	Salt         string    `json:"salt" gorm:"type:varchar(100); not null; comment:密码盐;"`
 	SessionTime  int64     `json:"sessionTime" gorm:"type:int; not null; comment:会话有效期(秒);"`

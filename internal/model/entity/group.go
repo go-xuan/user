@@ -3,7 +3,7 @@ package entity
 import "time"
 
 type Group struct {
-	Id           int64     `json:"id" gorm:"type:bigint; not null; primary_key; comment:群组ID;"`
+	Id           int64     `json:"id" gorm:"type:bigint; primary_key; comment:群组ID;"`
 	Code         string    `json:"code" gorm:"type:varchar(100); not null; comment:群组编码;"`
 	Name         string    `json:"name" gorm:"type:varchar(100); not null; comment:群组名称;"`
 	Remark       string    `json:"remark" gorm:"type:varchar(1000); comment:备注;"`
@@ -26,7 +26,7 @@ func (g Group) InitData() interface{} {
 }
 
 type GroupUser struct {
-	Id           int64     `json:"id" gorm:"type:bigint; not null; primary_key; comment:主键ID;"`
+	Id           int64     `json:"id" gorm:"type:bigint; primary_key; comment:主键ID;"`
 	GroupId      int64     `json:"groupId" gorm:"type:bigint; not null; comment:群组ID;"`
 	UserId       int64     `json:"userId" gorm:"type:bigint; not null; comment:用户ID;"`
 	IsAdmin      bool      `json:"isAdmin" gorm:"type:bool; not null; comment:是否管理员;"`
@@ -52,7 +52,7 @@ func (u GroupUser) InitData() interface{} {
 }
 
 type GroupRole struct {
-	Id           int64     `json:"id" gorm:"type:bigint; not null; primary_key; comment:主键ID;"`
+	Id           int64     `json:"id" gorm:"type:bigint; primary_key; comment:主键ID;"`
 	GroupId      int64     `json:"groupId" gorm:"type:bigint; not null; comment:群组ID;"`
 	RoleId       int64     `json:"roleId" gorm:"type:bigint; not null; comment:角色ID;"`
 	ValidStart   time.Time `json:"validStart" gorm:"type:timestamp(0); not null; comment:有效期始;"`

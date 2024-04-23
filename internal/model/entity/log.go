@@ -3,7 +3,7 @@ package entity
 import "time"
 
 type Log struct {
-	Id           int64     `json:"id" gorm:"type:bigint; not null; primary_key; comment:日志ID;"`
+	Id           int64     `json:"id" gorm:"type:bigint; primary_key; comment:日志ID;"`
 	Module       string    `json:"module" gorm:"type:varchar(100); comment:模块;"`
 	Type         string    `json:"type" gorm:"type:varchar(100); comment:类型;"`
 	Content      string    `json:"content" gorm:"type:varchar(1000); comment:内容;"`
