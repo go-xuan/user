@@ -5,9 +5,9 @@ import (
 
 	"github.com/go-xuan/quanx/common/modelx"
 	"github.com/go-xuan/quanx/os/encryptx"
-	"github.com/go-xuan/quanx/utils/anyx"
+	"github.com/go-xuan/quanx/types/anyx"
+	"github.com/go-xuan/quanx/types/timex"
 	"github.com/go-xuan/quanx/utils/randx"
-	"github.com/go-xuan/quanx/utils/timex"
 
 	"user/internal/model/entity"
 )

@@ -5,7 +5,7 @@ import (
 
 	"github.com/go-xuan/quanx/frame/snowflakex"
 	"github.com/go-xuan/quanx/net/respx"
-	"github.com/go-xuan/quanx/utils/timex"
+	"github.com/go-xuan/quanx/types/timex"
 	log "github.com/sirupsen/logrus"
 
 	"user/internal/dao"
