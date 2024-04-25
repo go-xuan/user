@@ -7,7 +7,7 @@ import (
 
 	"github.com/go-xuan/quanx/frame/ginx"
 	"github.com/go-xuan/quanx/frame/snowflakex"
-	"github.com/go-xuan/quanx/os/encryptx"
+	"github.com/go-xuan/quanx/utils/encryptx"
 	log "github.com/sirupsen/logrus"
 
 	"user/internal/dao"
