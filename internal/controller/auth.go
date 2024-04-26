@@ -4,8 +4,8 @@ import (
 	"errors"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-xuan/quanx/frame/ginx"
 	"github.com/go-xuan/quanx/net/respx"
+	"github.com/go-xuan/quanx/server/ginx"
 	"github.com/go-xuan/quanx/utils/encryptx"
 
 	"user/internal/logic"

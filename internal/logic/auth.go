@@ -5,8 +5,8 @@ import (
 	"errors"
 	"time"
 
-	"github.com/go-xuan/quanx/frame/ginx"
-	"github.com/go-xuan/quanx/frame/snowflakex"
+	"github.com/go-xuan/quanx/server/ginx"
+	"github.com/go-xuan/quanx/server/snowflakex"
 	"github.com/go-xuan/quanx/utils/encryptx"
 	log "github.com/sirupsen/logrus"
 

@@ -3,8 +3,8 @@ package logic
 import (
 	"errors"
 
-	"github.com/go-xuan/quanx/frame/snowflakex"
 	"github.com/go-xuan/quanx/net/respx"
+	"github.com/go-xuan/quanx/server/snowflakex"
 	"github.com/go-xuan/quanx/types/timex"
 	log "github.com/sirupsen/logrus"
 

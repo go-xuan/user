@@ -21,7 +21,7 @@ func (r Role) TableComment() string {
 	return "角色表"
 }
 
-func (r Role) InitData() interface{} {
+func (r Role) InitData() any {
 	return nil
 }
 
@@ -47,6 +47,6 @@ func (u RoleUser) TableComment() string {
 	return "角色成员表"
 }
 
-func (u RoleUser) InitData() interface{} {
+func (u RoleUser) InitData() any {
 	return nil
 }

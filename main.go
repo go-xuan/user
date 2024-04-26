@@ -1,14 +1,14 @@
 package main
 
 import (
-	"github.com/go-xuan/quanx"
+	"github.com/go-xuan/quanx/server"
 
 	"user/internal/model/entity"
 	"user/internal/router"
 )
 
 func main() {
-	var engine = quanx.GetEngine(quanx.EnableNacos)
+	var engine = server.GetEngine(server.EnableNacos)
 	engine.AddGinRouter(router.BindGinRouter)
 	engine.AddTable(
 		&entity.User{},

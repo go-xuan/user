@@ -21,7 +21,7 @@ func (g Group) TableComment() string {
 	return "群组表"
 }
 
-func (g Group) InitData() interface{} {
+func (g Group) InitData() any {
 	return nil
 }
 
@@ -47,7 +47,7 @@ func (u GroupUser) TableComment() string {
 	return "群组成员表"
 }
 
-func (u GroupUser) InitData() interface{} {
+func (u GroupUser) InitData() any {
 	return nil
 }
 
@@ -72,6 +72,6 @@ func (r GroupRole) TableComment() string {
 	return "群组角色表"
 }
 
-func (r GroupRole) InitData() interface{} {
+func (r GroupRole) InitData() any {
 	return nil
 }

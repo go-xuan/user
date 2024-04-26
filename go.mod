@@ -2,23 +2,24 @@ module user
 
 go 1.22
 
-replace github.com/go-xuan/quanx v1.24.415 => ../quanx
+replace github.com/go-xuan/quanx v1.24.425 => ../quanx
 
 require (
 	github.com/gin-gonic/gin v1.9.1
-	github.com/go-xuan/quanx v1.24.415
+	github.com/go-xuan/quanx v1.24.425
 	github.com/sirupsen/logrus v1.9.3
 )
 
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/BurntSushi/toml v1.3.2 // indirect
-	github.com/aliyun/alibaba-cloud-sdk-go v1.62.713 // indirect
+	github.com/aliyun/alibaba-cloud-sdk-go v1.62.724 // indirect
 	github.com/buger/jsonparser v1.1.1 // indirect
-	github.com/bytedance/sonic v1.11.4 // indirect
+	github.com/bytedance/sonic v1.11.6 // indirect
+	github.com/bytedance/sonic/loader v0.1.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
-	github.com/cloudwego/base64x v0.1.0 // indirect
-	github.com/cloudwego/iasm v0.0.9 // indirect
+	github.com/cloudwego/base64x v0.1.4 // indirect
+	github.com/cloudwego/iasm v0.2.0 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/gabriel-vasile/mimetype v1.4.3 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect

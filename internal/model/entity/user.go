@@ -27,7 +27,7 @@ func (u User) TableComment() string {
 	return "用户信息表"
 }
 
-func (u User) InitData() interface{} {
+func (u User) InitData() any {
 	return nil
 }
 
@@ -53,6 +53,6 @@ func (a UserAuth) TableComment() string {
 	return "用户鉴权表"
 }
 
-func (a UserAuth) InitData() interface{} {
+func (a UserAuth) InitData() any {
 	return nil
 }

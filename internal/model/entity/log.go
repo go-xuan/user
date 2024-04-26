@@ -20,6 +20,6 @@ func (l Log) TableComment() string {
 	return "日志表"
 }
 
-func (l Log) InitData() interface{} {
+func (l Log) InitData() any {
 	return nil
 }

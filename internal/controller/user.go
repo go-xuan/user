@@ -3,8 +3,8 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-xuan/quanx/common/modelx"
-	"github.com/go-xuan/quanx/frame/ginx"
 	"github.com/go-xuan/quanx/net/respx"
+	"github.com/go-xuan/quanx/server/ginx"
 	log "github.com/sirupsen/logrus"
 
 	"user/internal/logic"
