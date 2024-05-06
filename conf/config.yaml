@@ -8,8 +8,7 @@ server:
 # nacos访问配置
 nacos:
   address: localhost:8848
-  path: /nacos
   username: nacos
   password: nacos
-  mode: 0
   nameSpace: localhost
+  mode: 2

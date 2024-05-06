@@ -7,15 +7,16 @@ import (
 	"user/internal/controller"
 )
 
-// 添加api接口函数路由
-func BindGinRouter(router *gin.RouterGroup) {
-	BindNotAuthRouter(router)
-	BindAuthRouter(router)
-}
-
 // 鉴权路由
-func BindAuthRouter(router *gin.RouterGroup) {
+func BindGinRouter(router *gin.RouterGroup) {
 	router.Use(ginx.Auth)
+
+	auth := router.Group("auth")
+	auth.POST("login", controller.UserLogin)      // 用户登录
+	auth.GET("logout", controller.UserLogout)     // 用户登出
+	auth.GET("tokenParse", controller.TokenParse) // token解析
+	auth.GET("encrypt", controller.Encrypt)       // 密码加密
+	auth.GET("decrypt", controller.Decrypt)       // 密码解密
 
 	// 用户管理
 	user := router.Group("user")
@@ -39,15 +40,5 @@ func BindAuthRouter(router *gin.RouterGroup) {
 	group.POST("save", controller.GroupSave)    // 群组保存
 	group.GET("delete", controller.GroupDelete) // 群组删除
 	group.GET("detail", controller.GroupDetail) // 群组明细
-}
 
-// 免鉴权路由
-func BindNotAuthRouter(router *gin.RouterGroup) {
-	router.Use(ginx.NotAuth)
-	auth := router.Group("auth")
-	auth.POST("login", controller.UserLogin)      // 用户登录
-	auth.GET("logout", controller.UserLogout)     // 用户登出
-	auth.GET("tokenParse", controller.TokenParse) // token解析
-	auth.GET("encrypt", controller.Encrypt)       // 密码加密
-	auth.GET("decrypt", controller.Decrypt)       // 密码解密
 }

@@ -1,22 +1,6 @@
-source: default
-enable: true
-host: localhost
-port: 6379
-password: Init@123
-database: 1
-mode: 0
-
-#- source: default
-#  enable: true
-#  host: localhost
-#  port: 6379
-#  password: Init@123
-#  database: 1
-#  mode: 0
-#- source: user
-#  enable: true
-#  host: localhost
-#  port: 6379
-#  password: Init@123
-#  database: 2
-#  mode: 0
+- name: default
+  prefix: "cache:"
+  marshal: msgpack
+- name: user
+  prefix: "auth:login:"
+  marshal: msgpack
