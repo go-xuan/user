@@ -4,8 +4,8 @@ import (
 	"errors"
 
 	"github.com/go-xuan/quanx/net/respx"
-	"github.com/go-xuan/quanx/server/snowflakex"
 	"github.com/go-xuan/quanx/types/timex"
+	"github.com/go-xuan/quanx/utils/snowflakex"
 	log "github.com/sirupsen/logrus"
 
 	"user/internal/dao"

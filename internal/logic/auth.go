@@ -5,9 +5,9 @@ import (
 	"errors"
 	"time"
 
-	"github.com/go-xuan/quanx/server/ginx"
-	"github.com/go-xuan/quanx/server/snowflakex"
+	"github.com/go-xuan/quanx/core/ginx"
 	"github.com/go-xuan/quanx/utils/encryptx"
+	"github.com/go-xuan/quanx/utils/snowflakex"
 	log "github.com/sirupsen/logrus"
 
 	"user/internal/dao"
