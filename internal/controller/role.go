@@ -76,7 +76,7 @@ func RoleDetail(ctx *gin.Context) {
 		respx.Exception(ctx, respx.ParamErr, err)
 		return
 	}
-	var result model.RoleDetail
+	var result *model.RoleDetail
 	result, err = logic.RoleDetail(in.Id)
 	respx.BuildResponse(ctx, result, err)
 }

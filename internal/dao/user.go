@@ -69,13 +69,11 @@ func GetUserById(id int64) (user *model.User, err error) {
 	sql := strings.Builder{}
 	sql.WriteString(SelectUser)
 	sql.WriteString(` where u.id = ?`)
-	err = gormx.This().DB.Raw(sql.String(), id).Scan(user).Error
-	if err != nil {
+	if err = gormx.This().DB.Raw(sql.String(), id).Scan(user).Error; err != nil {
 		return
 	}
 	if user.Id == 0 {
 		err = errors.New("此用户不存在")
-		return
 	}
 	return
 }
@@ -86,13 +84,11 @@ func GetUserByName(username string) (user *model.User, err error) {
 	sql := strings.Builder{}
 	sql.WriteString(SelectUser)
 	sql.WriteString(` where u.phone = ? or u.account = ? `)
-	err = gormx.This().DB.Raw(sql.String(), username, username).Scan(user).Error
-	if err != nil {
+	if err = gormx.This().DB.Raw(sql.String(), username, username).Scan(user).Error; err != nil {
 		return
 	}
 	if user.Id == 0 {
 		err = errors.New("此用户不存在")
-		return
 	}
 	return
 }
@@ -100,11 +96,7 @@ func GetUserByName(username string) (user *model.User, err error) {
 // 查询用户基本信息
 func QueryUser(id int64) (user *entity.User, err error) {
 	user.Id = id
-	err = gormx.This().DB.Find(user).Error
-	if err != nil {
-		return
-	}
-	if user == nil {
+	if err = gormx.This().DB.Find(user).Error; err != nil {
 		return
 	}
 	return
@@ -114,11 +106,7 @@ func QueryUser(id int64) (user *entity.User, err error) {
 func QueryUserAuth(userId int64) (auth *entity.UserAuth, err error) {
 	auth = &entity.UserAuth{}
 	auth.UserId = userId
-	err = gormx.This().DB.Find(auth).Error
-	if err != nil {
-		return
-	}
-	if auth == nil {
+	if err = gormx.This().DB.Find(auth).Error; err != nil {
 		return
 	}
 	return
@@ -126,8 +114,9 @@ func QueryUserAuth(userId int64) (auth *entity.UserAuth, err error) {
 
 // 用户列表查询
 func UserList() (result []*model.User, err error) {
-	err = gormx.This().DB.Model(&entity.User{}).Select([]string{"id", "account", "name", "phone", "email"}).Order("id desc").Scan(&result).Error
-	if err != nil {
+	if err = gormx.This().DB.Model(&entity.User{}).
+		Select([]string{"id", "account", "name", "phone", "birthday", "gender", "email", "address"}).
+		Order("id desc").Scan(&result).Error; err != nil {
 		return
 	}
 	return
@@ -135,8 +124,7 @@ func UserList() (result []*model.User, err error) {
 
 // 查询手机是否存在
 func UserExist(in *model.UserSave) (count int64, err error) {
-	err = gormx.This().DB.Model(&entity.User{}).Where(`account = ? or phone = ?`, in.Account, in.Phone).Count(&count).Error
-	if err != nil {
+	if err = gormx.This().DB.Model(&entity.User{}).Where(`account = ? or phone = ?`, in.Account, in.Phone).Count(&count).Error; err != nil {
 		return
 	}
 	return
@@ -145,13 +133,11 @@ func UserExist(in *model.UserSave) (count int64, err error) {
 // 用户新增
 func UserCreate(user *entity.User, userAuth *entity.UserAuth) error {
 	tx := gormx.This().DB.Begin()
-	err := tx.Create(user).Error
-	if err != nil {
+	if err := tx.Create(user).Error; err != nil {
 		tx.Rollback()
 		return err
 	}
-	err = tx.Create(userAuth).Error
-	if err != nil {
+	if err := tx.Create(userAuth).Error; err != nil {
 		tx.Rollback()
 		return err
 	}
@@ -160,7 +146,7 @@ func UserCreate(user *entity.User, userAuth *entity.UserAuth) error {
 }
 
 // 用户修改
-func UserUpdate(in *model.UserSave) (err error) {
+func UserUpdate(in *model.UserSave) error {
 	tx := gormx.This().DB.Begin()
 	// 更新用户表
 	var userCols = []string{"update_user_id", "update_time"}
@@ -196,19 +182,17 @@ func UserUpdate(in *model.UserSave) (err error) {
 		userAuthCols = append(userAuthCols, "valid_end")
 	}
 	// 更新用户表
-	err = tx.Model(&entity.User{}).Select(userCols).Where("user_id = ? ", in.Id).Updates(in.UserUpdate()).Error
-	if err != nil {
+	if err := tx.Model(&entity.User{}).Select(userCols).Where("user_id = ?", in.Id).Updates(in.UserUpdate()).Error; err != nil {
 		tx.Rollback()
-		return
+		return err
 	}
 	// 更新用户鉴权表
-	err = tx.Model(&entity.UserAuth{}).Select(userAuthCols).Where("user_id = ? ", in.Id).Updates(in.UserAuthUpdate()).Error
-	if err != nil {
+	if err := tx.Model(&entity.UserAuth{}).Select(userAuthCols).Where("user_id = ?", in.Id).Updates(in.UserAuthUpdate()).Error; err != nil {
 		tx.Rollback()
-		return
+		return err
 	}
 	tx.Commit()
-	return
+	return nil
 }
 
 // 用户删除

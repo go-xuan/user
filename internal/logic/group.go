@@ -2,6 +2,7 @@ package logic
 
 import (
 	"errors"
+	"sync"
 
 	"github.com/go-xuan/quanx/net/respx"
 	"github.com/go-xuan/quanx/types/timex"
@@ -14,23 +15,20 @@ import (
 )
 
 // 群组分页
-func GroupPage(in model.GroupPage) (resp *respx.PageResponse, err error) {
-	var rows []*model.Group
-	var total int64
-	rows, total, err = dao.GroupPage(in)
-	if err != nil {
+func GroupPage(in model.GroupPage) (*respx.PageResponse, error) {
+	if rows, total, err := dao.GroupPage(in); err != nil {
 		log.Error("群组分页查询失败")
-		return
+		return nil, err
+	} else {
+		return respx.BuildPageResp(in.Page, rows, total), nil
 	}
-	resp = respx.BuildPageResp(in.Page, rows, total)
-	return
+
 }
 
 // 群组编码校验
 func GroupExist(in *model.GroupSave) (err error) {
 	var count int64
-	count, err = dao.GroupExist(in)
-	if err != nil {
+	if count, err = dao.GroupExist(in); err != nil {
 		return
 	}
 	if count > 0 {
@@ -46,21 +44,18 @@ func GroupCreate(in *model.GroupSave) (id int64, err error) {
 	}
 	id = snowflakex.New().Int64()
 	in.Id = id
-	err = dao.GroupCreate(in.Group())
-	if err != nil {
+	if err = dao.GroupCreate(in.Group()); err != nil {
 		log.Error("群组新增失败")
 		return
 	}
 	if len(in.UserList) > 0 {
-		err = GroupUserAdd(in)
-		if err != nil {
+		if err = GroupUserAdd(in); err != nil {
 			log.Error("群组用户新增失败")
 			return
 		}
 	}
 	if len(in.RoleList) > 0 {
-		err = GroupRoleAdd(in)
-		if err != nil {
+		if err = GroupRoleAdd(in); err != nil {
 			log.Error("群组用户新增失败")
 			return
 		}
@@ -70,8 +65,7 @@ func GroupCreate(in *model.GroupSave) (id int64, err error) {
 
 // 群组修改
 func GroupUpdate(in *model.GroupSave) (id int64, err error) {
-	err = dao.GroupUpdate(in)
-	if err != nil {
+	if err = dao.GroupUpdate(in); err != nil {
 		log.Error("群组修改失败")
 		return
 	}
@@ -85,63 +79,66 @@ func GroupDelete(groupId int64) error {
 }
 
 // 群组明细
-func GroupDetail(id int64) (detail model.GroupDetail, err error) {
+func GroupDetail(id int64) (*model.GroupDetail, error) {
 	// 查询群组信息
-	var groupInfo model.Group
-	groupChan := make(chan model.Group)
+	var wg sync.WaitGroup
+	wg.Add(3)
+	groupChan := make(chan *model.Group)
+	userListChan := make(chan []*model.GroupUser)
+	roleListChan := make(chan []*model.GroupRole)
+
+	var err error
+	// 查询角色信息
 	go func() {
-		var group model.Group
-		group, err = dao.GetGroup(id)
-		if err != nil {
+		wg.Done()
+		var group *model.Group
+		if group, err = dao.GetGroup(id); err != nil {
 			log.Error("角色信息查询失败")
 		}
 		groupChan <- group
 	}()
-	groupInfo = <-groupChan
-	detail.Group = &groupInfo
 
 	// 查询群组成员列表
-	userListChan := make(chan []*model.GroupUser)
 	go func() {
+		wg.Done()
 		var list []*model.GroupUser
-		list, err = dao.GroupUserList(id)
-		if err != nil {
+		if list, err = dao.GroupUserList(id); err != nil {
 			log.Error("用户角色列表失败")
 		}
 		userListChan <- list
 	}()
-	detail.UserList = <-userListChan
 
 	// 查询群组角色列表
-	roleListChan := make(chan []*model.GroupRole)
 	go func() {
+		wg.Done()
 		var list []*model.GroupRole
-		list, err = dao.GroupRoleList(id)
-		if err != nil {
+		if list, err = dao.GroupRoleList(id); err != nil {
 			log.Error("用户角色列表失败")
 		}
 		roleListChan <- list
 	}()
-	detail.RoleList = <-roleListChan
 
-	return
+	detail := &model.GroupDetail{
+		Group:    <-groupChan,
+		UserList: <-userListChan,
+		RoleList: <-roleListChan,
+	}
+	wg.Wait()
+	return detail, err
 }
 
 // 群组成员校验
-func GroupUserExist(id int64, userIds []int64) (err error) {
-	var count int64
-	count, err = dao.GroupUserCount(id, userIds)
-	if err != nil {
-		return
+func GroupUserExist(id int64, userIds []int64) error {
+	if count, err := dao.GroupUserCount(id, userIds); err != nil {
+		return err
+	} else if count > 0 {
+		return errors.New("新增群组成员已存在")
 	}
-	if count > 0 {
-		err = errors.New("新增群组成员已存在")
-	}
-	return
+	return nil
 }
 
 // 群组成员新增
-func GroupUserAdd(in *model.GroupSave) (err error) {
+func GroupUserAdd(in *model.GroupSave) error {
 	var createList []*entity.GroupUser
 	for _, item := range in.UserList {
 		var create = entity.GroupUser{
@@ -157,24 +154,17 @@ func GroupUserAdd(in *model.GroupSave) (err error) {
 		}
 		createList = append(createList, &create)
 	}
-	err = dao.GroupUserCreateBatch(createList)
-	if err != nil {
-		return
-	}
-	return
+	return dao.GroupUserCreateBatch(createList)
 }
 
 // 群组角色校验
-func GroupRoleExist(groupId int64, roleIds []int64) (err error) {
-	var count int64
-	count, err = dao.GroupRoleCount(groupId, roleIds)
-	if err != nil {
-		return
+func GroupRoleExist(groupId int64, roleIds []int64) error {
+	if count, err := dao.GroupRoleCount(groupId, roleIds); err != nil {
+		return err
+	} else if count > 0 {
+		return errors.New("新增群组角色已存在")
 	}
-	if count > 0 {
-		err = errors.New("新增群组角色已存在")
-	}
-	return
+	return nil
 }
 
 // 群组角色新增

@@ -34,7 +34,7 @@ func GroupDetail(ctx *gin.Context) {
 		respx.Exception(ctx, respx.ParamErr, err)
 		return
 	}
-	var result model.GroupDetail
+	var result *model.GroupDetail
 	result, err = logic.GroupDetail(in.Id)
 	respx.BuildResponse(ctx, result, err)
 }

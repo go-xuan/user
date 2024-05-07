@@ -12,16 +12,13 @@ import (
 )
 
 // 用户分页
-func UserPage(in model.UserPage) (resp *respx.PageResponse, err error) {
-	var resultList []*model.User
-	var total int64
-	resultList, total, err = dao.UserPage(in)
-	if err != nil {
+func UserPage(in model.UserPage) (*respx.PageResponse, error) {
+	if rows, total, err := dao.UserPage(in); err != nil {
 		log.Error("用户分页查询失败")
-		return
+		return nil, err
+	} else {
+		return respx.BuildPageResp(in.Page, rows, total), nil
 	}
-	resp = respx.BuildPageResp(in.Page, resultList, total)
-	return
 }
 
 // 用户列表
@@ -30,16 +27,13 @@ func UserList() ([]*model.User, error) {
 }
 
 // 用户校验
-func UserExist(in *model.UserSave) (err error) {
-	var count int64
-	count, err = dao.UserExist(in)
-	if err != nil {
-		return
+func UserExist(in *model.UserSave) error {
+	if count, err := dao.UserExist(in); err != nil {
+		return err
+	} else if count > 0 {
+		return errors.New("此账号/手机号已被使用")
 	}
-	if count > 0 {
-		err = errors.New("此账号/手机号已被使用")
-	}
-	return
+	return nil
 }
 
 // 用户新增
@@ -48,8 +42,7 @@ func UserCreate(in *model.UserSave) (userId int64, err error) {
 		return
 	}
 	in.Id = snowflakex.New().Int64()
-	err = dao.UserCreate(in.UserCreate(), in.UserAuthCreate())
-	if err != nil {
+	if err = dao.UserCreate(in.UserCreate(), in.UserAuthCreate()); err != nil {
 		log.Error("用户新增失败")
 		return
 	}
@@ -59,12 +52,7 @@ func UserCreate(in *model.UserSave) (userId int64, err error) {
 
 // 用户修改
 func UserUpdate(in *model.UserSave) error {
-	err := dao.UserUpdate(in)
-	if err != nil {
-		log.Error("用户修改失败")
-		return err
-	}
-	return nil
+	return dao.UserUpdate(in)
 }
 
 // 用户删除
@@ -73,11 +61,6 @@ func UserDelete(userId int64) error {
 }
 
 // 用户明细查询
-func UserDetail(id int64) (user *model.User, err error) {
-	user, err = dao.GetUserById(id)
-	if err != nil {
-		log.Error("查询用户基本信息失败")
-		return
-	}
-	return
+func UserDetail(id int64) (*model.User, error) {
+	return dao.GetUserById(id)
 }
