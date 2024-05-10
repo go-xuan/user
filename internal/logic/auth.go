@@ -82,6 +82,6 @@ func UserLogout(ctx context.Context, user *ginx.User, ip string) (userId int64, 
 		return
 	}
 	// 删除redis上用户token
-	ginx.AuthCache().Del(ctx, user.Account)
+	ginx.AuthCache().Delete(ctx, user.Account)
 	return
 }
