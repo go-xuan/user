@@ -6,7 +6,7 @@ import (
 
 	"github.com/go-xuan/quanx/net/respx"
 	"github.com/go-xuan/quanx/types/timex"
-	"github.com/go-xuan/quanx/utils/snowflakex"
+	"github.com/go-xuan/quanx/utils/idx"
 	log "github.com/sirupsen/logrus"
 
 	"user/internal/dao"
@@ -42,7 +42,7 @@ func GroupCreate(in *model.GroupSave) (id int64, err error) {
 	if err = GroupExist(in); err != nil {
 		return
 	}
-	id = snowflakex.New().Int64()
+	id = idx.SnowFlake().Int64()
 	in.Id = id
 	if err = dao.GroupCreate(in.Group()); err != nil {
 		log.Error("群组新增失败")
@@ -142,7 +142,7 @@ func GroupUserAdd(in *model.GroupSave) error {
 	var createList []*entity.GroupUser
 	for _, item := range in.UserList {
 		var create = entity.GroupUser{
-			Id:           snowflakex.New().Int64(),
+			Id:           idx.SnowFlake().Int64(),
 			GroupId:      in.Id,
 			UserId:       item.Id,
 			IsAdmin:      item.IsAdmin,
@@ -172,7 +172,7 @@ func GroupRoleAdd(in *model.GroupSave) (err error) {
 	var createList []*entity.GroupRole
 	for _, item := range in.RoleList {
 		var create = entity.GroupRole{
-			Id:           snowflakex.New().Int64(),
+			Id:           idx.SnowFlake().Int64(),
 			GroupId:      in.Id,
 			RoleId:       item.Id,
 			ValidStart:   timex.ToTime(item.ValidStart),

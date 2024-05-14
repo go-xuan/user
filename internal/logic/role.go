@@ -6,7 +6,7 @@ import (
 
 	"github.com/go-xuan/quanx/net/respx"
 	"github.com/go-xuan/quanx/types/timex"
-	"github.com/go-xuan/quanx/utils/snowflakex"
+	"github.com/go-xuan/quanx/utils/idx"
 	log "github.com/sirupsen/logrus"
 
 	"user/internal/dao"
@@ -44,7 +44,7 @@ func RoleCreate(in *model.RoleSave) (roleId int64, err error) {
 	if err = RoleExist(in); err != nil {
 		return
 	}
-	roleId = snowflakex.New().Int64()
+	roleId = idx.SnowFlake().Int64()
 	in.Id = roleId
 	if err = dao.RoleCreate(in.Role()); err != nil {
 		return
@@ -115,7 +115,7 @@ func RoleUserAdd(in *model.RoleSave) (err error) {
 	var createList []*entity.RoleUser
 	for _, item := range in.UserList {
 		var create = entity.RoleUser{
-			Id:           snowflakex.New().Int64(),
+			Id:           idx.SnowFlake().Int64(),
 			RoleId:       in.Id,
 			UserId:       item.Id,
 			ValidStart:   timex.ToTime(item.ValidStart),

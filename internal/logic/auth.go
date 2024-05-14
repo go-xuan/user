@@ -7,7 +7,7 @@ import (
 
 	"github.com/go-xuan/quanx/core/ginx"
 	"github.com/go-xuan/quanx/utils/encryptx"
-	"github.com/go-xuan/quanx/utils/snowflakex"
+	"github.com/go-xuan/quanx/utils/idx"
 	log "github.com/sirupsen/logrus"
 
 	"user/internal/dao"
@@ -52,7 +52,7 @@ func UserLogin(ctx context.Context, param model.Login, loginIp string) (result *
 	ginx.AuthCache().Set(ctx, user.Account, token, time.Duration(userAuth.SessionTime)*time.Second)
 	// 记录日志
 	var sysLog = entity.Log{
-		Id:           snowflakex.New().Int64(),
+		Id:           idx.SnowFlake().Int64(),
 		Module:       "auth",
 		Type:         "login",
 		Content:      user.Name + "【" + user.Phone + "账号密码登录】",
@@ -70,7 +70,7 @@ func UserLogin(ctx context.Context, param model.Login, loginIp string) (result *
 // 用户登出
 func UserLogout(ctx context.Context, user *ginx.User, ip string) (userId int64, err error) {
 	var sysLog = entity.Log{
-		Id:           snowflakex.New().Int64(),
+		Id:           idx.SnowFlake().Int64(),
 		Module:       "auth",
 		Type:         "logout",
 		Content:      user.Name + "【登出】",
