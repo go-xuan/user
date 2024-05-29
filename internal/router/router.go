@@ -2,7 +2,7 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/go-xuan/quanx/core/ginx"
+	"github.com/go-xuan/quanx/app/ginx"
 
 	"user/internal/controller"
 )

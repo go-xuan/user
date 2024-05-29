@@ -5,7 +5,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/go-xuan/quanx/core/ginx"
+	"github.com/go-xuan/quanx/app/ginx"
 	"github.com/go-xuan/quanx/utils/encryptx"
 	"github.com/go-xuan/quanx/utils/idx"
 	log "github.com/sirupsen/logrus"

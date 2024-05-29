@@ -1,15 +1,15 @@
 package main
 
 import (
-	"github.com/go-xuan/quanx/core"
+	"github.com/go-xuan/quanx/app"
 	"user/internal/router"
 )
 
 func main() {
-	var engine = core.GetEngine(
-		core.EnableNacos,
-		core.MultiRedis,
-		core.MultiCache,
+	var engine = app.NewEngine(
+		app.EnableNacos,
+		app.MultiRedis,
+		app.MultiCache,
 	)
 	engine.AddGinRouter(router.BindGinRouter)
 	//engine.AddTable(
