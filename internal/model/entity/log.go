@@ -16,10 +16,10 @@ func (Log) TableName() string {
 	return "t_sys_log"
 }
 
-func (l Log) TableComment() string {
+func (Log) TableComment() string {
 	return "日志表"
 }
 
-func (l Log) InitData() any {
+func (Log) InitData() any {
 	return nil
 }

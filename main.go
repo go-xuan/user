@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/go-xuan/quanx/app"
-	"user/internal/model/entity"
 
+	"user/internal/model/entity"
 	"user/internal/router"
 )
 

@@ -49,7 +49,7 @@ func UserLogin(ctx context.Context, param model.Login, loginIp string) (result *
 		return
 	}
 	// token存入redis
-	ginx.AuthCache().Set(ctx, user.Account, token, time.Duration(userAuth.SessionTime)*time.Second)
+	ginx.AuthCache().SET(ctx, user.Account, token, time.Duration(userAuth.SessionTime)*time.Second)
 	// 记录日志
 	var sysLog = entity.Log{
 		Id:           idx.SnowFlake().Int64(),
@@ -82,6 +82,6 @@ func UserLogout(ctx context.Context, user *ginx.User, ip string) (userId int64, 
 		return
 	}
 	// 删除redis上用户token
-	ginx.AuthCache().Delete(ctx, user.Account)
+	ginx.AuthCache().DELETE(ctx, user.Account)
 	return
 }

@@ -17,11 +17,11 @@ func (Role) TableName() string {
 	return "t_sys_role"
 }
 
-func (r Role) TableComment() string {
+func (Role) TableComment() string {
 	return "角色表"
 }
 
-func (r Role) InitData() any {
+func (Role) InitData() any {
 	return nil
 }
 
@@ -43,10 +43,10 @@ func (RoleUser) TableName() string {
 	return "t_sys_role_user"
 }
 
-func (u RoleUser) TableComment() string {
+func (RoleUser) TableComment() string {
 	return "角色成员表"
 }
 
-func (u RoleUser) InitData() any {
+func (RoleUser) InitData() any {
 	return nil
 }

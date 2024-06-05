@@ -23,11 +23,11 @@ func (User) TableName() string {
 	return "t_sys_user"
 }
 
-func (u User) TableComment() string {
+func (User) TableComment() string {
 	return "用户信息表"
 }
 
-func (u User) InitData() any {
+func (User) InitData() any {
 	return nil
 }
 
@@ -49,10 +49,10 @@ func (UserAuth) TableName() string {
 	return "t_sys_user_auth"
 }
 
-func (a UserAuth) TableComment() string {
+func (UserAuth) TableComment() string {
 	return "用户鉴权表"
 }
 
-func (a UserAuth) InitData() any {
+func (UserAuth) InitData() any {
 	return nil
 }

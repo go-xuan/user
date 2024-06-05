@@ -17,11 +17,11 @@ func (Group) TableName() string {
 	return "t_sys_group"
 }
 
-func (g Group) TableComment() string {
+func (Group) TableComment() string {
 	return "群组表"
 }
 
-func (g Group) InitData() any {
+func (Group) InitData() any {
 	return nil
 }
 
@@ -43,11 +43,11 @@ func (GroupUser) TableName() string {
 	return "t_sys_group_user"
 }
 
-func (u GroupUser) TableComment() string {
+func (GroupUser) TableComment() string {
 	return "群组成员表"
 }
 
-func (u GroupUser) InitData() any {
+func (GroupUser) InitData() any {
 	return nil
 }
 
@@ -68,10 +68,10 @@ func (GroupRole) TableName() string {
 	return "t_sys_group_role"
 }
 
-func (r GroupRole) TableComment() string {
+func (GroupRole) TableComment() string {
 	return "群组角色表"
 }
 
-func (r GroupRole) InitData() any {
+func (GroupRole) InitData() any {
 	return nil
 }
