@@ -9,9 +9,11 @@ import (
 
 func main() {
 	var engine = app.NewEngine(
-		app.EnableNacos,
-		app.MultiRedis,
-		app.MultiCache,
+		app.EnableNacos,   // 启用nacos
+		app.MultiDatabase, // 多数据源
+		app.MultiRedis,    // 对redis
+		app.MultiCache,    // 多缓存
+		app.UseQueue,      // 使用队列
 	)
 	engine.AddGinRouter(router.BindGinRouter)
 	engine.AddTable(
