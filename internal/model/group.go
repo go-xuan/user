@@ -9,7 +9,7 @@ import (
 	"user/internal/model/entity"
 )
 
-// 群组明细
+// Group 群组明细
 type Group struct {
 	Id           int64      `json:"id" comment:"群组ID"`
 	Code         string     `json:"code" comment:"群组编码"`
@@ -21,17 +21,17 @@ type Group struct {
 	UpdateTime   timex.Time `json:"updateTime" comment:"更新时间"`
 }
 
-// 群组分页查询参数
+// GroupPage 群组分页查询参数
 type GroupPage struct {
 	Keyword string `json:"keyword" comment:"关键字"`
 	*modelx.Page
 }
 
-// 群组信息新增
+// GroupSave 群组信息新增
 type GroupSave struct {
-	Id         int64        `json:"groupId" comment:"群组ID"`
-	Code       string       `json:"groupCode" comment:"群组编码"`
-	Name       string       `json:"groupName" comment:"群组名称"`
+	Id         int64        `json:"id" comment:"群组ID"`
+	Code       string       `json:"code" comment:"群组编码"`
+	Name       string       `json:"name" comment:"群组名称"`
 	Remark     string       `json:"remark" comment:"备注"`
 	UserList   []*GroupUser `json:"userList" comment:"群组成员列表"`
 	RoleList   []*GroupRole `json:"roleList" comment:"群组角色列表"`
@@ -50,7 +50,7 @@ func (g *GroupSave) Group() *entity.Group {
 	}
 }
 
-// 群组成员新增
+// GroupUserAdd 群组成员新增
 type GroupUserAdd struct {
 	GroupId    int64        `json:"groupId" comment:"群组ID"`
 	UserList   []*GroupUser `json:"userList" comment:"新增群组成员列表"`
@@ -58,21 +58,21 @@ type GroupUserAdd struct {
 	CurrUserId int64        `json:"currUserId" comment:"当前用户ID"`
 }
 
-// 群组角色新增
+// GroupRoleAdd 群组角色新增
 type GroupRoleAdd struct {
 	Id         int64        `json:"id" comment:"群组ID"`
 	RoleList   []*GroupRole `json:"roleList" comment:"新增群组角色列表"`
 	CurrUserId int64        `json:"currUserId" comment:"当前用户ID"`
 }
 
-// 群组明细
+// GroupDetail 群组明细
 type GroupDetail struct {
 	Group    *Group       `json:"group"  comment:"群组基本信息"`
 	RoleList []*GroupRole `json:"roleList" comment:"群组角色"`
 	UserList []*GroupUser `json:"userList" comment:"群组成员"`
 }
 
-// 群组用户
+// GroupUser 群组用户
 type GroupUser struct {
 	Id         int64  `json:"id" comment:"用户ID"`
 	Account    string `json:"account" comment:"用户账号"`
@@ -83,7 +83,7 @@ type GroupUser struct {
 	Remark     string `json:"remark" comment:"备注"`
 }
 
-// 群组角色
+// GroupRole 群组角色
 type GroupRole struct {
 	Id         int64  `json:"id" comment:"角色ID"`
 	Code       string `json:"code" comment:"角色编码"`

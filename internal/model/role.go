@@ -7,7 +7,7 @@ import (
 	"user/internal/model/entity"
 )
 
-// 角色信息
+// Role 角色信息
 type Role struct {
 	Id           int64      `json:"id" comment:"角色ID"`
 	Code         string     `json:"code" comment:"角色编码"`
@@ -19,13 +19,13 @@ type Role struct {
 	UpdateTime   timex.Time `json:"updateTime" comment:"更新时间"`
 }
 
-// 角色分页参数
+// RolePage 角色分页参数
 type RolePage struct {
 	Keyword string `json:"keyword" comment:"关键字"`
 	*modelx.Page
 }
 
-// 角色保存
+// RoleSave 角色保存
 type RoleSave struct {
 	Id         int64       `json:"id" comment:"角色ID"`
 	Code       string      `json:"code" comment:"角色编码"`
@@ -46,7 +46,7 @@ func (r *RoleSave) Role() *entity.Role {
 	}
 }
 
-// 角色成员列表
+// RoleUser 角色成员列表
 type RoleUser struct {
 	Id         int64  `json:"id" comment:"用户ID"`
 	Name       string `json:"name" comment:"姓名"`
@@ -55,7 +55,7 @@ type RoleUser struct {
 	Remark     string `json:"remark" comment:"备注"`
 }
 
-// 角色详情
+// RoleDetail 角色详情
 type RoleDetail struct {
 	Role     *Role       `json:"role" comment:"角色信息"`
 	UserList []*RoleUser `json:"userList" comment:"角色成员列表"`

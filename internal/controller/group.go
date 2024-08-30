@@ -5,64 +5,54 @@ import (
 	"github.com/go-xuan/quanx/app/ginx"
 	"github.com/go-xuan/quanx/app/modelx"
 	"github.com/go-xuan/quanx/net/respx"
-	log "github.com/sirupsen/logrus"
 
 	"user/internal/logic"
 	"user/internal/model"
 )
 
-// 群组分页
+// GroupPage 群组分页
 func GroupPage(ctx *gin.Context) {
 	var err error
 	var in model.GroupPage
 	if err = ctx.BindJSON(&in); err != nil {
-		log.Error("参数错误：", err)
-		respx.Exception(ctx, respx.ParamErr, err)
+		respx.Ctx(ctx).ParamError(err)
 		return
 	}
-	var result *respx.PageResponse
-	result, err = logic.GroupPage(in)
-	respx.BuildResponse(ctx, result, err)
+	respx.Ctx(ctx).Response(logic.GroupPage(in))
 }
 
-// 群组明细
+// GroupDetail 群组明细
 func GroupDetail(ctx *gin.Context) {
 	var err error
 	var in modelx.Id[int64]
 	if err = ctx.ShouldBindQuery(&in); err != nil {
-		log.Error("参数错误：", err)
-		respx.Exception(ctx, respx.ParamErr, err)
+		respx.Ctx(ctx).ParamError(err)
 		return
 	}
-	var result *model.GroupDetail
-	result, err = logic.GroupDetail(in.Id)
-	respx.BuildResponse(ctx, result, err)
+	respx.Ctx(ctx).Response(logic.GroupDetail(in.Id))
 }
 
-// 群组删除
+// GroupDelete 群组删除
 func GroupDelete(ctx *gin.Context) {
 	var err error
 	var in modelx.Id[int64]
 	if err = ctx.ShouldBindQuery(&in); err != nil {
-		log.Error("参数错误：", err)
-		respx.Exception(ctx, respx.ParamErr, err)
+		respx.Ctx(ctx).ParamError(err)
 		return
 	}
-	err = logic.GroupDelete(in.Id)
-	respx.BuildResponse(ctx, nil, err)
+	respx.Ctx(ctx).Response(nil, logic.GroupDelete(in.Id))
 }
 
-// 群组新增
+// GroupSave 群组新增
 func GroupSave(ctx *gin.Context) {
 	var err error
 	var in model.GroupSave
 	if err = ctx.BindJSON(&in); err != nil {
-		log.Error("参数错误：", err)
-		respx.Exception(ctx, respx.ParamErr, err)
+		respx.Ctx(ctx).ParamError(err)
 		return
 	}
 	if in.CurrUserId == 0 {
-		in.CurrUserId = ginx.GetUserId(ctx)
+		in.CurrUserId = ginx.GetSessionUser(ctx).UserId()
 	}
 	var result int64
 	if in.Id == 0 {
@@ -70,5 +60,5 @@ func GroupSave(ctx *gin.Context) {
 	} else {
 		result, err = logic.GroupUpdate(&in)
 	}
-	respx.BuildResponse(ctx, result, err)
+	respx.Ctx(ctx).Response(result, err)
 }

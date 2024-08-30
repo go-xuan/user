@@ -1,10 +1,10 @@
 package logic
 
 import (
-	"errors"
 	"sync"
 
 	"github.com/go-xuan/quanx/net/respx"
+	"github.com/go-xuan/quanx/os/errorx"
 	"github.com/go-xuan/quanx/types/timex"
 	"github.com/go-xuan/quanx/utils/idx"
 	log "github.com/sirupsen/logrus"
@@ -14,7 +14,7 @@ import (
 	"user/internal/model/entity"
 )
 
-// 用户分页查询
+// RolePage 用户分页查询
 func RolePage(in model.RolePage) (*respx.PageResponse, error) {
 	if rows, total, err := dao.RolePage(in); err != nil {
 		log.Error("用户分页查询失败")
@@ -24,22 +24,22 @@ func RolePage(in model.RolePage) (*respx.PageResponse, error) {
 	}
 }
 
-// 角色列表
+// RoleList 角色列表
 func RoleList() ([]*model.Role, error) {
 	return dao.RoleList()
 }
 
-// 角色校验
+// RoleExist 角色校验
 func RoleExist(in *model.RoleSave) error {
 	if count, err := dao.RoleExist(in); err != nil {
 		return err
 	} else if count > 0 {
-		return errors.New("此角色编码已存在")
+		return errorx.New("此角色编码已存在")
 	}
 	return nil
 }
 
-// 角色新增
+// RoleCreate 角色新增
 func RoleCreate(in *model.RoleSave) (roleId int64, err error) {
 	if err = RoleExist(in); err != nil {
 		return
@@ -57,17 +57,17 @@ func RoleCreate(in *model.RoleSave) (roleId int64, err error) {
 	return
 }
 
-// 角色修改
+// RoleUpdate 角色修改
 func RoleUpdate(in *model.RoleSave) error {
 	return dao.RoleUpdate(in)
 }
 
-// 角色删除
+// RoleDelete 角色删除
 func RoleDelete(id int64) error {
 	return dao.RoleDelete(id)
 }
 
-// 角色详情
+// RoleDetail 角色详情
 func RoleDetail(id int64) (detail *model.RoleDetail, err error) {
 
 	var wg sync.WaitGroup
@@ -101,12 +101,12 @@ func RoleDetail(id int64) (detail *model.RoleDetail, err error) {
 	return
 }
 
-// 角色成员校验
+// RoleUserExist 角色成员校验
 func RoleUserExist(roleId int64, userIds []int64) error {
 	if count, err := dao.RoleUserCount(roleId, userIds); err != nil {
 		return err
 	} else if count > 0 {
-		return errors.New("新增角色成员已存在")
+		return errorx.New("新增角色成员已存在")
 	}
 	return nil
 }
@@ -118,8 +118,8 @@ func RoleUserAdd(in *model.RoleSave) (err error) {
 			Id:           idx.SnowFlake().Int64(),
 			RoleId:       in.Id,
 			UserId:       item.Id,
-			ValidStart:   timex.ToTime(item.ValidStart),
-			ValidEnd:     timex.ToTime(item.ValidEnd),
+			ValidStart:   timex.Parse(item.ValidStart),
+			ValidEnd:     timex.Parse(item.ValidEnd),
 			Remark:       item.Remark,
 			CreateUserId: in.CurrUserId,
 			UpdateUserId: in.CurrUserId,

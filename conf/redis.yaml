@@ -1,14 +1,14 @@
-- name: default
+- source: default
+  enable: true
+  host: localhost
+  port: 6379
+  password: Init@123
+  database: 0
+  mode: 0
+- source: auth
   enable: true
   host: localhost
   port: 6379
   password: Init@123
   database: 1
-  mode: 0
-- name: auth
-  enable: true
-  host: localhost
-  port: 6379
-  password: Init@123
-  database: 2
   mode: 0

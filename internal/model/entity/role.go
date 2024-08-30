@@ -2,6 +2,7 @@ package entity
 
 import "time"
 
+// Role 角色
 type Role struct {
 	Id           int64     `json:"roleId" gorm:"type:bigint; primary_key; comment:角色ID;"`
 	Code         string    `json:"roleCode" gorm:"type:varchar(100); not null; comment:角色编码;"`
@@ -25,7 +26,7 @@ func (Role) InitData() any {
 	return nil
 }
 
-// 角色所属用户
+// RoleUser 角色所属用户
 type RoleUser struct {
 	Id           int64     `json:"id" gorm:"type:bigint; primary_key; comment:主键ID;"`
 	RoleId       int64     `json:"roleId" gorm:"type:bigint; not null; comment:角色ID;"`

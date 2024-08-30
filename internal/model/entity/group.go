@@ -2,6 +2,7 @@ package entity
 
 import "time"
 
+// Group 群组
 type Group struct {
 	Id           int64     `json:"id" gorm:"type:bigint; primary_key; comment:群组ID;"`
 	Code         string    `json:"code" gorm:"type:varchar(100); not null; comment:群组编码;"`
@@ -25,6 +26,7 @@ func (Group) InitData() any {
 	return nil
 }
 
+// GroupUser 群组成员
 type GroupUser struct {
 	Id           int64     `json:"id" gorm:"type:bigint; primary_key; comment:主键ID;"`
 	GroupId      int64     `json:"groupId" gorm:"type:bigint; not null; comment:群组ID;"`
@@ -51,6 +53,7 @@ func (GroupUser) InitData() any {
 	return nil
 }
 
+// GroupRole 群组角色
 type GroupRole struct {
 	Id           int64     `json:"id" gorm:"type:bigint; primary_key; comment:主键ID;"`
 	GroupId      int64     `json:"groupId" gorm:"type:bigint; not null; comment:群组ID;"`

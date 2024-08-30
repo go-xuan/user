@@ -1,10 +1,10 @@
 package logic
 
 import (
-	"errors"
 	"sync"
 
 	"github.com/go-xuan/quanx/net/respx"
+	"github.com/go-xuan/quanx/os/errorx"
 	"github.com/go-xuan/quanx/types/timex"
 	"github.com/go-xuan/quanx/utils/idx"
 	log "github.com/sirupsen/logrus"
@@ -14,7 +14,7 @@ import (
 	"user/internal/model/entity"
 )
 
-// 群组分页
+// GroupPage 群组分页
 func GroupPage(in model.GroupPage) (*respx.PageResponse, error) {
 	if rows, total, err := dao.GroupPage(in); err != nil {
 		log.Error("群组分页查询失败")
@@ -25,19 +25,19 @@ func GroupPage(in model.GroupPage) (*respx.PageResponse, error) {
 
 }
 
-// 群组编码校验
+// GroupExist 群组编码校验
 func GroupExist(in *model.GroupSave) (err error) {
 	var count int64
 	if count, err = dao.GroupExist(in); err != nil {
 		return
 	}
 	if count > 0 {
-		err = errors.New("此群组编码已存在")
+		err = errorx.New("此群组编码已存在")
 	}
 	return
 }
 
-// 群组新增
+// GroupCreate 群组新增
 func GroupCreate(in *model.GroupSave) (id int64, err error) {
 	if err = GroupExist(in); err != nil {
 		return
@@ -63,7 +63,7 @@ func GroupCreate(in *model.GroupSave) (id int64, err error) {
 	return
 }
 
-// 群组修改
+// GroupUpdate 群组修改
 func GroupUpdate(in *model.GroupSave) (id int64, err error) {
 	if err = dao.GroupUpdate(in); err != nil {
 		log.Error("群组修改失败")
@@ -73,12 +73,12 @@ func GroupUpdate(in *model.GroupSave) (id int64, err error) {
 	return
 }
 
-// 群组删除
+// GroupDelete 群组删除
 func GroupDelete(groupId int64) error {
 	return dao.GroupDelete(groupId)
 }
 
-// 群组明细
+// GroupDetail 群组明细
 func GroupDetail(id int64) (*model.GroupDetail, error) {
 	// 查询群组信息
 	var wg sync.WaitGroup
@@ -127,17 +127,17 @@ func GroupDetail(id int64) (*model.GroupDetail, error) {
 	return detail, err
 }
 
-// 群组成员校验
+// GroupUserExist 群组成员校验
 func GroupUserExist(id int64, userIds []int64) error {
 	if count, err := dao.GroupUserCount(id, userIds); err != nil {
 		return err
 	} else if count > 0 {
-		return errors.New("新增群组成员已存在")
+		return errorx.New("新增群组成员已存在")
 	}
 	return nil
 }
 
-// 群组成员新增
+// GroupUserAdd 群组成员新增
 func GroupUserAdd(in *model.GroupSave) error {
 	var createList []*entity.GroupUser
 	for _, item := range in.UserList {
@@ -146,8 +146,8 @@ func GroupUserAdd(in *model.GroupSave) error {
 			GroupId:      in.Id,
 			UserId:       item.Id,
 			IsAdmin:      item.IsAdmin,
-			ValidStart:   timex.ToTime(item.ValidStart),
-			ValidEnd:     timex.ToTime(item.ValidEnd),
+			ValidStart:   timex.Parse(item.ValidStart),
+			ValidEnd:     timex.Parse(item.ValidEnd),
 			Remark:       item.Remark,
 			CreateUserId: in.CurrUserId,
 			UpdateUserId: in.CurrUserId,
@@ -157,17 +157,17 @@ func GroupUserAdd(in *model.GroupSave) error {
 	return dao.GroupUserCreateBatch(createList)
 }
 
-// 群组角色校验
+// GroupRoleExist 群组角色校验
 func GroupRoleExist(groupId int64, roleIds []int64) error {
 	if count, err := dao.GroupRoleCount(groupId, roleIds); err != nil {
 		return err
 	} else if count > 0 {
-		return errors.New("新增群组角色已存在")
+		return errorx.New("新增群组角色已存在")
 	}
 	return nil
 }
 
-// 群组角色新增
+// GroupRoleAdd 群组角色新增
 func GroupRoleAdd(in *model.GroupSave) (err error) {
 	var createList []*entity.GroupRole
 	for _, item := range in.RoleList {
@@ -175,8 +175,8 @@ func GroupRoleAdd(in *model.GroupSave) (err error) {
 			Id:           idx.SnowFlake().Int64(),
 			GroupId:      in.Id,
 			RoleId:       item.Id,
-			ValidStart:   timex.ToTime(item.ValidStart),
-			ValidEnd:     timex.ToTime(item.ValidEnd),
+			ValidStart:   timex.Parse(item.ValidStart),
+			ValidEnd:     timex.Parse(item.ValidEnd),
 			Remark:       item.Remark,
 			CreateUserId: in.CurrUserId,
 			UpdateUserId: in.CurrUserId,

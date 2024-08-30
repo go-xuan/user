@@ -1,6 +1,8 @@
-- name: default
-  prefix: "cache:"
-  marshal: msgpack
-- name: user
+- source: "default"
+  type: "redis"
+  prefix: "user:"
+  marshal: "json"
+- source: "auth"
+  type: "redis"
   prefix: "auth:login:"
-  marshal: msgpack
+  marshal: "string"

@@ -1,67 +1,63 @@
 package controller
 
 import (
-	"errors"
-
 	"github.com/gin-gonic/gin"
 	"github.com/go-xuan/quanx/app/ginx"
 	"github.com/go-xuan/quanx/net/respx"
+	"github.com/go-xuan/quanx/os/errorx"
 	"github.com/go-xuan/quanx/utils/encryptx"
 
 	"user/internal/logic"
 	"user/internal/model"
 )
 
-// 用户登录
+// UserLogin 用户登录
 func UserLogin(ctx *gin.Context) {
 	var err error
 	var param model.Login
 	if err = ctx.BindJSON(&param); err != nil {
-		respx.Exception(ctx, respx.ParamErr, err)
+		respx.Ctx(ctx).ParamError(err)
 		return
 	}
 	ip := ginx.GetCorrectIP(ctx)
 	var result *model.LoginResult
-	result, err = logic.UserLogin(ctx.Request.Context(), param, ip)
-	if err != nil {
-		respx.BuildError(ctx, err)
+	if result, err = logic.UserLogin(ctx, param, ip); err != nil {
+		respx.Ctx(ctx).Error(err)
 		return
 	}
-	ginx.SetCookie(ctx, result.User.Account)
-	respx.BuildSuccess(ctx, result)
+	ginx.SetAuthCookie(ctx, result.User.Phone)
+	respx.Ctx(ctx).Success(result)
 }
 
-// 用户登出
+// UserLogout 用户登出
 func UserLogout(ctx *gin.Context) {
-	if user := ginx.GetUser(ctx); user != nil {
+	if user := ginx.GetSessionUser(ctx); user != nil {
 		ip := ginx.GetCorrectIP(ctx)
-		userId, err := logic.UserLogout(ctx.Request.Context(), user, ip)
-		if err != nil {
-			respx.BuildError(ctx, err)
+		if err := logic.UserLogout(ctx, user, ip); err != nil {
+			respx.Ctx(ctx).Error(err)
 			return
 		}
-		ginx.RemoveCookie(ctx)
-		respx.BuildSuccess(ctx, userId)
+		ginx.RemoveAuthCookie(ctx)
+		respx.Ctx(ctx).Success(user.UserId())
 	}
 }
 
-// 验证token
-func TokenParse(ctx *gin.Context) {
-	if user := ginx.GetUser(ctx); user != nil {
-		respx.BuildSuccess(ctx, user)
+// CheckLogin 校验登录
+func CheckLogin(ctx *gin.Context) {
+	if user := ginx.GetSessionUser(ctx); user != nil {
+		respx.Ctx(ctx).Success(user)
 	} else {
-		respx.BuildError(ctx, errors.New(""))
+		err := errorx.New("token is invalid")
+		respx.Ctx(ctx).Error(err)
 	}
 }
 
-// 加密
+// Encrypt 加密
 func Encrypt(ctx *gin.Context) {
-	ciphertext, err := encryptx.RSA().Encrypt(ctx.Query("text"))
-	respx.BuildResponse(ctx, ciphertext, err)
+	respx.Ctx(ctx).Response(encryptx.RSA().Encrypt(ctx.Query("text")))
 }
 
-// 加密
+// Decrypt 加密
 func Decrypt(ctx *gin.Context) {
-	plaintext, err := encryptx.RSA().Decrypt(ctx.Query("text"))
-	respx.BuildResponse(ctx, plaintext, err)
+	respx.Ctx(ctx).Response(encryptx.RSA().Decrypt(ctx.Query("text")))
 }
