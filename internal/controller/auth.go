@@ -15,7 +15,7 @@ import (
 func UserLogin(ctx *gin.Context) {
 	var err error
 	var param model.Login
-	if err = ctx.BindJSON(&param); err != nil {
+	if err = ctx.ShouldBindJSON(&param); err != nil {
 		respx.Ctx(ctx).ParamError(err)
 		return
 	}

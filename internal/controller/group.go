@@ -14,7 +14,7 @@ import (
 func GroupPage(ctx *gin.Context) {
 	var err error
 	var in model.GroupPage
-	if err = ctx.BindJSON(&in); err != nil {
+	if err = ctx.ShouldBindJSON(&in); err != nil {
 		respx.Ctx(ctx).ParamError(err)
 		return
 	}
@@ -47,7 +47,7 @@ func GroupDelete(ctx *gin.Context) {
 func GroupSave(ctx *gin.Context) {
 	var err error
 	var in model.GroupSave
-	if err = ctx.BindJSON(&in); err != nil {
+	if err = ctx.ShouldBindJSON(&in); err != nil {
 		respx.Ctx(ctx).ParamError(err)
 		return
 	}

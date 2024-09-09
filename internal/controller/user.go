@@ -14,7 +14,7 @@ import (
 func UserPage(ctx *gin.Context) {
 	var err error
 	var in model.UserPage
-	if err = ctx.BindJSON(&in); err != nil {
+	if err = ctx.ShouldBindJSON(&in); err != nil {
 		respx.Ctx(ctx).ParamError(err)
 		return
 	}
@@ -30,7 +30,7 @@ func UserList(ctx *gin.Context) {
 func UserSave(ctx *gin.Context) {
 	var err error
 	var in model.UserSave
-	if err = ctx.BindJSON(&in); err != nil {
+	if err = ctx.ShouldBindJSON(&in); err != nil {
 		respx.Ctx(ctx).ParamError(err)
 		return
 	}

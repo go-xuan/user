@@ -2,14 +2,15 @@ package logic
 
 import (
 	"fmt"
+
 	"github.com/gin-gonic/gin"
 	"github.com/go-xuan/quanx/app"
 	"github.com/go-xuan/quanx/app/ginx"
 	"github.com/go-xuan/quanx/os/errorx"
 	"github.com/go-xuan/quanx/utils/idx"
-	"user/internal/model"
 
 	"user/internal/dao"
+	"user/internal/model"
 	"user/internal/model/entity"
 )
 

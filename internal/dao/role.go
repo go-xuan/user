@@ -10,7 +10,7 @@ import (
 
 // RoleExist 查询群组编码是否存在
 func RoleExist(in *model.RoleSave) (count int64, err error) {
-	if err = gormx.This().DB.Model(&entity.Role{}).Where(`code = ? `, in.Code).Count(&count).Error; err != nil {
+	if err = gormx.GetDB().Model(&entity.Role{}).Where(`code = ? `, in.Code).Count(&count).Error; err != nil {
 		return
 	}
 	return
@@ -18,17 +18,17 @@ func RoleExist(in *model.RoleSave) (count int64, err error) {
 
 // RoleCreate 角色新增
 func RoleCreate(role *entity.Role) error {
-	return gormx.This().DB.Create(role).Error
+	return gormx.GetDB().Create(role).Error
 }
 
 // RoleDelete 角色删除
 func RoleDelete(id int64) error {
-	return gormx.This().DB.Delete(&entity.Role{}, id).Error
+	return gormx.GetDB().Delete(&entity.Role{}, id).Error
 }
 
 // RoleUpdate 角色修改
 func RoleUpdate(in *model.RoleSave) (err error) {
-	var tx = gormx.This().DB.Begin()
+	var tx = gormx.GetDB().Begin()
 	var cols = []string{"update_user_id", "update_time"}
 	if in.Name != "" {
 		cols = append(cols, "name")
@@ -49,7 +49,7 @@ func RoleUpdate(in *model.RoleSave) (err error) {
 
 // RolePage 角色分页查询
 func RolePage(in model.RolePage) (result []*model.Role, total int64, err error) {
-	db := gormx.This().GetDB().Model(&entity.Role{})
+	db := gormx.GetDB().Model(&entity.Role{})
 	if in.Keyword != "" {
 		db = db.Where(fmt.Sprintf("code like '%%%s%%' or name like '%%%s%%'", in.Keyword, in.Keyword))
 	}
@@ -68,7 +68,7 @@ func RolePage(in model.RolePage) (result []*model.Role, total int64, err error) 
 // RoleInfo 角色信息查询
 func RoleInfo(id int64) (result *model.Role, err error) {
 	result = &model.Role{}
-	if err = gormx.This().DB.Model(&entity.Role{}).Where(`id = ?`, id).Scan(&result).Error; err != nil {
+	if err = gormx.GetDB().Model(&entity.Role{}).Where(`id = ?`, id).Scan(&result).Error; err != nil {
 		return
 	}
 	return
@@ -76,14 +76,14 @@ func RoleInfo(id int64) (result *model.Role, err error) {
 
 // RoleList 用户角色
 func RoleList() (resultList []*model.Role, err error) {
-	if err = gormx.This().DB.Model(&entity.Role{}).Select([]string{"id", "code", "name"}).Order("id").Scan(&resultList).Error; err != nil {
+	if err = gormx.GetDB().Model(&entity.Role{}).Select([]string{"id", "code", "name"}).Order("id").Scan(&resultList).Error; err != nil {
 		return
 	}
 	return
 }
 
 func RoleUserCount(roleId int64, userIds []int64) (count int64, err error) {
-	if err = gormx.This().DB.Model(&entity.RoleUser{}).Where(`id = ? and user_id in ?`, roleId, userIds).Count(&count).Error; err != nil {
+	if err = gormx.GetDB().Model(&entity.RoleUser{}).Where(`id = ? and user_id in ?`, roleId, userIds).Count(&count).Error; err != nil {
 		return
 	}
 	return
@@ -91,12 +91,12 @@ func RoleUserCount(roleId int64, userIds []int64) (count int64, err error) {
 
 // RoleUserCreateBatch 角色用户批量新增
 func RoleUserCreateBatch(list []*entity.RoleUser) error {
-	return gormx.This().DB.Create(&list).Error
+	return gormx.GetDB().Create(&list).Error
 }
 
 // RoleUserList 角色成员列表
 func RoleUserList(roleId int64) (resultList []*model.RoleUser, err error) {
-	if err = gormx.This().DB.Raw(`
+	if err = gormx.GetDB().Raw(`
 select t2.id,
        t2.name,
        t2.account,

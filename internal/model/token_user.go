@@ -1,8 +1,9 @@
 package model
 
 import (
-	"github.com/golang-jwt/jwt/v4"
 	"time"
+
+	"github.com/golang-jwt/jwt/v4"
 	"user/internal/model/entity"
 
 	"github.com/go-xuan/quanx/os/errorx"

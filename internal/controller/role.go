@@ -13,7 +13,7 @@ import (
 func RolePage(ctx *gin.Context) {
 	var err error
 	var in model.RolePage
-	if err = ctx.BindJSON(&in); err != nil {
+	if err = ctx.ShouldBindJSON(&in); err != nil {
 		respx.Ctx(ctx).ParamError(err)
 		return
 	}
@@ -30,7 +30,7 @@ func RoleList(ctx *gin.Context) {
 func RoleSave(ctx *gin.Context) {
 	var err error
 	var in model.RoleSave
-	if err = ctx.BindJSON(&in); err != nil {
+	if err = ctx.ShouldBindJSON(&in); err != nil {
 		respx.Ctx(ctx).ParamError(err)
 		return
 	}

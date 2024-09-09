@@ -12,7 +12,7 @@ import (
 
 // UserPage 用户分页查询
 func UserPage(in model.UserPage) (result []*model.User, total int64, err error) {
-	db := gormx.This().GetDB().Model(&entity.User{})
+	db := gormx.GetDB().Model(&entity.User{})
 	if in.Keyword != "" {
 		db = db.Where(fmt.Sprintf("account like '%%%s%%' or name like '%%%s%%'", in.Keyword, in.Keyword))
 	}
@@ -31,7 +31,7 @@ func UserPage(in model.UserPage) (result []*model.User, total int64, err error) 
 // QueryUser 查询用户信息
 func QueryUser(id int64) (user *model.User, err error) {
 	user = &model.User{}
-	if err = gormx.This().DB.Model(&entity.User{}).Where("id = ?", id).Scan(user).Error; err != nil {
+	if err = gormx.GetDB().Model(&entity.User{}).Where("id = ?", id).Scan(user).Error; err != nil {
 		return
 	}
 	if user.Id == 0 {
@@ -43,7 +43,7 @@ func QueryUser(id int64) (user *model.User, err error) {
 // QueryUserByPhone 查询用户信息
 func QueryUserByPhone(phone string) (user *model.User, err error) {
 	user = &model.User{}
-	if err = gormx.This().GetDB().Model(&entity.User{}).Where("phone = ?", phone).Find(user).Error; err != nil {
+	if err = gormx.GetDB().Model(&entity.User{}).Where("phone = ?", phone).Find(user).Error; err != nil {
 		return
 	}
 	if user.Id == 0 {
@@ -57,7 +57,7 @@ func GetUserById(id int64) (user *entity.User, err error) {
 	user = &entity.User{
 		Id: id,
 	}
-	if err = gormx.This().DB.Find(user).Error; err != nil {
+	if err = gormx.GetDB().Find(user).Error; err != nil {
 		return
 	}
 	return
@@ -65,7 +65,7 @@ func GetUserById(id int64) (user *entity.User, err error) {
 
 // UserList 用户列表查询
 func UserList() (result []*model.User, err error) {
-	if err = gormx.This().DB.Model(&entity.User{}).
+	if err = gormx.GetDB().Model(&entity.User{}).
 		Select([]string{"id", "account", "name", "phone", "birthday", "gender", "email", "address"}).
 		Order("id desc").Scan(&result).Error; err != nil {
 		return
@@ -75,7 +75,7 @@ func UserList() (result []*model.User, err error) {
 
 // UserExist 查询手机是否存在
 func UserExist(in *model.UserSave) (count int64, err error) {
-	if err = gormx.This().DB.Model(&entity.User{}).Where(`phone = ? `, in.Phone).Count(&count).Error; err != nil {
+	if err = gormx.GetDB().Model(&entity.User{}).Where(`phone = ? `, in.Phone).Count(&count).Error; err != nil {
 		return
 	}
 	return
@@ -83,7 +83,7 @@ func UserExist(in *model.UserSave) (count int64, err error) {
 
 // UserCreate 用户新增
 func UserCreate(user *entity.User) error {
-	if err := gormx.This().DB.Create(user).Error; err != nil {
+	if err := gormx.GetDB().Create(user).Error; err != nil {
 		return err
 	}
 	return nil
@@ -124,7 +124,7 @@ func UserUpdate(in *model.UserSave) error {
 		userCols = append(userCols, "valid_end")
 	}
 	// 更新用户表
-	if err := gormx.This().DB.Model(&entity.User{}).Select(userCols).Where("id = ? ", in.Id).Updates(in.UserUpdate()).Error; err != nil {
+	if err := gormx.GetDB().Model(&entity.User{}).Select(userCols).Where("id = ? ", in.Id).Updates(in.UserUpdate()).Error; err != nil {
 		return err
 	}
 	return nil
@@ -132,7 +132,7 @@ func UserUpdate(in *model.UserSave) error {
 
 // UserDelete 用户删除
 func UserDelete(userId int64) error {
-	err := gormx.This().DB.Delete(&entity.User{}, userId).Error
+	err := gormx.GetDB().Delete(&entity.User{}, userId).Error
 	if err != nil {
 		return err
 	}
