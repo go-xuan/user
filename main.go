@@ -3,12 +3,12 @@ package main
 import (
 	"github.com/go-xuan/quanx/app"
 
-	"user/internal/model/entity"
 	"user/internal/router"
 )
 
 func main() {
 	var engine = app.NewEngine(
+		//app.Debug,         // debug模式
 		//app.EnableNacos,   // 启用nacos
 		//app.MultiDatabase, // 多数据源
 		app.MultiRedis, // 对redis
@@ -17,15 +17,15 @@ func main() {
 	)
 
 	engine.AddGinRouter(router.BindGinRouter)
-	engine.AddTable(
-		&entity.User{},
-		&entity.Role{},
-		&entity.RoleUser{},
-		&entity.Group{},
-		&entity.GroupUser{},
-		&entity.GroupRole{},
-		&entity.Log{},
-	)
+	//engine.AddTable(
+	//	&entity.User{},
+	//	&entity.Role{},
+	//	&entity.RoleUser{},
+	//	&entity.Group{},
+	//	&entity.GroupUser{},
+	//	&entity.GroupRole{},
+	//	&entity.Log{},
+	//)
 	engine.AddCustomFunc(func() {
 
 	})
