@@ -1,7 +1,7 @@
 package dao
 
 import (
-	"github.com/go-xuan/quanx/server/gormx"
+	"github.com/go-xuan/quanx/core/gormx"
 
 	"user/internal/model/entity"
 )

@@ -2,10 +2,10 @@ package logic
 
 import (
 	"fmt"
+	"github.com/go-xuan/quanx"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-xuan/quanx/app"
-	"github.com/go-xuan/quanx/app/ginx"
+	"github.com/go-xuan/quanx/core/ginx"
 	"github.com/go-xuan/quanx/os/errorx"
 	"github.com/go-xuan/quanx/utils/idx"
 
@@ -41,7 +41,7 @@ func UserLogin(ctx *gin.Context, in model.Login, loginIp string) (result *model.
 	// 记录日志
 	if err = dao.AddLog(&entity.Log{
 		Id:           idx.SnowFlake().Int64(),
-		Service:      app.GetServer().Name,
+		Service:      quanx.GetServer().Name,
 		Type:         "request",
 		Url:          ctx.Request.URL.Path,
 		Operation:    "账号登录",
@@ -60,7 +60,7 @@ func UserLogin(ctx *gin.Context, in model.Login, loginIp string) (result *model.
 func UserLogout(ctx *gin.Context, user ginx.AuthUser, ip string) error {
 	if err := dao.AddLog(&entity.Log{
 		Id:           idx.SnowFlake().Int64(),
-		Service:      app.GetServer().Name,
+		Service:      quanx.GetServer().Name,
 		Type:         "request",
 		Url:          ctx.Request.URL.Path,
 		Operation:    "退出登录",

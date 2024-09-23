@@ -3,7 +3,7 @@ package model
 import (
 	"time"
 
-	"github.com/go-xuan/quanx/app/modelx"
+	"github.com/go-xuan/quanx/common/modelx"
 	"github.com/go-xuan/quanx/types/anyx"
 	"github.com/go-xuan/quanx/types/timex"
 	"github.com/go-xuan/quanx/utils/encryptx"

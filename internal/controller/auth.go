@@ -2,7 +2,7 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/go-xuan/quanx/app/ginx"
+	"github.com/go-xuan/quanx/core/ginx"
 	"github.com/go-xuan/quanx/net/respx"
 	"github.com/go-xuan/quanx/os/errorx"
 	"github.com/go-xuan/quanx/utils/encryptx"

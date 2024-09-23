@@ -1,19 +1,18 @@
 package main
 
 import (
-	"github.com/go-xuan/quanx/app"
-
+	"github.com/go-xuan/quanx"
 	"user/internal/router"
 )
 
 func main() {
-	var engine = app.NewEngine(
+	var engine = quanx.NewEngine(
 		//app.Debug,         // debug模式
 		//app.EnableNacos,   // 启用nacos
 		//app.MultiDatabase, // 多数据源
-		app.MultiRedis, // 对redis
-		app.MultiCache, // 多缓存
-		app.UseQueue,   // 使用队列
+		quanx.MultiRedis, // 对redis
+		quanx.MultiCache, // 多缓存
+		quanx.UseQueue,   // 使用队列
 	)
 
 	engine.AddGinRouter(router.BindGinRouter)

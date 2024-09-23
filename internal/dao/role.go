@@ -2,7 +2,8 @@ package dao
 
 import (
 	"fmt"
-	"github.com/go-xuan/quanx/server/gormx"
+
+	"github.com/go-xuan/quanx/core/gormx"
 
 	"user/internal/model"
 	"user/internal/model/entity"
