@@ -8,5 +8,5 @@ import (
 
 // AddLog 新增日志
 func AddLog(log *entity.Log) error {
-	return gormx.GetDB().Create(log).Error
+	return gormx.DB().Create(log).Error
 }

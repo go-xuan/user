@@ -10,9 +10,9 @@ func main() {
 		//app.Debug,         // debug模式
 		//app.EnableNacos,   // 启用nacos
 		//app.MultiDatabase, // 多数据源
-		quanx.MultiRedis, // 对redis
-		quanx.MultiCache, // 多缓存
-		quanx.UseQueue,   // 使用队列
+		quanx.MultiRedis,  // 对redis
+		quanx.MultiCache,  // 多缓存
+		quanx.EnableQueue, // 使用队列
 	)
 
 	engine.AddGinRouter(router.BindGinRouter)

@@ -22,7 +22,7 @@ func UserLogin(ctx *gin.Context) {
 	ip := ginx.GetCorrectIP(ctx)
 	var result *model.LoginResult
 	if result, err = logic.UserLogin(ctx, param, ip); err != nil {
-		respx.Ctx(ctx).Error(err)
+		respx.Ctx(ctx).Failed(err)
 		return
 	}
 	ginx.SetAuthCookie(ctx, result.User.Phone)
@@ -34,7 +34,7 @@ func UserLogout(ctx *gin.Context) {
 	if user := ginx.GetSessionUser(ctx); user != nil {
 		ip := ginx.GetCorrectIP(ctx)
 		if err := logic.UserLogout(ctx, user, ip); err != nil {
-			respx.Ctx(ctx).Error(err)
+			respx.Ctx(ctx).Failed(err)
 			return
 		}
 		ginx.RemoveAuthCookie(ctx)
@@ -48,7 +48,7 @@ func CheckLogin(ctx *gin.Context) {
 		respx.Ctx(ctx).Success(user)
 	} else {
 		err := errorx.New("token is invalid")
-		respx.Ctx(ctx).Error(err)
+		respx.Ctx(ctx).Failed(err)
 	}
 }
 
