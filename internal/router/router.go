@@ -11,7 +11,7 @@ import (
 func BindGinRouter(router *gin.RouterGroup) {
 	// 鉴权方式
 	auth := ginx.AuthValidate().Token
-	//auth := ginx.AuthValidate().Cookie
+	//auth := ginx.AuthValidate().SetCookie
 
 	router.POST("login", ginx.CheckIP, controller.UserLogin) // 用户登录
 	router.GET("logout", controller.UserLogout)              // 用户登出

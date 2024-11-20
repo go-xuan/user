@@ -1,11 +1,10 @@
 package model
 
 import (
+	"github.com/go-xuan/quanx/types/timex"
 	"time"
 
 	"github.com/go-xuan/quanx/common/modelx"
-	"github.com/go-xuan/quanx/types/timex"
-
 	"user/internal/model/entity"
 )
 
@@ -16,8 +15,8 @@ type Group struct {
 	Name         string     `json:"name" comment:"群组名称"`
 	Remark       string     `json:"remark" comment:"备注"`
 	CreateUserId int64      `json:"createUserId" comment:"创建人"`
-	CreateTime   timex.Time `json:"createTime" comment:"创建时间"`
 	UpdateUserId int64      `json:"updateUserId" comment:"更新人"`
+	CreateTime   timex.Time `json:"createTime" comment:"创建时间"`
 	UpdateTime   timex.Time `json:"updateTime" comment:"更新时间"`
 }
 
