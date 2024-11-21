@@ -78,8 +78,8 @@ type UserSave struct {
 func (u *UserSave) UserCreate() *entity.User {
 	var salt = randx.UUID()
 	var password = encryptx.PasswordSalt(encryptx.MD5(u.Password), salt)
-	var validStart = anyx.If(u.ValidStart != "", timex.Parse(u.ValidStart), time.Now())
-	var validEnd = anyx.If(u.ValidEnd != "", timex.Parse(u.ValidEnd), validStart.AddDate(1, 0, 0))
+	var validStart = anyx.If(u.ValidStart != "", timex.ParseDateOrTime(u.ValidStart), time.Now())
+	var validEnd = anyx.If(u.ValidEnd != "", timex.ParseDateOrTime(u.ValidEnd), validStart.AddDate(1, 0, 0))
 	return &entity.User{
 		Id:           u.Id,
 		Account:      u.Account,
@@ -121,10 +121,10 @@ func (u *UserSave) UserUpdate() *entity.User {
 		user.Password = encryptx.PasswordSalt(encryptx.MD5(u.Password), salt)
 	}
 	if u.ValidStart != "" {
-		user.ValidStart = timex.Parse(u.ValidStart)
+		user.ValidStart = timex.ParseDateOrTime(u.ValidStart)
 	}
 	if u.ValidEnd != "" {
-		user.ValidEnd = timex.Parse(u.ValidEnd)
+		user.ValidEnd = timex.ParseDateOrTime(u.ValidEnd)
 	}
 	return user
 }
