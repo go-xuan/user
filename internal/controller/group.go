@@ -12,53 +12,53 @@ import (
 
 // GroupPage 群组分页
 func GroupPage(ctx *gin.Context) {
-	var err error
 	var in model.GroupPage
-	if err = ctx.ShouldBindJSON(&in); err != nil {
-		respx.Ctx(ctx).ParamError(err)
+	if err := ctx.ShouldBindJSON(&in); err != nil {
+		respx.ParamError(ctx, err)
 		return
 	}
-	respx.Ctx(ctx).Response(logic.GroupPage(in))
+
+	res, err := logic.GroupPage(in)
+	respx.Response(ctx, res, err)
 }
 
 // GroupDetail 群组明细
 func GroupDetail(ctx *gin.Context) {
-	var err error
 	var in modelx.Id[int64]
-	if err = ctx.ShouldBindQuery(&in); err != nil {
-		respx.Ctx(ctx).ParamError(err)
+	if err := ctx.ShouldBindQuery(&in); err != nil {
+		respx.ParamError(ctx, err)
 		return
 	}
-	respx.Ctx(ctx).Response(logic.GroupDetail(in.Id))
+	res, err := logic.GroupDetail(in.Id)
+	respx.Response(ctx, res, err)
 }
 
 // GroupDelete 群组删除
 func GroupDelete(ctx *gin.Context) {
-	var err error
 	var in modelx.Id[int64]
-	if err = ctx.ShouldBindQuery(&in); err != nil {
-		respx.Ctx(ctx).ParamError(err)
+	if err := ctx.ShouldBindQuery(&in); err != nil {
+		respx.ParamError(ctx, err)
 		return
 	}
-	respx.Ctx(ctx).Response(nil, logic.GroupDelete(in.Id))
+	err := logic.GroupDelete(in.Id)
+	respx.Response(ctx, nil, err)
 }
 
 // GroupSave 群组新增
 func GroupSave(ctx *gin.Context) {
-	var err error
 	var in model.GroupSave
-	if err = ctx.ShouldBindJSON(&in); err != nil {
-		respx.Ctx(ctx).ParamError(err)
+	if err := ctx.ShouldBindJSON(&in); err != nil {
+		respx.ParamError(ctx, err)
 		return
 	}
 	if in.CurrUserId == 0 {
 		in.CurrUserId = ginx.GetSessionUser(ctx).UserId()
 	}
-	var result int64
 	if in.Id == 0 {
-		result, err = logic.GroupCreate(&in)
+		result, err := logic.GroupCreate(&in)
+		respx.Response(ctx, result, err)
 	} else {
-		result, err = logic.GroupUpdate(&in)
+		result, err := logic.GroupUpdate(&in)
+		respx.Response(ctx, result, err)
 	}
-	respx.Ctx(ctx).Response(result, err)
 }

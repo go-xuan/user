@@ -12,56 +12,61 @@ import (
 
 // UserPage 用户分页
 func UserPage(ctx *gin.Context) {
-	var err error
 	var in model.UserPage
-	if err = ctx.ShouldBindJSON(&in); err != nil {
-		respx.Ctx(ctx).ParamError(err)
+	if err := ctx.ShouldBindJSON(&in); err != nil {
+		respx.ParamError(ctx, err)
 		return
 	}
-	respx.Ctx(ctx).Response(logic.UserPage(in))
+	res, err := logic.UserPage(in)
+	respx.Response(ctx, res, err)
 }
 
 // UserList 用户列表
 func UserList(ctx *gin.Context) {
-	respx.Ctx(ctx).Response(logic.UserList())
+	res, err := logic.UserList()
+	respx.Response(ctx, res, err)
 }
 
 // UserSave 用户新增
 func UserSave(ctx *gin.Context) {
-	var err error
 	var in model.UserSave
-	if err = ctx.ShouldBindJSON(&in); err != nil {
-		respx.Ctx(ctx).ParamError(err)
+	if err := ctx.ShouldBindJSON(&in); err != nil {
+		respx.ParamError(ctx, err)
 		return
 	}
 	if in.CurrUserId == 0 {
 		in.CurrUserId = ginx.GetSessionUser(ctx).UserId()
 	}
 	if in.Id != 0 {
-		respx.Ctx(ctx).Response(nil, logic.UserUpdate(&in))
+		err := logic.UserUpdate(&in)
+		respx.Response(ctx, nil, err)
 	} else {
-		respx.Ctx(ctx).Response(logic.UserCreate(&in))
+		res, err := logic.UserCreate(&in)
+		respx.Response(ctx, res, err)
 	}
 }
 
 // UserDelete 用户删除
 func UserDelete(ctx *gin.Context) {
-	var err error
 	var in modelx.Id[int64]
-	if err = ctx.ShouldBindQuery(&in); err != nil {
-		respx.Ctx(ctx).ParamError(err)
+	if err := ctx.ShouldBindQuery(&in); err != nil {
+		respx.ParamError(ctx, err)
 		return
 	}
-	respx.Ctx(ctx).Response(nil, logic.UserDelete(in.Id))
+	if err := logic.UserDelete(in.Id); err != nil {
+		respx.Error(ctx, err.Error())
+	} else {
+		respx.Success(ctx, nil)
+	}
 }
 
 // UserDetail 用户明细
 func UserDetail(ctx *gin.Context) {
-	var err error
 	var in modelx.Id[int64]
-	if err = ctx.ShouldBindQuery(&in); err != nil {
-		respx.Ctx(ctx).ParamError(err)
+	if err := ctx.ShouldBindQuery(&in); err != nil {
+		respx.ParamError(ctx, err)
 		return
 	}
-	respx.Ctx(ctx).Response(logic.UserDetail(in.Id))
+	res, err := logic.UserDetail(in.Id)
+	respx.Response(ctx, res, err)
 }

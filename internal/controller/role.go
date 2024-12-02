@@ -11,49 +11,50 @@ import (
 
 // RolePage 用户分页查询
 func RolePage(ctx *gin.Context) {
-	var err error
 	var in model.RolePage
-	if err = ctx.ShouldBindJSON(&in); err != nil {
-		respx.Ctx(ctx).ParamError(err)
+	if err := ctx.ShouldBindJSON(&in); err != nil {
+		respx.ParamError(ctx, err)
 		return
 	}
-	respx.Ctx(ctx).Response(logic.RolePage(in))
+	res, err := logic.RolePage(in)
+	respx.Response(ctx, res, err)
 
 }
 
 // RoleList 角色列表
 func RoleList(ctx *gin.Context) {
-	respx.Ctx(ctx).Response(logic.RoleList())
+	res, err := logic.RoleList()
+	respx.Response(ctx, res, err)
 }
 
 // RoleSave 角色新增
 func RoleSave(ctx *gin.Context) {
-	var err error
 	var in model.RoleSave
-	if err = ctx.ShouldBindJSON(&in); err != nil {
-		respx.Ctx(ctx).ParamError(err)
+	if err := ctx.ShouldBindJSON(&in); err != nil {
+		respx.ParamError(ctx, err)
 		return
 	}
 	if in.CurrUserId == 0 {
 		in.CurrUserId = ginx.GetSessionUser(ctx).UserId()
 	}
 	if in.Id == 0 {
-		respx.Ctx(ctx).Response(logic.RoleCreate(&in))
+		res, err := logic.RoleCreate(&in)
+		respx.Response(ctx, res, err)
 	} else {
-		err = logic.RoleUpdate(&in)
-		respx.Ctx(ctx).Response(nil, logic.RoleUpdate(&in))
+		err := logic.RoleUpdate(&in)
+		respx.Response(ctx, nil, err)
 	}
 }
 
 // RoleDelete 角色删除
 func RoleDelete(ctx *gin.Context) {
-	var err error
 	var in modelx.Id[int64]
-	if err = ctx.ShouldBindQuery(&in); err != nil {
-		respx.Ctx(ctx).ParamError(err)
+	if err := ctx.ShouldBindQuery(&in); err != nil {
+		respx.ParamError(ctx, err)
 		return
 	}
-	respx.Ctx(ctx).Response(nil, logic.RoleDelete(in.Id))
+	err := logic.RoleDelete(in.Id)
+	respx.Response(ctx, nil, err)
 }
 
 // RoleDetail 角色详情
@@ -61,8 +62,9 @@ func RoleDetail(ctx *gin.Context) {
 	var err error
 	var in modelx.Id[int64]
 	if err = ctx.ShouldBindQuery(&in); err != nil {
-		respx.Ctx(ctx).ParamError(err)
+		respx.ParamError(ctx, err)
 		return
 	}
-	respx.Ctx(ctx).Response(logic.RoleDetail(in.Id))
+	res, err := logic.RoleDetail(in.Id)
+	respx.Response(ctx, res, err)
 }
