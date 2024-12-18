@@ -4,7 +4,7 @@ type: mysql
 host: localhost
 port: 3306
 username: root
-password: mysql123qc
+password: root
 database: quan_user
 debug: true
 init: true

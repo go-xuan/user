@@ -10,14 +10,14 @@ import (
 // BindGinRouter 绑定路由
 func BindGinRouter(router *gin.RouterGroup) {
 	// 鉴权方式
-	auth := ginx.AuthValidate().Token
-	//auth := ginx.AuthValidate().SetCookie
+	auth := ginx.AuthValidate().Token // token方式鉴权
+	//auth := ginx.AuthValidate().SetCookie // cookie方式鉴权
 
-	router.POST("login", ginx.CheckIP, controller.UserLogin) // 用户登录
-	router.GET("logout", controller.UserLogout)              // 用户登出
-	router.GET("encrypt", controller.Encrypt)                // 密码加密
-	router.GET("decrypt", controller.Decrypt)                // 密码解密
-	router.GET("check", auth, controller.CheckLogin)         // 校验登录
+	router.POST("login", ginx.CorrectIP, controller.UserLogin) // 用户登录
+	router.GET("logout", auth, controller.UserLogout)          // 用户登出
+	router.GET("encrypt", controller.Encrypt)                  // 密码加密
+	router.GET("decrypt", controller.Decrypt)                  // 密码解密
+	router.GET("check", auth, controller.CheckLogin)           // 校验登录
 	// 用户管理
 	user := router.Group("user").Use(auth)
 	user.POST("page", controller.UserPage)    // 用户分页

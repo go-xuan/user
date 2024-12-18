@@ -38,6 +38,8 @@ func UserLogout(ctx *gin.Context) {
 		}
 		ginx.RemoveAuthCookie(ctx)
 		respx.Success(ctx, user.UserId())
+	} else {
+		respx.Error(ctx, "user not login")
 	}
 }
 
@@ -46,7 +48,7 @@ func CheckLogin(ctx *gin.Context) {
 	if user := ginx.GetSessionUser(ctx); user != nil {
 		respx.Success(ctx, user)
 	} else {
-		respx.Error(ctx, "token is invalid")
+		respx.Error(ctx, "user not login")
 	}
 }
 

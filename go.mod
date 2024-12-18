@@ -2,11 +2,12 @@ module user
 
 go 1.18
 
-replace github.com/go-xuan/quanx v1.24.622 => ../quanx
+replace github.com/go-xuan/quanx v1.24.1210 => ../quanx
 
 require (
 	github.com/gin-gonic/gin v1.9.0
-	github.com/go-xuan/quanx v1.24.622
+	github.com/go-xuan/quanx v1.24.1210
+	github.com/golang-jwt/jwt/v4 v4.5.1
 	github.com/sirupsen/logrus v1.9.3
 )
 
@@ -25,7 +26,6 @@ require (
 	github.com/go-playground/validator/v10 v10.11.2 // indirect
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
 	github.com/goccy/go-json v0.10.0 // indirect
-	github.com/golang-jwt/jwt/v4 v4.5.1 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect

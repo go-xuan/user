@@ -1,8 +1,8 @@
-- source: "default"
-  type: "redis"
+- source: default
+  type: redis
   prefix: "user:"
-  marshal: "json"
-- source: "auth"
-  type: "redis"
+  marshal: json
+- source: auth
+  type: redis
   prefix: "auth:login:"
-  marshal: "string"
+  marshal: string

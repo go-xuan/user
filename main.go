@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/go-xuan/quanx"
+	"user/internal/model/entity"
 	"user/internal/router"
 )
 
@@ -16,18 +17,15 @@ func main() {
 	)
 
 	engine.AddGinRouter(router.BindGinRouter)
-	//engine.AddTable(
-	//	&entity.User{},
-	//	&entity.Role{},
-	//	&entity.RoleUser{},
-	//	&entity.Group{},
-	//	&entity.GroupUser{},
-	//	&entity.GroupRole{},
-	//	&entity.Log{},
-	//)
-	engine.AddCustomFunc(func() {
-
-	})
+	engine.AddTable(
+		&entity.User{},
+		&entity.Role{},
+		&entity.RoleUser{},
+		&entity.Group{},
+		&entity.GroupUser{},
+		&entity.GroupRole{},
+		&entity.Log{},
+	)
 	// 初始化路由
 	engine.RUN()
 }
