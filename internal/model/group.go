@@ -1,10 +1,10 @@
 package model
 
 import (
-	"github.com/go-xuan/quanx/types/timex"
 	"time"
 
 	"github.com/go-xuan/quanx/common/modelx"
+	"github.com/go-xuan/quanx/types/timex"
 	"user/internal/model/entity"
 )
 
