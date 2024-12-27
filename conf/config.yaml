@@ -6,9 +6,9 @@ server:
   debug: true
 
 ## nacos访问配置
-#nacos:
-#  address: localhost:8848
-#  username: nacos
-#  password: nacos
-#  nameSpace: localhost
-#  mode: 2
+nacos:
+  address: localhost:8848
+  username: nacos
+  password: nacos
+  nameSpace: localhost
+  mode: 2

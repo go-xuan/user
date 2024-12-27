@@ -8,8 +8,8 @@ import (
 )
 
 func main() {
-	var engine = quanx.NewEngine(
-		//quanx.EnableNacos(),   // 启用nacos
+	quanx.NewEngine(
+		quanx.EnableNacos(),   // 启用nacos
 		quanx.MultiDatabase(), // 多数据源
 		quanx.MultiRedis(),    // 多redis
 		quanx.MultiCache(),    // 多缓存
@@ -24,7 +24,5 @@ func main() {
 			&entity.GroupRole{},
 			&entity.Log{}),
 		quanx.SetGinRouter(router.BindGinRouter),
-	)
-	// 初始化路由
-	engine.RUN()
+	).RUN()
 }
